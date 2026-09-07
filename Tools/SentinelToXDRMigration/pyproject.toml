@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentinel-xdr-migration"
+version = "0.1.0"
+description = "Convert Microsoft Sentinel analytic rules into Defender XDR Custom Detection YAML."
+requires-python = ">=3.10"
+dependencies = [
+  "PyYAML>=6.0,<7",
+  "jsonschema>=4.0,<5",
+  "mcp>=1.0,<2"
+]
+
+[project.scripts]
+sentinel-xdr-migrate = "sentinel_xdr_migration.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["sentinel_xdr_migration*"]
