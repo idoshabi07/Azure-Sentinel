@@ -170,6 +170,20 @@ runtime providers are unavailable.
 10. Reuse an existing reviewed scenario or invoke
     `sentinel-solution-mock-data-generation` before ingestion. Require reviewed
     input when behavior is complex or cannot be safely inferred.
+    Qualification has one mandatory mock and parity contract:
+    - each Analytic Rule and its converted Custom Detection share exactly one
+      rule-specific `mock.json`;
+    - never generate, select, or ingest separate AR and CD payloads;
+    - `mock.json` may contain multiple correlated records when the detection
+      requires joins, thresholds, sequences, aggregation, or a baseline;
+    - ingest the shared payload once, grouped with compatible rules by source
+      table and supported ingestion path;
+    - do not create a recurring ingestion or parity schedule;
+    - first prove that the exact AR and CD queries return the same marked source
+      rows, then run controlled alert parity;
+    - when the native table cannot accept synthetic ingestion, use a documented
+      native telemetry generator or mark the rule blocked. Never redirect it to
+      a parallel custom table.
 11. Require explicit approval immediately before any deployment or ingestion
     write. Pass `--approve-write` only after approval for that exact scope.
 12. Keep every AR and CD disabled except during the controlled parity lifecycle.
@@ -226,6 +240,9 @@ After deployment and reviewed scenario preparation through
 `sentinel-xdr-alert-parity-validator` only with explicit user approval in a lab
 workspace. Require strict AR/CD alert, entity, and evidence parity. Both rules
 must begin disabled and must be disabled after completion or failure.
+The parity validator must consume the same one-time ingested `mock.json` records
+for both sides. A row-count comparison without matching the unique scenario
+keys is insufficient, and separate AR/CD mock payloads are prohibited.
 
 ## Scope restrictions
 

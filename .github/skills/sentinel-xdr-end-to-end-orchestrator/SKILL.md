@@ -56,6 +56,13 @@ fixture handling, guarded ingestion, and evidence routing. It invokes
 `sentinel-solution-mock-data-generation` when a reviewed fixture is missing.
 Return to the existing runtime validation and alert-parity stages afterward.
 
+Qualification must use one shared, rule-specific `mock.json` for the source
+Analytic Rule and converted Custom Detection. Ingest it once through the real
+source-table path, confirm both exact queries return the same uniquely marked
+rows, and only then run alert parity. Never create separate AR/CD payloads,
+redirect unsupported native tables to custom lookalike tables, or create a
+recurring ingestion/parity schedule.
+
 For the packaging stage, always invoke `sentinel-xdr-solution-packager` and use
 the `sentinel-xdr-migration package-v4` result as workflow evidence. Existing
 files under `Package` do not prove that V4 ran during the current workflow.

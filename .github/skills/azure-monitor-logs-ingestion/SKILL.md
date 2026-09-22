@@ -16,6 +16,8 @@ mock JSON records into a Log Analytics table.
 - Require a declared `Custom-*` input stream for both custom and standard
   destinations.
 - Never POST directly to a reserved `Microsoft-*` stream.
+- Provision one contract-specific DCE/DCR pair for each standard-table input
+  contract. Do not add another input stream to an existing DCR.
 - Do not claim that every standard table is supported. Preserve and report
   Azure `InvalidStream` and schema errors.
 - Do not alter or delete existing connector DCRs.
@@ -36,6 +38,11 @@ mock JSON records into a Log Analytics table.
 4. For a custom table, define the complete `_CL` destination schema.
 5. For a standard table, confirm the table exists and specify its documented
    `Microsoft-*` output stream.
+   - Give the contract unique `resources.dce` and `resources.dcr` names.
+   - Reuse is allowed only when that DCR already contains exactly the same
+     `Custom-*` input stream.
+   - If a shared DCR already contains other streams, create a separate pair.
+     Do not update the shared DCR and wait for propagation.
 6. Validate without Azure writes:
 
    ```powershell
@@ -66,5 +73,6 @@ mock JSON records into a Log Analytics table.
    through the CLI.
 
 Report the destination table, record and batch counts, DCR/DCE resource IDs,
-verification result, warnings, and the report path. An HTTP success confirms
-acceptance, not completion of downstream processing.
+immutable DCR ID, DCR row/drop/transform metrics when available, verification
+result, warnings, and the report path. An HTTP success confirms acceptance,
+not completion of downstream processing.

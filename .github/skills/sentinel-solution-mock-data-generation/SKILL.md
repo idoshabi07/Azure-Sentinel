@@ -1,6 +1,6 @@
 ---
 name: sentinel-solution-mock-data-generation
-description: Generate or reuse reviewed malicious and benign mock fixtures for a Microsoft Sentinel Analytic Rule and its converted Defender XDR Custom Detection. Uses only Azure-Sentinel repository content and never writes to Azure.
+description: Generate or reuse one shared mock.json payload for a Microsoft Sentinel Analytic Rule and its converted Defender XDR Custom Detection. Uses only Azure-Sentinel repository content and never writes to Azure.
 version: 1.0.0
 allowed-tools: Bash, Read, Grep, Glob
 ---
@@ -50,8 +50,7 @@ Check:
 
 ```text
 Sample Data\Solutions\Mock\<solution>\<rule-id>\
-    malicious.json
-    benign.json
+    mock.json
     scenario.json
 ```
 
@@ -78,10 +77,10 @@ For a simple rule, the tool:
 4. reverse-maps fields through parser and DCR transforms when a declared
    `Custom-*` input stream exists;
 5. otherwise starts from the checked-in Standard-table base event;
-6. creates a malicious record that satisfies the decisive predicate;
-7. creates a type-safe benign negative control;
+6. creates records that satisfy the decisive predicate;
+7. creates a type-safe benign negative control for validation only;
 8. validates every field against the DCR or table metadata;
-9. writes the rule-specific fixture bundle.
+9. writes the qualifying records to one shared `mock.json` payload.
 
 Optional deterministic controls:
 
@@ -130,8 +129,7 @@ Standard-table metadata contract.
 
 ```text
 Sample Data\Solutions\Mock\<solution>\<rule-id>\
-    malicious.json
-    benign.json
+    mock.json
     scenario.json
 ```
 
@@ -143,7 +141,7 @@ Sample Data\Solutions\Mock\<solution>\<rule-id>\
 - source and destination tables;
 - DCR, stream, output stream, and ingestion mode;
 - decisive field mappings and locked paths;
-- malicious and benign record counts;
+- shared mock record count and benign validation-control count;
 - schema validation;
 - separate seeded, live, alert, and cleanup statuses.
 
@@ -157,7 +155,7 @@ for direct Logs Ingestion API qualification.
 After generation or reuse:
 
 1. present the scenario path and status;
-2. review the AR/CD identity, DCR mapping, record counts, and limitations;
+2. review the AR/CD identity, DCR mapping, shared mock record count, and limitations;
 3. hand off to `sentinel-solution-optional-testing` only when the user requests
    live qualification;
 4. never treat generation as proof of ingestion, query match, alert creation,

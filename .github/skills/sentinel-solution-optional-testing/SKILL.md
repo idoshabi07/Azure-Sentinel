@@ -59,6 +59,11 @@ selects **Select another workspace**.
 
 - Never treat workspace discovery as write approval.
 - Never generate or deploy a Custom Detection as part of mock-data ingestion.
+- Use exactly one rule-specific `mock.json` for both the source Analytic Rule
+  and converted Custom Detection.
+- Ingest that shared payload once. Separate AR and CD payloads are prohibited.
+- Group compatible `mock.json` payloads by source table and supported ingestion
+  path for one-time batch execution; never create a recurring ingestion job.
 - Never ingest a heuristic payload merely because it matches the stream schema.
 - Require a documented detection hypothesis and reviewed malicious and benign
   fixtures for the exact rule.
@@ -206,16 +211,15 @@ The default ingestion fixture location is:
 
 ```text
 Sample Data\Solutions\Mock\<solution>\<rule-id>\
-    malicious.json
-    benign.json
+    mock.json
     scenario.json
 ```
 
 `scenario.json` must record the source rule, converted Custom Detection,
-source and destination tables, stream when applicable, hypothesis, malicious
-and benign record counts, decisive fields, locked correlation paths,
+source and destination tables, stream when applicable, hypothesis, shared mock
+record count, benign validation-control count, decisive fields, locked correlation paths,
 limitations, and separate validation status. Reject the fixture if schema
-validation is not `passed`, either record count is zero, or the scenario lacks
+validation is not `passed`, the mock record count is zero, or the scenario lacks
 a defensible negative control.
 
 First try the default folder. If the requested fixture is absent:
@@ -228,7 +232,7 @@ First try the default folder. If the requested fixture is absent:
 4. If generation reports `manual-review-required` or `unsupported-payload`,
    request a reviewed multi-event scenario or stop the live stage.
 5. Only when the fixture is maintained outside the default repository path,
-   ask the user for the folder containing `malicious.json`, `benign.json`, and
+   ask the user for the folder containing `mock.json` and
    `scenario.json`, then retry with `--mock-data-folder "<folder>"`.
 
 Do not silently search unrelated directories or select another rule's fixture.
@@ -240,8 +244,8 @@ Before requesting approval:
 3. Verify every raw fixture field and value conforms to the selected input stream.
 4. Verify transform-derived fields, parser mappings, timestamps, and correlation
    keys.
-5. Verify the malicious fixture is expected to match and the benign fixture is
-   expected not to match.
+5. Verify the shared mock payload is expected to match both the AR and CD, and
+   verify the non-ingested benign validation control is expected not to match.
 6. Treat seeded Sentinel/AH harness results only as logical query evidence; they
    do not prove live visibility or alert parity.
 7. Do not auto-ingest single-row heuristic fixtures for joins, thresholds,
@@ -251,6 +255,11 @@ Before requesting approval:
 8. Require `generationStatus=qualification-ready`,
    `validation.schemaValidation=passed`, and
    `ingestion.directLogsIngestionSupported=true`.
+9. Before enabling either rule, prove that the exact AR and CD queries return
+   the same uniquely marked rows from the single shared ingestion.
+10. When a native table does not support synthetic Logs Ingestion, use only a
+    documented native telemetry generator. Never copy the records to a custom
+    lookalike table because the deployed AR/CD queries would not read it.
 
 ## Approval and ingestion
 
@@ -266,7 +275,6 @@ python Tools\SolutionMigration\ingest_to_dcr.py `
   --stream "<Custom-StreamName_CL>" `
   --solution "<solution-folder>" `
   --rule-id "<rule-id>" `
-  --fixture malicious `
   --approve-write
 ```
 
@@ -280,7 +288,6 @@ python Tools\SolutionMigration\ingest_to_dcr.py `
   --stream "<Custom-StreamName_CL>" `
   --solution "<solution-folder>" `
   --rule-id "<rule-id>" `
-  --fixture malicious `
   --mock-data-folder "<folder-containing-the-fixtures>" `
   --approve-write
 ```
@@ -292,7 +299,8 @@ After Azure accepts the payload:
 1. Wait for ingestion visibility and query the destination table for unique
    fixture identifiers.
 2. Run the exact analytic-rule KQL over the intended time window.
-3. Run the benign case separately.
+3. Run the benign validation control separately without treating it as another
+   live ingestion payload.
 4. Record expected and observed row counts, timestamps, entities, and errors.
 5. If alert validation was approved, verify alert creation separately.
 6. Perform and verify the stated cleanup.
