@@ -165,7 +165,7 @@ checks for a reviewed fixture, then invokes
 generation skill uses public neutral table structures under:
 
 ```text
-Sample Data\Tables\<TableName>\
+Tools\SolutionMigration\table_schemas\<TableName>\
     base-event.json
     metadata.json
 ```

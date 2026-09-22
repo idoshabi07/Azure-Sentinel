@@ -26,7 +26,7 @@ import yaml
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
-TABLE_ROOT = REPOSITORY_ROOT / "Sample Data" / "Tables"
+TABLE_ROOT = REPOSITORY_ROOT / "Tools" / "SolutionMigration" / "table_schemas"
 MOCK_ROOT = REPOSITORY_ROOT / "Sample Data" / "Solutions" / "Mock"
 STANDARD_CONTRACT_ROOT = (
     REPOSITORY_ROOT / "Tools" / "AzureMonitorLogsIngestion" / "contracts"

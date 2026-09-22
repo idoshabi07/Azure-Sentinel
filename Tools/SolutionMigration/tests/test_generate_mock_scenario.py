@@ -215,7 +215,7 @@ class MockScenarioGeneratorTests(unittest.TestCase):
             root = Path(temp)
             _create_custom_solution(root)
             with mock.patch.object(generator, "REPOSITORY_ROOT", root), \
-                    mock.patch.object(generator, "TABLE_ROOT", root / "Sample Data" / "Tables"), \
+                    mock.patch.object(generator, "TABLE_ROOT", root / "Tools" / "SolutionMigration" / "table_schemas"), \
                     mock.patch.object(
                         generator,
                         "MOCK_ROOT",
@@ -265,7 +265,7 @@ class MockScenarioGeneratorTests(unittest.TestCase):
             package = solution / "Package" / "mainTemplate.json"
             package.parent.mkdir(parents=True)
             package.write_text('{"resources":[]}', encoding="utf-8")
-            table = root / "Sample Data" / "Tables" / "DeviceEvents"
+            table = root / "Tools" / "SolutionMigration" / "table_schemas" / "DeviceEvents"
             table.mkdir(parents=True)
             (table / "base-event.json").write_text(
                 json.dumps({"ActionType": "synthetic", "Timestamp": "2026-09-17T00:00:00Z"}),
@@ -280,7 +280,7 @@ class MockScenarioGeneratorTests(unittest.TestCase):
                 encoding="utf-8",
             )
             with mock.patch.object(generator, "REPOSITORY_ROOT", root), \
-                    mock.patch.object(generator, "TABLE_ROOT", root / "Sample Data" / "Tables"), \
+                    mock.patch.object(generator, "TABLE_ROOT", root / "Tools" / "SolutionMigration" / "table_schemas"), \
                     mock.patch.object(
                         generator,
                         "MOCK_ROOT",
@@ -317,7 +317,7 @@ class MockScenarioGeneratorTests(unittest.TestCase):
             package = solution / "Package" / "mainTemplate.json"
             package.parent.mkdir(parents=True)
             package.write_text('{"resources":[]}', encoding="utf-8")
-            table = root / "Sample Data" / "Tables" / "Event"
+            table = root / "Tools" / "SolutionMigration" / "table_schemas" / "Event"
             table.mkdir(parents=True)
             (table / "base-event.json").write_text(
                 json.dumps({
@@ -370,7 +370,7 @@ class MockScenarioGeneratorTests(unittest.TestCase):
                     mock.patch.object(
                         generator,
                         "TABLE_ROOT",
-                        root / "Sample Data" / "Tables",
+                        root / "Tools" / "SolutionMigration" / "table_schemas",
                     ), \
                     mock.patch.object(
                         generator,
@@ -408,7 +408,7 @@ class MockScenarioGeneratorTests(unittest.TestCase):
             )
             _write_yaml(rule_path, complex_rule)
             with mock.patch.object(generator, "REPOSITORY_ROOT", root), \
-                    mock.patch.object(generator, "TABLE_ROOT", root / "Sample Data" / "Tables"), \
+                    mock.patch.object(generator, "TABLE_ROOT", root / "Tools" / "SolutionMigration" / "table_schemas"), \
                     mock.patch.object(
                         generator,
                         "MOCK_ROOT",

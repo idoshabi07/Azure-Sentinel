@@ -38,8 +38,8 @@ The generator uses:
 
 - source Analytic Rule YAML;
 - converted Custom Detection YAML;
-- `Sample Data\Tables\<Table>\base-event.json`;
-- `Sample Data\Tables\<Table>\metadata.json`;
+- `Tools\SolutionMigration\table_schemas\<Table>\base-event.json`;
+- `Tools\SolutionMigration\table_schemas\<Table>\metadata.json`;
 - solution `Package\mainTemplate.json`;
 - solution parsers;
 - DCR `streamDeclarations`, `dataFlows`, `transformKql`, and output stream.
