@@ -73,6 +73,36 @@ properties:
   status: disabled
 ```
 
+### Local parser bindings
+
+Conversion automatically renames local `let` bindings that match a solution parser's
+`FunctionName` or `FunctionAlias`. The shared PowerShell packager applies the same
+normalization before building both the CD installation and its registration, including
+when it receives previously authored detection YAML.
+
+Names use `__xdr_inline_<original>` with a numeric suffix when necessary. Microsoft's
+KQL parser and semantic binder identify the declaration and its references, including
+nested scopes. This is not a text replacement: columns, strings, comments, parameters
+that shadow the binding, and native parser YAML remain unchanged. Repeated runs are
+stable. Conversion reports each rename as a warning, not a review blocker.
+
+The normalizer checks syntax, binding identity, and inferred column shapes after editing.
+It fails explicitly when a safe rewrite cannot be verified, including wildcard-selected
+bindings, `union withsource`, and implicit output-column name changes. Use explicit inputs
+and column aliases in these cases. Missing tooling is a setup error, not permission to
+skip normalization.
+
+This offline check uses the parsers shipped in the solution, including nested `.yaml`
+and `.yml` files. It does not discover unrelated functions installed in a target tenant,
+inline missing parsers, or replace live schema/query validation.
+
+Requires Node.js and the pinned KQL dependency. From the repository root:
+
+```powershell
+npm ci --prefix Tools\SentinelToXDRMigration\kql
+npm test --prefix Tools\SentinelToXDRMigration\kql
+```
+
 ## Install
 
 ```powershell

@@ -39,3 +39,16 @@ package automation calls it through:
 ```text
 .script\package-automation\package-generator.ps1
 ```
+
+## Local parser names in Custom Detections
+
+Before emitting CD installation and registration bodies, the shared packager renames
+local KQL bindings that match the solution's parser names or aliases. Both bodies receive
+the same query. Source YAML and native parsers are not edited. This also protects inputs
+that were authored outside the migration converter.
+
+For solutions with parsers, install Node.js and run
+`npm ci --prefix Tools\SentinelToXDRMigration\kql` from the repository root.
+The shared Microsoft KQL semantic helper preserves binding scope and rejects unsafe
+rewrites rather than falling back to text replacement. See the migration-tool README's
+"Local parser bindings" section for limits and regression commands.

@@ -20,6 +20,7 @@ from .catalog import (
     query_requires_timestamp,
 )
 from .columns import projected_columns
+from .parser_bindings import normalize_parser_bindings
 from .report import write_transformation_report
 
 SCHEMA_VERSION = "1.0.0"
@@ -500,6 +501,11 @@ def build_xdr_document(source: Path, solution_root: Path, config: dict[str, Any]
     converted_query, query_warnings, errors = convert_query(source_query, config)
     warnings = list(query_warnings)
     review_reasons = list(query_warnings)
+    try:
+        converted_query, parser_warnings = normalize_parser_bindings(converted_query, solution_root)
+        warnings.extend(parser_warnings)
+    except ValueError as exc:
+        errors.append(str(exc))
     is_nrt = str(doc.get("kind") or "").lower() == "nrt"
     frequency, frequency_warning = iso_duration(
         doc.get("queryFrequency") or ("PT1H" if is_nrt else None)

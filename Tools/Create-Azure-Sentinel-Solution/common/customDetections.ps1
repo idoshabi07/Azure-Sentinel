@@ -1,3 +1,70 @@
+function Get-CustomDetectionParserNames {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$SolutionPath
+    )
+
+    $parserPath = Join-Path $SolutionPath 'Parsers'
+    if (-not (Test-Path -LiteralPath $parserPath -PathType Container)) {
+        return
+    }
+    $names = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+    foreach ($file in (Get-ChildItem -LiteralPath $parserPath -Recurse -File |
+            Where-Object { $_.Extension -in '.yaml', '.yml' } | Sort-Object FullName)) {
+        $document = Get-Content -LiteralPath $file.FullName -Raw |
+            ConvertFrom-Yaml -ErrorAction Stop
+        if ($document -isnot [System.Collections.IDictionary]) {
+            throw "Parser must contain a YAML object: $($file.FullName)"
+        }
+        if ($null -eq $document['FunctionName'] -and $null -eq $document['FunctionAlias']) {
+            throw "Parser must declare FunctionName or FunctionAlias: $($file.FullName)"
+        }
+        foreach ($field in @('FunctionName', 'FunctionAlias')) {
+            if ($null -ne $document[$field]) {
+                if ($document[$field] -isnot [string] -or [string]::IsNullOrWhiteSpace($document[$field])) {
+                    throw "Parser $field must be a nonempty string: $($file.FullName)"
+                }
+                [void]$names.Add($document[$field].Trim())
+            }
+        }
+    }
+    return @($names | Sort-Object -CaseSensitive)
+}
+
+function Set-CustomDetectionParserBindings {
+    param(
+        [Parameter(Mandatory = $true)]
+        [psobject]$DetectionDocument,
+        [string[]]$ParserNames = @()
+    )
+
+    if ($ParserNames.Count -eq 0) {
+        return
+    }
+    $helper = Join-Path $PSScriptRoot '..\..\SentinelToXDRMigration\kql\rename-parser-bindings.cjs'
+    $node = Get-Command node -CommandType Application -ErrorAction SilentlyContinue
+    if ($null -eq $node) {
+        throw 'Node.js is required for scope-aware KQL parser binding normalization.'
+    }
+    $dependency = Join-Path (Split-Path $helper) 'node_modules\@kusto\language-service-next'
+    if (-not (Test-Path -LiteralPath $dependency -PathType Container)) {
+        throw "KQL dependency is missing; run npm ci --prefix `"$(Split-Path $helper)`""
+    }
+    $inputJson = @{
+        query = [string]$DetectionDocument.properties.queryCondition.queryText
+        reservedNames = @($ParserNames)
+    } | ConvertTo-Json -Depth 10 -Compress
+    $outputJson = $inputJson | & $node.Source $helper 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        throw "Custom Detection parser binding normalization failed: $($outputJson -join [Environment]::NewLine)"
+    }
+    $result = ($outputJson -join [Environment]::NewLine) | ConvertFrom-Json -ErrorAction Stop
+    $DetectionDocument.properties.queryCondition.queryText = $result.query
+    foreach ($rename in $result.renames) {
+        Write-Warning "Renamed local parser binding $($rename.from) to $($rename.to) to avoid a saved parser collision."
+    }
+}
+
 function Get-CustomDetectionDataProperty {
     param(
         [Parameter(Mandatory = $true)]
@@ -329,6 +396,7 @@ function Add-XdrCustomDetectionsToSolution {
     }
 
     $analyticRuleIndex = Get-AnalyticRuleContentTemplateIndex -Template $Template
+    $parserNames = @(Get-CustomDetectionParserNames -SolutionPath (Join-Path $repoRoot "Solutions/$SolutionName"))
     $seenIds = @{}
     $count = 0
     foreach ($configuredPath in @($detectionProperty.Value)) {
@@ -368,6 +436,7 @@ function Add-XdrCustomDetectionsToSolution {
         }
 
         $detectionDocument.properties.status = 'disabled'
+        Set-CustomDetectionParserBindings -DetectionDocument $detectionDocument -ParserNames $parserNames
         $resourceType = "$($detectionDocument.resourceType)@$($detectionDocument.apiVersion)"
         $detectionResource = [pscustomobject]@{
             import     = 'MicrosoftSecurity'
