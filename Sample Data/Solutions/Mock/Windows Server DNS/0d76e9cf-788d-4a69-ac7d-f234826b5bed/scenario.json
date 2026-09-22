@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-20T11:06:04.584843+00:00",
+  "solution": "Windows Server DNS",
+  "ruleId": "0d76e9cf-788d-4a69-ac7d-f234826b5bed",
+  "ruleName": "DNS events related to mining pools",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Server DNS\\Analytic Rules\\DNS_Miners.yaml",
+  "customDetectionId": null,
+  "customDetectionName": null,
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Server DNS\\XDR Detections\\DNS_Miners.yaml",
+  "scenarioName": "automatic-simple-predicate",
+  "hypothesis": "Synthetic records exercise the decisive predicates in DNS events related to mining pools.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "simple",
+    "reasons": []
+  },
+  "sourceTable": "DnsEvents",
+  "destinationTables": [
+    "DnsEvents"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-DnsEvents",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "Name",
+        "operator": "has_any",
+        "rawPath": "Name",
+        "value": "monerohash.com"
+      }
+    ],
+    "lockedPaths": [
+      "Name"
+    ]
+  },
+  "fixtures": {
+    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Server DNS\\0d76e9cf-788d-4a69-ac7d-f234826b5bed\\malicious.json",
+    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Server DNS\\0d76e9cf-788d-4a69-ac7d-f234826b5bed\\benign.json",
+    "maliciousRecords": 1,
+    "benignRecords": 1
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-run"
+  },
+  "limitations": [
+    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
+  ]
+}

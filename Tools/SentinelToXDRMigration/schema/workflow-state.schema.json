@@ -51,6 +51,27 @@
             "null"
           ]
         },
+        "tenantId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "subscriptionId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "workspaceCustomerId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "targetContextLocked": {
+          "type": "boolean"
+        },
         "versionBump": {
           "enum": [
             "patch",

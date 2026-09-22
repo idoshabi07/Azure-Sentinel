@@ -60,7 +60,7 @@
   },
   "variables": {
     "_solutionName": "NetskopeAlertEvents",
-    "_solutionVersion": "3.0.1",
+    "_solutionVersion": "3.0.2",
     "solutionId": "netskope.netskope_alertevents",
     "_solutionId": "[variables('solutionId')]",
     "workbookVersion1": "1.0.0",
@@ -117,7 +117,7 @@
         "[extensionResourceId(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace')), 'Microsoft.SecurityInsights/contentPackages', variables('_solutionId'))]"
       ],
       "properties": {
-        "description": "NetskopeAlertEvents_Workbook Workbook with template version 3.0.1",
+        "description": "NetskopeAlertEvents_Workbook Workbook with template version 3.0.2",
         "mainTemplate": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "[variables('workbookVersion1')]",
@@ -203,7 +203,7 @@
         "[extensionResourceId(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace')), 'Microsoft.SecurityInsights/contentPackages', variables('_solutionId'))]"
       ],
       "properties": {
-        "description": "NetskopeAlertEvents_Rule1_AnalyticalRules Analytics Rule with template version 3.0.1",
+        "description": "NetskopeAlertEvents_Rule1_AnalyticalRules Analytics Rule with template version 3.0.2",
         "mainTemplate": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "[variables('analyticRuleObject1').analyticRuleVersion1]",
@@ -231,10 +231,10 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
+                    "connectorId": "NetskopeAlertEventsConnector",
                     "dataTypes": [
                       "NetskopeAlertEvents_CL"
-                    ],
-                    "connectorId": "NetskopeAlertEventsConnector"
+                    ]
                   }
                 ],
                 "tactics": [
@@ -247,31 +247,31 @@
                 ],
                 "entityMappings": [
                   {
+                    "entityType": "Account",
                     "fieldMappings": [
                       {
-                        "identifier": "Name",
-                        "columnName": "User"
+                        "columnName": "User",
+                        "identifier": "Name"
                       }
-                    ],
-                    "entityType": "Account"
+                    ]
                   },
                   {
+                    "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "Userip"
+                        "columnName": "Userip",
+                        "identifier": "Address"
                       }
-                    ],
-                    "entityType": "IP"
+                    ]
                   },
                   {
+                    "entityType": "Host",
                     "fieldMappings": [
                       {
-                        "identifier": "HostName",
-                        "columnName": "Hostname"
+                        "columnName": "Hostname",
+                        "identifier": "HostName"
                       }
-                    ],
-                    "entityType": "Host"
+                    ]
                   }
                 ]
               }
@@ -326,7 +326,7 @@
         "[extensionResourceId(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace')), 'Microsoft.SecurityInsights/contentPackages', variables('_solutionId'))]"
       ],
       "properties": {
-        "description": "NetskopeAlertEvents_Rule2_AnalyticalRules Analytics Rule with template version 3.0.1",
+        "description": "NetskopeAlertEvents_Rule2_AnalyticalRules Analytics Rule with template version 3.0.2",
         "mainTemplate": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "[variables('analyticRuleObject2').analyticRuleVersion2]",
@@ -354,10 +354,10 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
+                    "connectorId": "NetskopeAlertEventsConnector",
                     "dataTypes": [
                       "NetskopeAlertEvents_CL"
-                    ],
-                    "connectorId": "NetskopeAlertEventsConnector"
+                    ]
                   }
                 ],
                 "tactics": [
@@ -370,31 +370,31 @@
                 ],
                 "entityMappings": [
                   {
+                    "entityType": "Account",
                     "fieldMappings": [
                       {
-                        "identifier": "Name",
-                        "columnName": "User"
+                        "columnName": "User",
+                        "identifier": "Name"
                       }
-                    ],
-                    "entityType": "Account"
+                    ]
                   },
                   {
+                    "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "Userip"
+                        "columnName": "Userip",
+                        "identifier": "Address"
                       }
-                    ],
-                    "entityType": "IP"
+                    ]
                   },
                   {
+                    "entityType": "Host",
                     "fieldMappings": [
                       {
-                        "identifier": "HostName",
-                        "columnName": "Hostname"
+                        "columnName": "Hostname",
+                        "identifier": "HostName"
                       }
-                    ],
-                    "entityType": "Host"
+                    ]
                   }
                 ]
               }
@@ -449,7 +449,7 @@
         "[extensionResourceId(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace')), 'Microsoft.SecurityInsights/contentPackages', variables('_solutionId'))]"
       ],
       "properties": {
-        "description": "NetskopeAlertEvents_Rule3_AnalyticalRules Analytics Rule with template version 3.0.1",
+        "description": "NetskopeAlertEvents_Rule3_AnalyticalRules Analytics Rule with template version 3.0.2",
         "mainTemplate": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "[variables('analyticRuleObject3').analyticRuleVersion3]",
@@ -477,10 +477,10 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
+                    "connectorId": "NetskopeAlertEventsConnector",
                     "dataTypes": [
                       "NetskopeAlertEvents_CL"
-                    ],
-                    "connectorId": "NetskopeAlertEventsConnector"
+                    ]
                   }
                 ],
                 "tactics": [
@@ -493,31 +493,31 @@
                 ],
                 "entityMappings": [
                   {
+                    "entityType": "Account",
                     "fieldMappings": [
                       {
-                        "identifier": "Name",
-                        "columnName": "User"
+                        "columnName": "User",
+                        "identifier": "Name"
                       }
-                    ],
-                    "entityType": "Account"
+                    ]
                   },
                   {
+                    "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "Userip"
+                        "columnName": "Userip",
+                        "identifier": "Address"
                       }
-                    ],
-                    "entityType": "IP"
+                    ]
                   },
                   {
+                    "entityType": "Host",
                     "fieldMappings": [
                       {
-                        "identifier": "HostName",
-                        "columnName": "Hostname"
+                        "columnName": "Hostname",
+                        "identifier": "HostName"
                       }
-                    ],
-                    "entityType": "Host"
+                    ]
                   }
                 ]
               }
@@ -3359,7 +3359,7 @@
         "[extensionResourceId(resourceId('Microsoft.OperationalInsights/workspaces', parameters('workspace')), 'Microsoft.SecurityInsights/contentPackages', variables('_solutionId'))]"
       ],
       "properties": {
-        "description": "NetskopeAlertEvents Data Parser with template version 3.0.1",
+        "description": "NetskopeAlertEvents Data Parser with template version 3.0.2",
         "mainTemplate": {
           "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
           "contentVersion": "[variables('parserObject1').parserVersion1]",
@@ -3483,7 +3483,7 @@
       "apiVersion": "2023-04-01-preview",
       "location": "[parameters('workspace-location')]",
       "properties": {
-        "version": "3.0.1",
+        "version": "3.0.2",
         "kind": "Solution",
         "contentSchemaVersion": "3.0.0",
         "displayName": "NetskopeAlertEvents",
@@ -3585,46 +3585,46 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "status": "disabled",
+                "displayName": "Netskope - High Severity Alert",
+                "schedule": {
+                  "frequency": "PT1H"
+                },
                 "queryCondition": {
                   "queryText": "NetskopeAlertEvents_CL\n| where TimeGenerated > ago(1h)\n| where Alert =~ \"yes\"\n| where Severity in~ (\"high\", \"critical\")\n| extend NormalizedSeverity = tolower(Severity)\n| summarize\n    AlertCount = count(),\n    Activities = make_set(Activity, 20),\n    Applications = make_set(App, 20),\n    Policies = make_set(Policy, 20),\n    Actions = make_set(Action, 10),\n    FirstSeen = min(TimeGenerated),\n    LastSeen = max(TimeGenerated)\n    by AlertName, AlertType, NormalizedSeverity, User, Userip, Hostname, SrcCountry\n| order by AlertCount desc\n| project\n    LastSeen,\n    AlertName,\n    AlertType,\n    Severity = NormalizedSeverity,\n    User,\n    Userip,\n    Hostname,\n    SrcCountry,\n    AlertCount,\n    Applications,\n    Activities,\n    Policies,\n    Actions,\n    FirstSeen"
                 },
-                "status": "disabled",
-                "displayName": "Netskope - High Severity Alert",
-                "id": "[if(true(), 'xdr-netskope-high-severity-alert-a1f6c2d4', 'xdr-netskope-high-severity-alert-a1f6c2d4')]",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "Detects Netskope alerts raised with a high or critical severity. High severity alerts\ntypically indicate DLP violations, malware detections, compromised credentials, or\nsignificant policy breaches that warrant immediate investigation.",
-                    "severity": "high",
-                    "title": "Netskope - High Severity Alert",
                     "tactics": [
                       {
-                        "tactic": "InitialAccess",
                         "techniques": [
                           {
-                            "technique": "T1078"
+                            "technique": "T1567"
                           }
-                        ]
+                        ],
+                        "tactic": "Exfiltration"
                       }
                     ],
+                    "description": "Detects Netskope alerts raised with a high or critical severity. High severity alerts\ntypically indicate DLP violations, malware detections, compromised credentials, or\nsignificant policy breaches that warrant immediate investigation.",
+                    "severity": "high",
                     "entityMappings": {
+                      "ips": [
+                        {
+                          "addressColumn": "Userip",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ],
                       "hosts": [
                         {
                           "id": "[if(true(), 'host1', 'host1')]",
                           "nameColumn": "Hostname"
                         }
-                      ],
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "Userip"
-                        }
                       ]
-                    }
+                    },
+                    "title": "Netskope - High Severity Alert"
                   }
                 },
-                "schedule": {
-                  "frequency": "PT1H"
-                }
+                "id": "[if(true(), 'xdr-netskope-high-severity-alert-a1f6c2d4', 'xdr-netskope-high-severity-alert-a1f6c2d4')]"
               }
             }
           }
@@ -3659,46 +3659,46 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "status": "disabled",
+                "displayName": "Netskope - Suspicious Application Activity (Low Confidence / Risky App)",
+                "schedule": {
+                  "frequency": "PT1H"
+                },
                 "queryCondition": {
                   "queryText": "let riskyCcl = dynamic([\"low\", \"poor\"]);\nlet sensitiveActivities = dynamic([\"Upload\", \"Share\", \"Download\", \"Post\", \"Send\"]);\nNetskopeAlertEvents_CL\n| where TimeGenerated > ago(1h)\n| where isnotempty(App)\n| where tolower(Ccl) in (riskyCcl)\n     or Action =~ \"block\"\n     or (Activity in~ (sensitiveActivities) and tolower(Ccl) != \"excellent\")\n| summarize\n    EventCount = count(),\n    Activities = make_set(Activity, 20),\n    Actions = make_set(Action, 10),\n    CCLs = make_set(Ccl, 10),\n    Categories = make_set(Appcategory, 20),\n    DistinctApps = dcount(App),\n    Apps = make_set(App, 20),\n    LastSeen = max(TimeGenerated)\n    by User, Userip, Hostname, DeviceClassification\n| where EventCount > 5 or DistinctApps > 3\n| extend RiskIndicators = strcat_array(array_concat(\n    iff(set_has_element(CCLs, \"low\") or set_has_element(CCLs, \"poor\"), dynamic([\"Low Confidence App\"]), dynamic([])),\n    iff(set_has_element(Actions, \"block\"), dynamic([\"Blocked Activity\"]), dynamic([])),\n    iff(DistinctApps > 3, dynamic([\"Multiple Risky Apps\"]), dynamic([]))\n), \", \")\n| order by EventCount desc\n| project\n    LastSeen,\n    User,\n    Userip,\n    Hostname,\n    DeviceClassification,\n    EventCount,\n    DistinctApps,\n    Apps,\n    Categories,\n    Activities,\n    Actions,\n    CCLs,\n    RiskIndicators"
                 },
-                "status": "disabled",
-                "displayName": "Netskope - Suspicious Application Activity (Low Confidence / Risky App)",
-                "id": "[if(true(), 'xdr-netskope-suspicious-application-activity-low-confidence-risky-app-b2e7d3c5', 'xdr-netskope-suspicious-application-activity-low-confidence-risky-app-b2e7d3c5')]",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "Detects activity involving risky or low Cloud Confidence Level (CCL) applications,\nblocked application actions, or sensitive activities (upload, share, download) on\nunsanctioned apps. Helps surface Shadow IT and potential data leakage via risky\ncloud applications.",
-                    "severity": "medium",
-                    "title": "Netskope - Suspicious Application Activity (Low Confidence / Risky App)",
                     "tactics": [
                       {
-                        "tactic": "Exfiltration",
                         "techniques": [
                           {
                             "technique": "T1567"
                           }
-                        ]
+                        ],
+                        "tactic": "Exfiltration"
                       }
                     ],
+                    "description": "Detects activity involving risky or low Cloud Confidence Level (CCL) applications,\nblocked application actions, or sensitive activities (upload, share, download) on\nunsanctioned apps. Helps surface Shadow IT and potential data leakage via risky\ncloud applications.",
+                    "severity": "medium",
                     "entityMappings": {
+                      "ips": [
+                        {
+                          "addressColumn": "Userip",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ],
                       "hosts": [
                         {
                           "id": "[if(true(), 'host1', 'host1')]",
                           "nameColumn": "Hostname"
                         }
-                      ],
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "Userip"
-                        }
                       ]
-                    }
+                    },
+                    "title": "Netskope - Suspicious Application Activity (Low Confidence / Risky App)"
                   }
                 },
-                "schedule": {
-                  "frequency": "PT1H"
-                }
+                "id": "[if(true(), 'xdr-netskope-suspicious-application-activity-low-confidence-risky-app-b2e7d3c5', 'xdr-netskope-suspicious-application-activity-low-confidence-risky-app-b2e7d3c5')]"
               }
             }
           }
@@ -3733,46 +3733,46 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "status": "disabled",
+                "displayName": "Netskope - DLP Incident Spike",
+                "schedule": {
+                  "frequency": "PT1H"
+                },
                 "queryCondition": {
                   "queryText": "let dlpIncidentThreshold = 10;\nNetskopeAlertEvents_CL\n| where TimeGenerated > ago(1h)\n| where AlertType =~ \"DLP\" or isnotempty(DlpProfile) or isnotempty(DlpIncidentId)\n| summarize\n    IncidentCount = count(),\n    DistinctIncidents = dcount(DlpIncidentId),\n    Profiles = make_set(DlpProfile, 20),\n    Rules = make_set(DlpRule, 20),\n    Applications = make_set(App, 20),\n    Files = make_set(DlpFile, 20),\n    Activities = make_set(Activity, 10),\n    Actions = make_set(Action, 10),\n    FirstSeen = min(TimeGenerated),\n    LastSeen = max(TimeGenerated)\n    by User, Userip, Hostname\n| where IncidentCount > dlpIncidentThreshold\n| order by IncidentCount desc\n| project\n    LastSeen,\n    User,\n    Userip,\n    Hostname,\n    IncidentCount,\n    DistinctIncidents,\n    Profiles,\n    Rules,\n    Applications,\n    Files,\n    Activities,\n    Actions,\n    FirstSeen"
                 },
-                "status": "disabled",
-                "displayName": "Netskope - DLP Incident Spike",
-                "id": "[if(true(), 'xdr-netskope-dlp-incident-spike-c3f8e4d6', 'xdr-netskope-dlp-incident-spike-c3f8e4d6')]",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "Detects a spike in Netskope DLP incidents within a short window. A sudden increase in\nDLP violations for a single user or DLP profile can indicate active data exfiltration,\na misconfigured policy, or bulk handling of sensitive data. Triggers when a user\ngenerates more DLP incidents in the last hour than a configurable threshold.",
-                    "severity": "high",
-                    "title": "Netskope - DLP Incident Spike",
                     "tactics": [
                       {
-                        "tactic": "Exfiltration",
                         "techniques": [
                           {
                             "technique": "T1567"
                           }
-                        ]
+                        ],
+                        "tactic": "Exfiltration"
                       }
                     ],
+                    "description": "Detects a spike in Netskope DLP incidents within a short window. A sudden increase in\nDLP violations for a single user or DLP profile can indicate active data exfiltration,\na misconfigured policy, or bulk handling of sensitive data. Triggers when a user\ngenerates more DLP incidents in the last hour than a configurable threshold.",
+                    "severity": "high",
                     "entityMappings": {
+                      "ips": [
+                        {
+                          "addressColumn": "Userip",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ],
                       "hosts": [
                         {
                           "id": "[if(true(), 'host1', 'host1')]",
                           "nameColumn": "Hostname"
                         }
-                      ],
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "Userip"
-                        }
                       ]
-                    }
+                    },
+                    "title": "Netskope - DLP Incident Spike"
                   }
                 },
-                "schedule": {
-                  "frequency": "PT1H"
-                }
+                "id": "[if(true(), 'xdr-netskope-dlp-incident-spike-c3f8e4d6', 'xdr-netskope-dlp-incident-spike-c3f8e4d6')]"
               }
             }
           }

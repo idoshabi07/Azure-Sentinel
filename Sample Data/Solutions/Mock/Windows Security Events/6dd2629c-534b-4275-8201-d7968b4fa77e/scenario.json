@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-20T11:05:45.911894+00:00",
+  "solution": "Windows Security Events",
+  "ruleId": "6dd2629c-534b-4275-8201-d7968b4fa77e",
+  "ruleName": "Scheduled Task Hide",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\Analytic Rules\\ScheduleTaskHide.yaml",
+  "customDetectionId": null,
+  "customDetectionName": null,
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\XDR Detections\\ScheduleTaskHide.yaml",
+  "scenarioName": "automatic-simple-predicate",
+  "hypothesis": "Synthetic records exercise the decisive predicates in Scheduled Task Hide.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "simple",
+    "reasons": []
+  },
+  "sourceTable": "SecurityEvent",
+  "destinationTables": [
+    "SecurityEvent"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-SecurityEvent",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "EventID",
+        "operator": "==",
+        "rawPath": "EventID",
+        "value": 4657
+      },
+      {
+        "ruleColumn": "ObjectValueName",
+        "operator": "==",
+        "rawPath": "ObjectValueName",
+        "value": "SD"
+      },
+      {
+        "ruleColumn": "OperationType",
+        "operator": "==",
+        "rawPath": "OperationType",
+        "value": "%%1906"
+      }
+    ],
+    "lockedPaths": [
+      "EventID",
+      "ObjectValueName",
+      "OperationType"
+    ]
+  },
+  "fixtures": {
+    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\6dd2629c-534b-4275-8201-d7968b4fa77e\\malicious.json",
+    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\6dd2629c-534b-4275-8201-d7968b4fa77e\\benign.json",
+    "maliciousRecords": 1,
+    "benignRecords": 1
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-run"
+  },
+  "limitations": [
+    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
+  ]
+}

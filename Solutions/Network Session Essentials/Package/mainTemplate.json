@@ -677,113 +677,113 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "AWSS3",
                     "dataTypes": [
                       "AWSVPCFlow"
-                    ]
+                    ],
+                    "connectorId": "AWSS3"
                   },
                   {
-                    "connectorId": "MicrosoftThreatProtection",
                     "dataTypes": [
                       "DeviceNetworkEvents"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftThreatProtection"
                   },
                   {
-                    "connectorId": "SecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "SecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsSecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsSecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsForwardedEvents",
                     "dataTypes": [
                       "WindowsEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsForwardedEvents"
                   },
                   {
-                    "connectorId": "Zscaler",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Zscaler"
                   },
                   {
-                    "connectorId": "MicrosoftSysmonForLinux",
                     "dataTypes": [
                       "Syslog"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftSysmonForLinux"
                   },
                   {
-                    "connectorId": "PaloAltoNetworks",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "PaloAltoNetworks"
                   },
                   {
-                    "connectorId": "AzureMonitor(VMInsights)",
                     "dataTypes": [
                       "VMConnection"
-                    ]
+                    ],
+                    "connectorId": "AzureMonitor(VMInsights)"
                   },
                   {
-                    "connectorId": "AzureFirewall",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureFirewall"
                   },
                   {
-                    "connectorId": "AzureNSG",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureNSG"
                   },
                   {
-                    "connectorId": "CiscoASA",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoASA"
                   },
                   {
-                    "connectorId": "CiscoAsaAma",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoAsaAma"
                   },
                   {
-                    "connectorId": "Corelight",
                     "dataTypes": [
                       "Corelight_CL"
-                    ]
+                    ],
+                    "connectorId": "Corelight"
                   },
                   {
-                    "connectorId": "AIVectraStream",
                     "dataTypes": [
                       "VectraStream"
-                    ]
+                    ],
+                    "connectorId": "AIVectraStream"
                   },
                   {
-                    "connectorId": "CheckPoint",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CheckPoint"
                   },
                   {
-                    "connectorId": "Fortinet",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Fortinet"
                   },
                   {
-                    "connectorId": "CiscoMeraki",
                     "dataTypes": [
                       "Syslog",
                       "CiscoMerakiNativePoller"
-                    ]
+                    ],
+                    "connectorId": "CiscoMeraki"
                   }
                 ],
                 "tactics": [
@@ -803,9 +803,9 @@
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
-                  "Score": "score",
+                  "AnomalyFieldType": "anomalyFieldType",
                   "AnomalyFieldValue": "anomalyFieldValue",
-                  "AnomalyFieldType": "anomalyFieldType"
+                  "Score": "score"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "Based on past data, anomaly was observed in {{anomalyFieldValue}} Traffic with a score of {{score}}.",
@@ -903,13 +903,13 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ],
                 "eventGroupingSettings": {
@@ -1003,13 +1003,13 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ],
                 "eventGroupingSettings": {
@@ -1096,113 +1096,113 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "AWSS3",
                     "dataTypes": [
                       "AWSVPCFlow"
-                    ]
+                    ],
+                    "connectorId": "AWSS3"
                   },
                   {
-                    "connectorId": "MicrosoftThreatProtection",
                     "dataTypes": [
                       "DeviceNetworkEvents"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftThreatProtection"
                   },
                   {
-                    "connectorId": "SecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "SecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsSecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsSecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsForwardedEvents",
                     "dataTypes": [
                       "WindowsEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsForwardedEvents"
                   },
                   {
-                    "connectorId": "Zscaler",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Zscaler"
                   },
                   {
-                    "connectorId": "MicrosoftSysmonForLinux",
                     "dataTypes": [
                       "Syslog"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftSysmonForLinux"
                   },
                   {
-                    "connectorId": "PaloAltoNetworks",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "PaloAltoNetworks"
                   },
                   {
-                    "connectorId": "AzureMonitor(VMInsights)",
                     "dataTypes": [
                       "VMConnection"
-                    ]
+                    ],
+                    "connectorId": "AzureMonitor(VMInsights)"
                   },
                   {
-                    "connectorId": "AzureFirewall",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureFirewall"
                   },
                   {
-                    "connectorId": "AzureNSG",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureNSG"
                   },
                   {
-                    "connectorId": "CiscoASA",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoASA"
                   },
                   {
-                    "connectorId": "CiscoAsaAma",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoAsaAma"
                   },
                   {
-                    "connectorId": "Corelight",
                     "dataTypes": [
                       "Corelight_CL"
-                    ]
+                    ],
+                    "connectorId": "Corelight"
                   },
                   {
-                    "connectorId": "AIVectraStream",
                     "dataTypes": [
                       "VectraStream"
-                    ]
+                    ],
+                    "connectorId": "AIVectraStream"
                   },
                   {
-                    "connectorId": "CheckPoint",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CheckPoint"
                   },
                   {
-                    "connectorId": "Fortinet",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Fortinet"
                   },
                   {
-                    "connectorId": "CiscoMeraki",
                     "dataTypes": [
                       "Syslog",
                       "CiscoMerakiNativePoller"
-                    ]
+                    ],
+                    "connectorId": "CiscoMeraki"
                   }
                 ],
                 "tactics": [
@@ -1221,16 +1221,16 @@
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
-                  "DstPortNumber": "DstPortNumber",
-                  "AllNetworkDirections": "NetworkDirections",
                   "AllDvcAction": "DvcActions",
+                  "AllNetworkDirections": "NetworkDirections",
+                  "DstPortNumber": "DstPortNumber",
                   "AllNetworkProtocols": "NetworkProtocols"
                 },
                 "alertDetailsOverride": {
-                  "alertDisplayNameFormat": "Detected {{Name}}",
-                  "alertSeverityColumnName": "Severity",
+                  "alertDescriptionFormat": "{{Description}}",
                   "alertTacticsColumnName": "Tactic",
-                  "alertDescriptionFormat": "{{Description}}"
+                  "alertDisplayNameFormat": "Detected {{Name}}",
+                  "alertSeverityColumnName": "Severity"
                 }
               }
             },
@@ -1313,113 +1313,113 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "AWSS3",
                     "dataTypes": [
                       "AWSVPCFlow"
-                    ]
+                    ],
+                    "connectorId": "AWSS3"
                   },
                   {
-                    "connectorId": "MicrosoftThreatProtection",
                     "dataTypes": [
                       "DeviceNetworkEvents"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftThreatProtection"
                   },
                   {
-                    "connectorId": "SecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "SecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsSecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsSecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsForwardedEvents",
                     "dataTypes": [
                       "WindowsEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsForwardedEvents"
                   },
                   {
-                    "connectorId": "Zscaler",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Zscaler"
                   },
                   {
-                    "connectorId": "MicrosoftSysmonForLinux",
                     "dataTypes": [
                       "Syslog"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftSysmonForLinux"
                   },
                   {
-                    "connectorId": "PaloAltoNetworks",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "PaloAltoNetworks"
                   },
                   {
-                    "connectorId": "AzureMonitor(VMInsights)",
                     "dataTypes": [
                       "VMConnection"
-                    ]
+                    ],
+                    "connectorId": "AzureMonitor(VMInsights)"
                   },
                   {
-                    "connectorId": "AzureFirewall",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureFirewall"
                   },
                   {
-                    "connectorId": "AzureNSG",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureNSG"
                   },
                   {
-                    "connectorId": "CiscoASA",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoASA"
                   },
                   {
-                    "connectorId": "CiscoAsaAma",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoAsaAma"
                   },
                   {
-                    "connectorId": "Corelight",
                     "dataTypes": [
                       "Corelight_CL"
-                    ]
+                    ],
+                    "connectorId": "Corelight"
                   },
                   {
-                    "connectorId": "AIVectraStream",
                     "dataTypes": [
                       "VectraStream"
-                    ]
+                    ],
+                    "connectorId": "AIVectraStream"
                   },
                   {
-                    "connectorId": "CheckPoint",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CheckPoint"
                   },
                   {
-                    "connectorId": "Fortinet",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Fortinet"
                   },
                   {
-                    "connectorId": "CiscoMeraki",
                     "dataTypes": [
                       "Syslog",
                       "CiscoMerakiNativePoller"
-                    ]
+                    ],
+                    "connectorId": "CiscoMeraki"
                   }
                 ],
                 "tactics": [
@@ -1437,16 +1437,16 @@
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
-                  "DstPortNumber": "DstPortNumber",
-                  "AllNetworkDirections": "NetworkDirections",
                   "AllDvcAction": "DvcActions",
+                  "AllNetworkDirections": "NetworkDirections",
+                  "DstPortNumber": "DstPortNumber",
                   "AllNetworkProtocols": "NetworkProtocols"
                 },
                 "alertDetailsOverride": {
-                  "alertDisplayNameFormat": "Detected {{Name}}",
-                  "alertSeverityColumnName": "Severity",
+                  "alertDescriptionFormat": "{{Description}}",
                   "alertTacticsColumnName": "Tactic",
-                  "alertDescriptionFormat": "{{Description}}"
+                  "alertDisplayNameFormat": "Detected {{Name}}",
+                  "alertSeverityColumnName": "Severity"
                 }
               }
             },
@@ -1529,113 +1529,113 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "AWSS3",
                     "dataTypes": [
                       "AWSVPCFlow"
-                    ]
+                    ],
+                    "connectorId": "AWSS3"
                   },
                   {
-                    "connectorId": "MicrosoftThreatProtection",
                     "dataTypes": [
                       "DeviceNetworkEvents"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftThreatProtection"
                   },
                   {
-                    "connectorId": "SecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "SecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsSecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsSecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsForwardedEvents",
                     "dataTypes": [
                       "WindowsEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsForwardedEvents"
                   },
                   {
-                    "connectorId": "Zscaler",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Zscaler"
                   },
                   {
-                    "connectorId": "MicrosoftSysmonForLinux",
                     "dataTypes": [
                       "Syslog"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftSysmonForLinux"
                   },
                   {
-                    "connectorId": "PaloAltoNetworks",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "PaloAltoNetworks"
                   },
                   {
-                    "connectorId": "AzureMonitor(VMInsights)",
                     "dataTypes": [
                       "VMConnection"
-                    ]
+                    ],
+                    "connectorId": "AzureMonitor(VMInsights)"
                   },
                   {
-                    "connectorId": "AzureFirewall",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureFirewall"
                   },
                   {
-                    "connectorId": "AzureNSG",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureNSG"
                   },
                   {
-                    "connectorId": "CiscoASA",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoASA"
                   },
                   {
-                    "connectorId": "CiscoAsaAma",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoAsaAma"
                   },
                   {
-                    "connectorId": "Corelight",
                     "dataTypes": [
                       "Corelight_CL"
-                    ]
+                    ],
+                    "connectorId": "Corelight"
                   },
                   {
-                    "connectorId": "AIVectraStream",
                     "dataTypes": [
                       "VectraStream"
-                    ]
+                    ],
+                    "connectorId": "AIVectraStream"
                   },
                   {
-                    "connectorId": "CheckPoint",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CheckPoint"
                   },
                   {
-                    "connectorId": "Fortinet",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Fortinet"
                   },
                   {
-                    "connectorId": "CiscoMeraki",
                     "dataTypes": [
                       "Syslog",
                       "CiscoMerakiNativePoller"
-                    ]
+                    ],
+                    "connectorId": "CiscoMeraki"
                   }
                 ],
                 "tactics": [
@@ -1737,113 +1737,113 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "AWSS3",
                     "dataTypes": [
                       "AWSVPCFlow"
-                    ]
+                    ],
+                    "connectorId": "AWSS3"
                   },
                   {
-                    "connectorId": "MicrosoftThreatProtection",
                     "dataTypes": [
                       "DeviceNetworkEvents"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftThreatProtection"
                   },
                   {
-                    "connectorId": "SecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "SecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsSecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsSecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsForwardedEvents",
                     "dataTypes": [
                       "WindowsEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsForwardedEvents"
                   },
                   {
-                    "connectorId": "Zscaler",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Zscaler"
                   },
                   {
-                    "connectorId": "MicrosoftSysmonForLinux",
                     "dataTypes": [
                       "Syslog"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftSysmonForLinux"
                   },
                   {
-                    "connectorId": "PaloAltoNetworks",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "PaloAltoNetworks"
                   },
                   {
-                    "connectorId": "AzureMonitor(VMInsights)",
                     "dataTypes": [
                       "VMConnection"
-                    ]
+                    ],
+                    "connectorId": "AzureMonitor(VMInsights)"
                   },
                   {
-                    "connectorId": "AzureFirewall",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureFirewall"
                   },
                   {
-                    "connectorId": "AzureNSG",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureNSG"
                   },
                   {
-                    "connectorId": "CiscoASA",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoASA"
                   },
                   {
-                    "connectorId": "CiscoAsaAma",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoAsaAma"
                   },
                   {
-                    "connectorId": "Corelight",
                     "dataTypes": [
                       "Corelight_CL"
-                    ]
+                    ],
+                    "connectorId": "Corelight"
                   },
                   {
-                    "connectorId": "AIVectraStream",
                     "dataTypes": [
                       "VectraStream"
-                    ]
+                    ],
+                    "connectorId": "AIVectraStream"
                   },
                   {
-                    "connectorId": "CheckPoint",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CheckPoint"
                   },
                   {
-                    "connectorId": "Fortinet",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Fortinet"
                   },
                   {
-                    "connectorId": "CiscoMeraki",
                     "dataTypes": [
                       "Syslog",
                       "CiscoMerakiNativePoller"
-                    ]
+                    ],
+                    "connectorId": "CiscoMeraki"
                   }
                 ],
                 "tactics": [
@@ -1854,13 +1854,13 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ],
                 "customDetails": {
@@ -1951,113 +1951,113 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "AWSS3",
                     "dataTypes": [
                       "AWSVPCFlow"
-                    ]
+                    ],
+                    "connectorId": "AWSS3"
                   },
                   {
-                    "connectorId": "MicrosoftThreatProtection",
                     "dataTypes": [
                       "DeviceNetworkEvents"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftThreatProtection"
                   },
                   {
-                    "connectorId": "SecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "SecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsSecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsSecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsForwardedEvents",
                     "dataTypes": [
                       "WindowsEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsForwardedEvents"
                   },
                   {
-                    "connectorId": "Zscaler",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Zscaler"
                   },
                   {
-                    "connectorId": "MicrosoftSysmonForLinux",
                     "dataTypes": [
                       "Syslog"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftSysmonForLinux"
                   },
                   {
-                    "connectorId": "PaloAltoNetworks",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "PaloAltoNetworks"
                   },
                   {
-                    "connectorId": "AzureMonitor(VMInsights)",
                     "dataTypes": [
                       "VMConnection"
-                    ]
+                    ],
+                    "connectorId": "AzureMonitor(VMInsights)"
                   },
                   {
-                    "connectorId": "AzureFirewall",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureFirewall"
                   },
                   {
-                    "connectorId": "AzureNSG",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureNSG"
                   },
                   {
-                    "connectorId": "CiscoASA",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoASA"
                   },
                   {
-                    "connectorId": "CiscoAsaAma",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoAsaAma"
                   },
                   {
-                    "connectorId": "Corelight",
                     "dataTypes": [
                       "Corelight_CL"
-                    ]
+                    ],
+                    "connectorId": "Corelight"
                   },
                   {
-                    "connectorId": "AIVectraStream",
                     "dataTypes": [
                       "VectraStream"
-                    ]
+                    ],
+                    "connectorId": "AIVectraStream"
                   },
                   {
-                    "connectorId": "CheckPoint",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CheckPoint"
                   },
                   {
-                    "connectorId": "Fortinet",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Fortinet"
                   },
                   {
-                    "connectorId": "CiscoMeraki",
                     "dataTypes": [
                       "Syslog",
                       "CiscoMerakiNativePoller"
-                    ]
+                    ],
+                    "connectorId": "CiscoMeraki"
                   }
                 ],
                 "tactics": [
@@ -2068,13 +2068,13 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ],
                 "customDetails": {
@@ -2165,113 +2165,113 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "AWSS3",
                     "dataTypes": [
                       "AWSVPCFlow"
-                    ]
+                    ],
+                    "connectorId": "AWSS3"
                   },
                   {
-                    "connectorId": "MicrosoftThreatProtection",
                     "dataTypes": [
                       "DeviceNetworkEvents"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftThreatProtection"
                   },
                   {
-                    "connectorId": "SecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "SecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsSecurityEvents",
                     "dataTypes": [
                       "SecurityEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsSecurityEvents"
                   },
                   {
-                    "connectorId": "WindowsForwardedEvents",
                     "dataTypes": [
                       "WindowsEvent"
-                    ]
+                    ],
+                    "connectorId": "WindowsForwardedEvents"
                   },
                   {
-                    "connectorId": "Zscaler",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Zscaler"
                   },
                   {
-                    "connectorId": "MicrosoftSysmonForLinux",
                     "dataTypes": [
                       "Syslog"
-                    ]
+                    ],
+                    "connectorId": "MicrosoftSysmonForLinux"
                   },
                   {
-                    "connectorId": "PaloAltoNetworks",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "PaloAltoNetworks"
                   },
                   {
-                    "connectorId": "AzureMonitor(VMInsights)",
                     "dataTypes": [
                       "VMConnection"
-                    ]
+                    ],
+                    "connectorId": "AzureMonitor(VMInsights)"
                   },
                   {
-                    "connectorId": "AzureFirewall",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureFirewall"
                   },
                   {
-                    "connectorId": "AzureNSG",
                     "dataTypes": [
                       "AzureDiagnostics"
-                    ]
+                    ],
+                    "connectorId": "AzureNSG"
                   },
                   {
-                    "connectorId": "CiscoASA",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoASA"
                   },
                   {
-                    "connectorId": "CiscoAsaAma",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CiscoAsaAma"
                   },
                   {
-                    "connectorId": "Corelight",
                     "dataTypes": [
                       "Corelight_CL"
-                    ]
+                    ],
+                    "connectorId": "Corelight"
                   },
                   {
-                    "connectorId": "AIVectraStream",
                     "dataTypes": [
                       "VectraStream"
-                    ]
+                    ],
+                    "connectorId": "AIVectraStream"
                   },
                   {
-                    "connectorId": "CheckPoint",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "CheckPoint"
                   },
                   {
-                    "connectorId": "Fortinet",
                     "dataTypes": [
                       "CommonSecurityLog"
-                    ]
+                    ],
+                    "connectorId": "Fortinet"
                   },
                   {
-                    "connectorId": "CiscoMeraki",
                     "dataTypes": [
                       "Syslog",
                       "CiscoMerakiNativePoller"
-                    ]
+                    ],
+                    "connectorId": "CiscoMeraki"
                   }
                 ],
                 "tactics": [
@@ -2283,29 +2283,29 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   },
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "DstIpAddr"
+                        "columnName": "DstIpAddr",
+                        "identifier": "Address"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ],
                 "customDetails": {
-                  "TotalDstBytes": "TotalDstBytes",
                   "FrequencyTime": "MostFrequentTimeDeltaCount",
-                  "FrequencyCount": "TotalSrcBytes",
-                  "DstPortNumber": "DstPortNumber"
+                  "TotalDstBytes": "TotalDstBytes",
+                  "DstPortNumber": "DstPortNumber",
+                  "FrequencyCount": "TotalSrcBytes"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "Potential beaconing pattern from a client at address {{SrcIpAddr}} to a server at address {{DstIpAddr}} over port {{DstPortNumber}} identified. Such potential outbound beaconing pattern to untrusted public networks should be investigated for any malware callbacks or data exfiltration attempts as discussed in this [Blog](http://www.austintaylor.io/detect/beaconing/intrusion/detection/system/command/control/flare/elastic/stack/2017/06/10/detect-beaconing-with-flare-elasticsearch-and-intrusion-detection-systems/). The recurring frequency, reported as FrequencyTime in the custom details, and the total transferred volume reported as TotalDstBytes in the custom details, can help to determine the significance of this incident.",
@@ -6810,80 +6810,80 @@
                   "operator": "AND",
                   "criteria": [
                     {
-                      "contentId": "AWSVPCFlow",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AWSVPCFlow"
                     },
                     {
-                      "contentId": "DeviceNetworkEvents",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "DeviceNetworkEvents"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "WindowsEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "WindowsEvent"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "VMConnection",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VMConnection"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Corelight_CL",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Corelight_CL"
                     },
                     {
-                      "contentId": "VectraStream",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VectraStream"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CiscoMerakiNativePoller",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CiscoMerakiNativePoller"
                     }
                   ]
                 }
@@ -6907,8 +6907,8 @@
           "operator": "AND",
           "criteria": [
             {
-              "contentId": "[variables('summaryRuleObject1')._summaryRuleContentId1]",
-              "kind": "SummaryRule"
+              "kind": "SummaryRule",
+              "contentId": "[variables('summaryRuleObject1')._summaryRuleContentId1]"
             }
           ]
         }
@@ -7086,80 +7086,80 @@
                   "operator": "AND",
                   "criteria": [
                     {
-                      "contentId": "AWSVPCFlow",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AWSVPCFlow"
                     },
                     {
-                      "contentId": "DeviceNetworkEvents",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "DeviceNetworkEvents"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "WindowsEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "WindowsEvent"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "VMConnection",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VMConnection"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Corelight_CL",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Corelight_CL"
                     },
                     {
-                      "contentId": "VectraStream",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VectraStream"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CiscoMerakiNativePoller",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CiscoMerakiNativePoller"
                     }
                   ]
                 }
@@ -7183,8 +7183,8 @@
           "operator": "AND",
           "criteria": [
             {
-              "contentId": "[variables('summaryRuleObject2')._summaryRuleContentId2]",
-              "kind": "SummaryRule"
+              "kind": "SummaryRule",
+              "contentId": "[variables('summaryRuleObject2')._summaryRuleContentId2]"
             }
           ]
         }
@@ -7362,80 +7362,80 @@
                   "operator": "AND",
                   "criteria": [
                     {
-                      "contentId": "AWSVPCFlow",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AWSVPCFlow"
                     },
                     {
-                      "contentId": "DeviceNetworkEvents",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "DeviceNetworkEvents"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "WindowsEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "WindowsEvent"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "VMConnection",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VMConnection"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Corelight_CL",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Corelight_CL"
                     },
                     {
-                      "contentId": "VectraStream",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VectraStream"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CiscoMerakiNativePoller",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CiscoMerakiNativePoller"
                     }
                   ]
                 }
@@ -7459,8 +7459,8 @@
           "operator": "AND",
           "criteria": [
             {
-              "contentId": "[variables('summaryRuleObject3')._summaryRuleContentId3]",
-              "kind": "SummaryRule"
+              "kind": "SummaryRule",
+              "contentId": "[variables('summaryRuleObject3')._summaryRuleContentId3]"
             }
           ]
         }
@@ -7638,80 +7638,80 @@
                   "operator": "AND",
                   "criteria": [
                     {
-                      "contentId": "AWSVPCFlow",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AWSVPCFlow"
                     },
                     {
-                      "contentId": "DeviceNetworkEvents",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "DeviceNetworkEvents"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "WindowsEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "WindowsEvent"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "VMConnection",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VMConnection"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Corelight_CL",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Corelight_CL"
                     },
                     {
-                      "contentId": "VectraStream",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VectraStream"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CiscoMerakiNativePoller",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CiscoMerakiNativePoller"
                     }
                   ]
                 }
@@ -7735,8 +7735,8 @@
           "operator": "AND",
           "criteria": [
             {
-              "contentId": "[variables('summaryRuleObject4')._summaryRuleContentId4]",
-              "kind": "SummaryRule"
+              "kind": "SummaryRule",
+              "contentId": "[variables('summaryRuleObject4')._summaryRuleContentId4]"
             }
           ]
         }
@@ -7914,80 +7914,80 @@
                   "operator": "AND",
                   "criteria": [
                     {
-                      "contentId": "AWSVPCFlow",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AWSVPCFlow"
                     },
                     {
-                      "contentId": "DeviceNetworkEvents",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "DeviceNetworkEvents"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "WindowsEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "WindowsEvent"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "VMConnection",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VMConnection"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Corelight_CL",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Corelight_CL"
                     },
                     {
-                      "contentId": "VectraStream",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VectraStream"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CiscoMerakiNativePoller",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CiscoMerakiNativePoller"
                     }
                   ]
                 }
@@ -8011,8 +8011,8 @@
           "operator": "AND",
           "criteria": [
             {
-              "contentId": "[variables('summaryRuleObject5')._summaryRuleContentId5]",
-              "kind": "SummaryRule"
+              "kind": "SummaryRule",
+              "contentId": "[variables('summaryRuleObject5')._summaryRuleContentId5]"
             }
           ]
         }
@@ -8190,80 +8190,80 @@
                   "operator": "AND",
                   "criteria": [
                     {
-                      "contentId": "AWSVPCFlow",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AWSVPCFlow"
                     },
                     {
-                      "contentId": "DeviceNetworkEvents",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "DeviceNetworkEvents"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "WindowsEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "WindowsEvent"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "VMConnection",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VMConnection"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Corelight_CL",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Corelight_CL"
                     },
                     {
-                      "contentId": "VectraStream",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VectraStream"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CiscoMerakiNativePoller",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CiscoMerakiNativePoller"
                     }
                   ]
                 }
@@ -8287,8 +8287,8 @@
           "operator": "AND",
           "criteria": [
             {
-              "contentId": "[variables('summaryRuleObject6')._summaryRuleContentId6]",
-              "kind": "SummaryRule"
+              "kind": "SummaryRule",
+              "contentId": "[variables('summaryRuleObject6')._summaryRuleContentId6]"
             }
           ]
         }
@@ -8466,80 +8466,80 @@
                   "operator": "AND",
                   "criteria": [
                     {
-                      "contentId": "AWSVPCFlow",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AWSVPCFlow"
                     },
                     {
-                      "contentId": "DeviceNetworkEvents",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "DeviceNetworkEvents"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "WindowsEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "WindowsEvent"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "VMConnection",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VMConnection"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Corelight_CL",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Corelight_CL"
                     },
                     {
-                      "contentId": "VectraStream",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VectraStream"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CiscoMerakiNativePoller",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CiscoMerakiNativePoller"
                     }
                   ]
                 }
@@ -8563,8 +8563,8 @@
           "operator": "AND",
           "criteria": [
             {
-              "contentId": "[variables('summaryRuleObject7')._summaryRuleContentId7]",
-              "kind": "SummaryRule"
+              "kind": "SummaryRule",
+              "contentId": "[variables('summaryRuleObject7')._summaryRuleContentId7]"
             }
           ]
         }
@@ -8742,80 +8742,80 @@
                   "operator": "AND",
                   "criteria": [
                     {
-                      "contentId": "AWSVPCFlow",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AWSVPCFlow"
                     },
                     {
-                      "contentId": "DeviceNetworkEvents",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "DeviceNetworkEvents"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "WindowsEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "WindowsEvent"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "VMConnection",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VMConnection"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Corelight_CL",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Corelight_CL"
                     },
                     {
-                      "contentId": "VectraStream",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VectraStream"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CiscoMerakiNativePoller",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CiscoMerakiNativePoller"
                     }
                   ]
                 }
@@ -8839,8 +8839,8 @@
           "operator": "AND",
           "criteria": [
             {
-              "contentId": "[variables('summaryRuleObject8')._summaryRuleContentId8]",
-              "kind": "SummaryRule"
+              "kind": "SummaryRule",
+              "contentId": "[variables('summaryRuleObject8')._summaryRuleContentId8]"
             }
           ]
         }
@@ -9018,80 +9018,80 @@
                   "operator": "AND",
                   "criteria": [
                     {
-                      "contentId": "AWSVPCFlow",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AWSVPCFlow"
                     },
                     {
-                      "contentId": "DeviceNetworkEvents",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "DeviceNetworkEvents"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "SecurityEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "SecurityEvent"
                     },
                     {
-                      "contentId": "WindowsEvent",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "WindowsEvent"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "VMConnection",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VMConnection"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "AzureDiagnostics",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "AzureDiagnostics"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Corelight_CL",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Corelight_CL"
                     },
                     {
-                      "contentId": "VectraStream",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "VectraStream"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "CommonSecurityLog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CommonSecurityLog"
                     },
                     {
-                      "contentId": "Syslog",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "Syslog"
                     },
                     {
-                      "contentId": "CiscoMerakiNativePoller",
-                      "kind": "DataType"
+                      "kind": "DataType",
+                      "contentId": "CiscoMerakiNativePoller"
                     }
                   ]
                 }
@@ -9115,8 +9115,8 @@
           "operator": "AND",
           "criteria": [
             {
-              "contentId": "[variables('summaryRuleObject9')._summaryRuleContentId9]",
-              "kind": "SummaryRule"
+              "kind": "SummaryRule",
+              "contentId": "[variables('summaryRuleObject9')._summaryRuleContentId9]"
             }
           ]
         }

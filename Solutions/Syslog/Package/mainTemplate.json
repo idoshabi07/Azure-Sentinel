@@ -758,8 +758,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "FullName",
-                        "columnName": "Computer"
+                        "columnName": "Computer",
+                        "identifier": "FullName"
                       }
                     ],
                     "entityType": "Host"
@@ -767,8 +767,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "HostIP"
+                        "columnName": "HostIP",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -874,8 +874,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "FullName",
-                        "columnName": "User"
+                        "columnName": "User",
+                        "identifier": "FullName"
                       }
                     ],
                     "entityType": "Account"
@@ -883,8 +883,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIP"
+                        "columnName": "SourceIP",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -892,8 +892,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "URL"
+                        "columnName": "URL",
+                        "identifier": "Url"
                       }
                     ],
                     "entityType": "URL"
@@ -1003,16 +1003,16 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "FullName",
-                        "columnName": "User"
+                        "columnName": "User",
+                        "identifier": "FullName"
                       },
                       {
-                        "identifier": "Name",
-                        "columnName": "AccountName"
+                        "columnName": "AccountName",
+                        "identifier": "Name"
                       },
                       {
-                        "identifier": "UPNSuffix",
-                        "columnName": "AccountUPNSuffix"
+                        "columnName": "AccountUPNSuffix",
+                        "identifier": "UPNSuffix"
                       }
                     ],
                     "entityType": "Account"
@@ -1020,8 +1020,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIP"
+                        "columnName": "SourceIP",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -1029,8 +1029,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "URL"
+                        "columnName": "URL",
+                        "identifier": "Url"
                       }
                     ],
                     "entityType": "URL"
@@ -1141,16 +1141,16 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "FullName",
-                        "columnName": "User"
+                        "columnName": "User",
+                        "identifier": "FullName"
                       },
                       {
-                        "identifier": "Name",
-                        "columnName": "AccountName"
+                        "columnName": "AccountName",
+                        "identifier": "Name"
                       },
                       {
-                        "identifier": "UPNSuffix",
-                        "columnName": "AccountUPNSuffix"
+                        "columnName": "AccountUPNSuffix",
+                        "identifier": "UPNSuffix"
                       }
                     ],
                     "entityType": "Account"
@@ -1158,8 +1158,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIP"
+                        "columnName": "SourceIP",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -1167,8 +1167,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "URL"
+                        "columnName": "URL",
+                        "identifier": "Url"
                       }
                     ],
                     "entityType": "URL"
@@ -1278,8 +1278,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Name",
-                        "columnName": "Account"
+                        "columnName": "Account",
+                        "identifier": "Name"
                       }
                     ],
                     "entityType": "Account"
@@ -1287,8 +1287,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "IPAddress"
+                        "columnName": "IPAddress",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -1296,8 +1296,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "HostName",
-                        "columnName": "HostName"
+                        "columnName": "HostName",
+                        "identifier": "HostName"
                       }
                     ],
                     "entityType": "Host"
@@ -1305,8 +1305,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "ResourceId",
-                        "columnName": "ResourceId"
+                        "columnName": "ResourceId",
+                        "identifier": "ResourceId"
                       }
                     ],
                     "entityType": "AzureResource"
@@ -1416,8 +1416,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Name",
-                        "columnName": "username"
+                        "columnName": "username",
+                        "identifier": "Name"
                       }
                     ],
                     "entityType": "Account"
@@ -1425,8 +1425,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "src_ip"
+                        "columnName": "src_ip",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -1434,8 +1434,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "HostName",
-                        "columnName": "Computer"
+                        "columnName": "Computer",
+                        "identifier": "HostName"
                       }
                     ],
                     "entityType": "Host"
@@ -1443,29 +1443,29 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Name",
-                        "columnName": "FileSample"
+                        "columnName": "FileSample",
+                        "identifier": "Name"
                       }
                     ],
                     "entityType": "File"
                   }
                 ],
                 "customDetails": {
-                  "FilesList": "fileslist",
-                  "TransferCount": "count_distinct_filepath"
+                  "TransferCount": "count_distinct_filepath",
+                  "FilesList": "fileslist"
                 },
                 "incidentConfiguration": {
                   "groupingConfiguration": {
+                    "enabled": true,
                     "reopenClosedIncident": false,
+                    "matchingMethod": "Selected",
+                    "groupByAlertDetails": [],
                     "groupByEntities": [
                       "Account",
                       "Host"
                     ],
-                    "enabled": true,
-                    "groupByAlertDetails": [],
-                    "lookbackDuration": "5h",
-                    "matchingMethod": "Selected",
-                    "groupByCustomDetails": []
+                    "groupByCustomDetails": [],
+                    "lookbackDuration": "5h"
                   },
                   "createIncident": true
                 }
@@ -1573,8 +1573,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Name",
-                        "columnName": "username"
+                        "columnName": "username",
+                        "identifier": "Name"
                       }
                     ],
                     "entityType": "Account"
@@ -1582,8 +1582,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "src_ip"
+                        "columnName": "src_ip",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -1591,8 +1591,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "HostName",
-                        "columnName": "Computer"
+                        "columnName": "Computer",
+                        "identifier": "HostName"
                       }
                     ],
                     "entityType": "Host"
@@ -1600,29 +1600,29 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Name",
-                        "columnName": "DirSample"
+                        "columnName": "DirSample",
+                        "identifier": "Name"
                       }
                     ],
                     "entityType": "File"
                   }
                 ],
                 "customDetails": {
-                  "FilesList": "dirlist",
-                  "TransferCount": "count_distinct_dirpath"
+                  "TransferCount": "count_distinct_dirpath",
+                  "FilesList": "dirlist"
                 },
                 "incidentConfiguration": {
                   "groupingConfiguration": {
+                    "enabled": true,
                     "reopenClosedIncident": false,
+                    "matchingMethod": "Selected",
+                    "groupByAlertDetails": [],
                     "groupByEntities": [
                       "Account",
                       "Host"
                     ],
-                    "enabled": true,
-                    "groupByAlertDetails": [],
-                    "lookbackDuration": "5h",
-                    "matchingMethod": "Selected",
-                    "groupByCustomDetails": []
+                    "groupByCustomDetails": [],
+                    "lookbackDuration": "5h"
                   },
                   "createIncident": true
                 }
@@ -2887,18 +2887,13 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
-                "schedule": {
-                  "frequency": "P1D"
-                },
-                "displayName": "Failed logon attempts in authpriv",
-                "status": "disabled",
-                "id": "[if(true(), 'xdr-failed-logon-attempts-in-authpriv-e7ec9fa6', 'xdr-failed-logon-attempts-in-authpriv-e7ec9fa6')]",
                 "queryCondition": {
                   "queryText": "let threshold = 15;\n// Below pulls messages from syslog-authpriv logs where there was an authentication failure with an unknown user.\n// IP address of system attempting logon is also extracted from the SyslogMessage field. Some of these messages\n// are aggregated.\nSyslog\n| where Facility =~ \"authpriv\"\n| where SyslogMessage has \"authentication failure\" and SyslogMessage has \" uid=0\"\n| extend RemoteIP = extract(@\".*?rhost=([\\d.]+).*?\", 1,SyslogMessage)\n| project TimeGenerated, Computer, ProcessName, HostIP, RemoteIP, ProcessID\n| join kind=innerunique (\n    // Below pulls messages from syslog-authpriv logs that show each instance an unknown user tried to logon.\n    Syslog\n    | where Facility =~ \"authpriv\"\n    | where SyslogMessage has \"user unknown\"\n    | project Computer, HostIP, ProcessID\n    ) on Computer, HostIP, ProcessID\n// Count the number of failed logon attempts by External IP and internal machine\n| summarize FirstLogonAttempt = min(TimeGenerated), LatestLogonAttempt = max(TimeGenerated), TotalLogonAttempts = count() by Computer, HostIP, RemoteIP\n// Calculate the time between first and last logon attempt (AttemptPeriodLength)\n| extend TimeBetweenLogonAttempts = LatestLogonAttempt - FirstLogonAttempt\n| where TotalLogonAttempts >= threshold\n| project FirstLogonAttempt, LatestLogonAttempt, TimeBetweenLogonAttempts, TotalLogonAttempts, SourceAddress = RemoteIP, Computer,  HostIP\n| sort by Computer asc nulls last"
                 },
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Identifies failed logon attempts from unknown users in Syslog authpriv logs. The unknown user means the account that tried to log in isn't provisioned on the machine. A few hits could indicate someone attempting to access a machine they aren't authorized to access. \nIf there are many of hits, especially from outside your network, it could indicate a brute force attack. \nDefault threshold for logon attempts is 15.'",
+                    "title": "Failed logon attempts in authpriv",
                     "tactics": [
                       {
                         "techniques": [
@@ -2910,7 +2905,7 @@
                       }
                     ],
                     "severity": "medium",
-                    "title": "Failed logon attempts in authpriv",
+                    "description": "'Identifies failed logon attempts from unknown users in Syslog authpriv logs. The unknown user means the account that tried to log in isn't provisioned on the machine. A few hits could indicate someone attempting to access a machine they aren't authorized to access. \nIf there are many of hits, especially from outside your network, it could indicate a brute force attack. \nDefault threshold for logon attempts is 15.'",
                     "entityMappings": {
                       "ips": [
                         {
@@ -2920,6 +2915,11 @@
                       ]
                     }
                   }
+                },
+                "displayName": "Failed logon attempts in authpriv",
+                "id": "[if(true(), 'xdr-failed-logon-attempts-in-authpriv-e7ec9fa6', 'xdr-failed-logon-attempts-in-authpriv-e7ec9fa6')]",
+                "schedule": {
+                  "frequency": "P1D"
                 }
               }
             }
@@ -2955,18 +2955,13 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
-                "schedule": {
-                  "frequency": "PT1H"
-                },
-                "displayName": "NRT Squid proxy events related to mining pools",
-                "status": "disabled",
-                "id": "[if(true(), 'xdr-nrt-squid-proxy-events-related-to-mining-pools-dd03057e', 'xdr-nrt-squid-proxy-events-related-to-mining-pools-dd03057e')]",
                 "queryCondition": {
                   "queryText": "let DomainList = dynamic([\"monerohash.com\", \"do-dear.com\", \"xmrminerpro.com\", \"secumine.net\", \"xmrpool.com\", \"minexmr.org\", \"hashanywhere.com\", \"xmrget.com\",\n\"mininglottery.eu\", \"minergate.com\", \"moriaxmr.com\", \"multipooler.com\", \"moneropools.com\", \"xmrpool.eu\", \"coolmining.club\", \"supportxmr.com\",\n\"minexmr.com\", \"hashvault.pro\", \"xmrpool.net\", \"crypto-pool.fr\", \"xmr.pt\", \"miner.rocks\", \"walpool.com\", \"herominers.com\", \"gntl.co.uk\", \"semipool.com\",\n\"coinfoundry.org\", \"cryptoknight.cc\", \"fairhash.org\", \"baikalmine.com\", \"tubepool.xyz\", \"fairpool.xyz\", \"asiapool.io\", \"coinpoolit.webhop.me\", \"nanopool.org\",\n\"moneropool.com\", \"miner.center\", \"prohash.net\", \"poolto.be\", \"cryptoescrow.eu\", \"monerominers.net\", \"cryptonotepool.org\", \"extrmepool.org\", \"webcoin.me\",\n\"kippo.eu\", \"hashinvest.ws\", \"monero.farm\", \"supportxmr.com\", \"xmrpool.eu\", \"linux-repository-updates.com\", \"1gh.com\", \"dwarfpool.com\", \"hash-to-coins.com\",\n\"hashvault.pro\", \"pool-proxy.com\", \"hashfor.cash\", \"fairpool.cloud\", \"litecoinpool.org\", \"mineshaft.ml\", \"abcxyz.stream\", \"moneropool.ru\", \"cryptonotepool.org.uk\",\n\"extremepool.org\", \"extremehash.com\", \"hashinvest.net\", \"unipool.pro\", \"crypto-pools.org\", \"monero.net\", \"backup-pool.com\", \"mooo.com\", \"freeyy.me\", \"cryptonight.net\",\n\"shscrypto.net\"]);\nSyslog\n| where ProcessName contains \"squid\"\n| extend URL = extract(\"(([A-Z]+ [a-z]{4,5}:\\\\/\\\\/)|[A-Z]+ )([^ :]*)\",3,SyslogMessage),\n        SourceIP = extract(\"([0-9]+ )(([0-9]{1,3})\\\\.([0-9]{1,3})\\\\.([0-9]{1,3})\\\\.([0-9]{1,3}))\",2,SyslogMessage),\n        Status = extract(\"(TCP_(([A-Z]+)(_[A-Z]+)*)|UDP_(([A-Z]+)(_[A-Z]+)*))\",1,SyslogMessage),\n        HTTP_Status_Code = extract(\"(TCP_(([A-Z]+)(_[A-Z]+)*)|UDP_(([A-Z]+)(_[A-Z]+)*))/([0-9]{3})\",8,SyslogMessage),\n        User = extract(\"(CONNECT |GET )([^ ]* )([^ ]+)\",3,SyslogMessage),\n        RemotePort = extract(\"(CONNECT |GET )([^ ]*)(:)([0-9]*)\",4,SyslogMessage),\n        Domain = extract(\"(([A-Z]+ [a-z]{4,5}:\\\\/\\\\/)|[A-Z]+ )([^ :\\\\/]*)\",3,SyslogMessage),\n        Bytes = toint(extract(\"([A-Z]+\\\\/[0-9]{3} )([0-9]+)\",2,SyslogMessage)),\n        contentType = extract(\"([a-z/]+$)\",1,SyslogMessage)\n| extend TLD = extract(\"\\\\.[a-z]*$\",0,Domain)\n| where HTTP_Status_Code == '200'\n| where Domain contains \".\"\n| where Domain has_any (DomainList)"
                 },
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Checks for Squid proxy events in Syslog associated with common mining pools .This query presumes the default Squid log format is being used.\n http://www.squid-cache.org/Doc/config/access_log/'",
+                    "title": "NRT Squid proxy events related to mining pools",
                     "tactics": [
                       {
                         "techniques": [
@@ -2978,22 +2973,27 @@
                       }
                     ],
                     "severity": "low",
-                    "title": "NRT Squid proxy events related to mining pools",
+                    "description": "'Checks for Squid proxy events in Syslog associated with common mining pools .This query presumes the default Squid log format is being used.\n http://www.squid-cache.org/Doc/config/access_log/'",
                     "entityMappings": {
-                      "urls": [
-                        {
-                          "addressColumn": "URL",
-                          "id": "[if(true(), 'url1', 'url1')]"
-                        }
-                      ],
                       "ips": [
                         {
                           "addressColumn": "SourceIP",
                           "id": "[if(true(), 'ip1', 'ip1')]"
                         }
+                      ],
+                      "urls": [
+                        {
+                          "addressColumn": "URL",
+                          "id": "[if(true(), 'url1', 'url1')]"
+                        }
                       ]
                     }
                   }
+                },
+                "displayName": "NRT Squid proxy events related to mining pools",
+                "id": "[if(true(), 'xdr-nrt-squid-proxy-events-related-to-mining-pools-dd03057e', 'xdr-nrt-squid-proxy-events-related-to-mining-pools-dd03057e')]",
+                "schedule": {
+                  "frequency": "PT1H"
                 }
               }
             }
@@ -3029,18 +3029,13 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
-                "schedule": {
-                  "frequency": "P1D"
-                },
-                "displayName": "Squid proxy events related to mining pools",
-                "status": "disabled",
-                "id": "[if(true(), 'xdr-squid-proxy-events-related-to-mining-pools-80733eb7', 'xdr-squid-proxy-events-related-to-mining-pools-80733eb7')]",
                 "queryCondition": {
                   "queryText": "let DomainList = dynamic([\"monerohash.com\", \"do-dear.com\", \"xmrminerpro.com\", \"secumine.net\", \"xmrpool.com\", \"minexmr.org\", \"hashanywhere.com\", \"xmrget.com\",\n\"mininglottery.eu\", \"minergate.com\", \"moriaxmr.com\", \"multipooler.com\", \"moneropools.com\", \"xmrpool.eu\", \"coolmining.club\", \"supportxmr.com\",\n\"minexmr.com\", \"hashvault.pro\", \"xmrpool.net\", \"crypto-pool.fr\", \"xmr.pt\", \"miner.rocks\", \"walpool.com\", \"herominers.com\", \"gntl.co.uk\", \"semipool.com\",\n\"coinfoundry.org\", \"cryptoknight.cc\", \"fairhash.org\", \"baikalmine.com\", \"tubepool.xyz\", \"fairpool.xyz\", \"asiapool.io\", \"coinpoolit.webhop.me\", \"nanopool.org\",\n\"moneropool.com\", \"miner.center\", \"prohash.net\", \"poolto.be\", \"cryptoescrow.eu\", \"monerominers.net\", \"cryptonotepool.org\", \"extrmepool.org\", \"webcoin.me\",\n\"kippo.eu\", \"hashinvest.ws\", \"monero.farm\", \"supportxmr.com\", \"xmrpool.eu\", \"linux-repository-updates.com\", \"1gh.com\", \"dwarfpool.com\", \"hash-to-coins.com\",\n\"hashvault.pro\", \"pool-proxy.com\", \"hashfor.cash\", \"fairpool.cloud\", \"litecoinpool.org\", \"mineshaft.ml\", \"abcxyz.stream\", \"moneropool.ru\", \"cryptonotepool.org.uk\",\n\"extremepool.org\", \"extremehash.com\", \"hashinvest.net\", \"unipool.pro\", \"crypto-pools.org\", \"monero.net\", \"backup-pool.com\", \"mooo.com\", \"freeyy.me\", \"cryptonight.net\",\n\"shscrypto.net\"]);\nSyslog\n| where ProcessName contains \"squid\"\n| extend URL = extract(\"(([A-Z]+ [a-z]{4,5}:\\\\/\\\\/)|[A-Z]+ )([^ :]*)\",3,SyslogMessage),\n        SourceIP = extract(\"([0-9]+ )(([0-9]{1,3})\\\\.([0-9]{1,3})\\\\.([0-9]{1,3})\\\\.([0-9]{1,3}))\",2,SyslogMessage),\n        Status = extract(\"(TCP_(([A-Z]+)(_[A-Z]+)*)|UDP_(([A-Z]+)(_[A-Z]+)*))\",1,SyslogMessage),\n        HTTP_Status_Code = extract(\"(TCP_(([A-Z]+)(_[A-Z]+)*)|UDP_(([A-Z]+)(_[A-Z]+)*))/([0-9]{3})\",8,SyslogMessage),\n        User = extract(\"(CONNECT |GET )([^ ]* )([^ ]+)\",3,SyslogMessage),\n        RemotePort = extract(\"(CONNECT |GET )([^ ]*)(:)([0-9]*)\",4,SyslogMessage),\n        Domain = extract(\"(([A-Z]+ [a-z]{4,5}:\\\\/\\\\/)|[A-Z]+ )([^ :\\\\/]*)\",3,SyslogMessage),\n        Bytes = toint(extract(\"([A-Z]+\\\\/[0-9]{3} )([0-9]+)\",2,SyslogMessage)),\n        contentType = extract(\"([a-z/]+$)\",1,SyslogMessage)\n| extend TLD = extract(\"\\\\.[a-z]*$\",0,Domain)\n| where HTTP_Status_Code == '200'\n| where Domain contains \".\"\n| where Domain has_any (DomainList)\n| extend AccountName = tostring(split(User, \"@\")[0]), AccountUPNSuffix = tostring(split(User, \"@\")[1])"
                 },
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Checks for Squid proxy events in Syslog associated with common mining pools. This query presumes the default Squid log format is being used.\n http://www.squid-cache.org/Doc/config/access_log/'",
+                    "title": "Squid proxy events related to mining pools",
                     "tactics": [
                       {
                         "techniques": [
@@ -3052,19 +3047,19 @@
                       }
                     ],
                     "severity": "low",
-                    "title": "Squid proxy events related to mining pools",
+                    "description": "'Checks for Squid proxy events in Syslog associated with common mining pools. This query presumes the default Squid log format is being used.\n http://www.squid-cache.org/Doc/config/access_log/'",
                     "entityMappings": {
+                      "accounts": [
+                        {
+                          "upnSuffixColumn": "AccountUPNSuffix",
+                          "nameColumn": "AccountName",
+                          "id": "[if(true(), 'account1', 'account1')]"
+                        }
+                      ],
                       "ips": [
                         {
                           "addressColumn": "SourceIP",
                           "id": "[if(true(), 'ip1', 'ip1')]"
-                        }
-                      ],
-                      "accounts": [
-                        {
-                          "nameColumn": "AccountName",
-                          "id": "[if(true(), 'account1', 'account1')]",
-                          "upnSuffixColumn": "AccountUPNSuffix"
                         }
                       ],
                       "urls": [
@@ -3075,6 +3070,11 @@
                       ]
                     }
                   }
+                },
+                "displayName": "Squid proxy events related to mining pools",
+                "id": "[if(true(), 'xdr-squid-proxy-events-related-to-mining-pools-80733eb7', 'xdr-squid-proxy-events-related-to-mining-pools-80733eb7')]",
+                "schedule": {
+                  "frequency": "P1D"
                 }
               }
             }
@@ -3110,18 +3110,13 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
-                "schedule": {
-                  "frequency": "P1D"
-                },
-                "displayName": "Squid proxy events for ToR proxies",
-                "status": "disabled",
-                "id": "[if(true(), 'xdr-squid-proxy-events-for-tor-proxies-90d3f6ec', 'xdr-squid-proxy-events-for-tor-proxies-90d3f6ec')]",
                 "queryCondition": {
                   "queryText": "let DomainList = dynamic([\"tor2web.org\", \"tor2web.com\", \"torlink.co\", \"onion.to\", \"onion.ink\", \"onion.cab\", \"onion.nu\", \"onion.link\",\n\"onion.it\", \"onion.city\", \"onion.direct\", \"onion.top\", \"onion.casa\", \"onion.plus\", \"onion.rip\", \"onion.dog\", \"tor2web.fi\",\n\"tor2web.blutmagie.de\", \"onion.sh\", \"onion.lu\", \"onion.pet\", \"t2w.pw\", \"tor2web.ae.org\", \"tor2web.io\", \"tor2web.xyz\", \"onion.lt\",\n\"s1.tor-gateways.de\", \"s2.tor-gateways.de\", \"s3.tor-gateways.de\", \"s4.tor-gateways.de\", \"s5.tor-gateways.de\", \"hiddenservice.net\"]);\nSyslog\n| where ProcessName contains \"squid\"\n| extend URL = extract(\"(([A-Z]+ [a-z]{4,5}:\\\\/\\\\/)|[A-Z]+ )([^ :]*)\",3,SyslogMessage),\n        SourceIP = extract(\"([0-9]+ )(([0-9]{1,3})\\\\.([0-9]{1,3})\\\\.([0-9]{1,3})\\\\.([0-9]{1,3}))\",2,SyslogMessage),\n        Status = extract(\"(TCP_(([A-Z]+)(_[A-Z]+)*)|UDP_(([A-Z]+)(_[A-Z]+)*))\",1,SyslogMessage),\n        HTTP_Status_Code = extract(\"(TCP_(([A-Z]+)(_[A-Z]+)*)|UDP_(([A-Z]+)(_[A-Z]+)*))/([0-9]{3})\",8,SyslogMessage),\n        User = extract(\"(CONNECT |GET )([^ ]* )([^ ]+)\",3,SyslogMessage),\n        RemotePort = extract(\"(CONNECT |GET )([^ ]*)(:)([0-9]*)\",4,SyslogMessage),\n        Domain = extract(\"(([A-Z]+ [a-z]{4,5}:\\\\/\\\\/)|[A-Z]+ )([^ :\\\\/]*)\",3,SyslogMessage),\n        Bytes = toint(extract(\"([A-Z]+\\\\/[0-9]{3} )([0-9]+)\",2,SyslogMessage)),\n        contentType = extract(\"([a-z/]+$)\",1,SyslogMessage)\n| extend TLD = extract(\"\\\\.[a-z]*$\",0,Domain)\n| where HTTP_Status_Code == \"200\"\n| where Domain contains \".\"\n| where Domain has_any (DomainList)\n| extend AccountName = tostring(split(User, \"@\")[0]), AccountUPNSuffix = tostring(split(User, \"@\")[1])"
                 },
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Check for Squid proxy events associated with common ToR proxies. This query presumes the default squid log format is being used.\nhttp://www.squid-cache.org/Doc/config/access_log/'",
+                    "title": "Squid proxy events for ToR proxies",
                     "tactics": [
                       {
                         "techniques": [
@@ -3136,19 +3131,19 @@
                       }
                     ],
                     "severity": "low",
-                    "title": "Squid proxy events for ToR proxies",
+                    "description": "'Check for Squid proxy events associated with common ToR proxies. This query presumes the default squid log format is being used.\nhttp://www.squid-cache.org/Doc/config/access_log/'",
                     "entityMappings": {
+                      "accounts": [
+                        {
+                          "upnSuffixColumn": "AccountUPNSuffix",
+                          "nameColumn": "AccountName",
+                          "id": "[if(true(), 'account1', 'account1')]"
+                        }
+                      ],
                       "ips": [
                         {
                           "addressColumn": "SourceIP",
                           "id": "[if(true(), 'ip1', 'ip1')]"
-                        }
-                      ],
-                      "accounts": [
-                        {
-                          "nameColumn": "AccountName",
-                          "id": "[if(true(), 'account1', 'account1')]",
-                          "upnSuffixColumn": "AccountUPNSuffix"
                         }
                       ],
                       "urls": [
@@ -3159,6 +3154,11 @@
                       ]
                     }
                   }
+                },
+                "displayName": "Squid proxy events for ToR proxies",
+                "id": "[if(true(), 'xdr-squid-proxy-events-for-tor-proxies-90d3f6ec', 'xdr-squid-proxy-events-for-tor-proxies-90d3f6ec')]",
+                "schedule": {
+                  "frequency": "P1D"
                 }
               }
             }
@@ -3194,18 +3194,13 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
-                "schedule": {
-                  "frequency": "P1D"
-                },
-                "displayName": "SSH - Potential Brute Force",
-                "status": "disabled",
-                "id": "[if(true(), 'xdr-ssh-potential-brute-force-e1ce0eab', 'xdr-ssh-potential-brute-force-e1ce0eab')]",
                 "queryCondition": {
                   "queryText": "let threshold = 15;\nSyslog\n| where ProcessName =~ \"sshd\"\n| where SyslogMessage contains \"Failed password for invalid user\"\n| parse kind=relaxed SyslogMessage with * \"invalid user \" user \" from \" ip \" port\" port \" ssh2\" *\n// using distinct below as it has been seen that Syslog can duplicate entries depending on implementation\n| distinct TimeGenerated, Computer, user, ip, port, SyslogMessage, _ResourceId\n| summarize EventTimes = make_list(TimeGenerated), PerHourCount = count() by bin(TimeGenerated,4h), ip, Computer, user, _ResourceId\n| where PerHourCount > threshold\n| mvexpand EventTimes\n| extend EventTimes = tostring(EventTimes)\n| summarize StartTime = min(EventTimes), EndTime = max(EventTimes), UserList = make_set(user), ComputerList = make_set(Computer), ResourceIdList = make_set(_ResourceId), sum(PerHourCount) by IPAddress = ip\n// bringing through single computer and user if array only has 1, otherwise, referencing the column and hashing the ComputerList or UserList so we don't get accidental entity matches when reviewing alerts\n| extend HostName = iff(array_length(ComputerList) == 1, tostring(ComputerList[0]), strcat(\"SeeComputerListField\",\"_\", tostring(hash(tostring(ComputerList)))))\n| extend Account = iff(array_length(ComputerList) == 1, tostring(UserList[0]), strcat(\"SeeUserListField\",\"_\", tostring(hash(tostring(UserList)))))\n| extend ResourceId = iff(array_length(ResourceIdList) == 1, tostring(ResourceIdList[0]), strcat(\"SeeResourceIdListField\",\"_\", tostring(hash(tostring(ResourceIdList)))))"
                 },
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Identifies an IP address that had 15 failed attempts to sign in via SSH in a 4 hour block during a 24 hour time period.\n Please note that entity mapping for arrays is not supported, so when there is a single value in an array, we will pull that value from the array as a single string to populate the entity to support entity mapping features within Sentinel. Additionally, if the array is multivalued, we will input a string to indicate this with a unique hash so that matching will not occur.\n As an example - ComputerList is an array that we check for a single value and write that into the HostN",
+                    "title": "SSH - Potential Brute Force",
                     "tactics": [
                       {
                         "techniques": [
@@ -3217,8 +3212,14 @@
                       }
                     ],
                     "severity": "low",
-                    "title": "SSH - Potential Brute Force",
+                    "description": "'Identifies an IP address that had 15 failed attempts to sign in via SSH in a 4 hour block during a 24 hour time period.\n Please note that entity mapping for arrays is not supported, so when there is a single value in an array, we will pull that value from the array as a single string to populate the entity to support entity mapping features within Sentinel. Additionally, if the array is multivalued, we will input a string to indicate this with a unique hash so that matching will not occur.\n As an example - ComputerList is an array that we check for a single value and write that into the HostN",
                     "entityMappings": {
+                      "hosts": [
+                        {
+                          "nameColumn": "HostName",
+                          "id": "[if(true(), 'host1', 'host1')]"
+                        }
+                      ],
                       "ips": [
                         {
                           "addressColumn": "IPAddress",
@@ -3230,15 +3231,14 @@
                           "resourceIdColumn": "ResourceId",
                           "id": "[if(true(), 'azureResource1', 'azureResource1')]"
                         }
-                      ],
-                      "hosts": [
-                        {
-                          "nameColumn": "HostName",
-                          "id": "[if(true(), 'host1', 'host1')]"
-                        }
                       ]
                     }
                   }
+                },
+                "displayName": "SSH - Potential Brute Force",
+                "id": "[if(true(), 'xdr-ssh-potential-brute-force-e1ce0eab', 'xdr-ssh-potential-brute-force-e1ce0eab')]",
+                "schedule": {
+                  "frequency": "P1D"
                 }
               }
             }
@@ -3274,18 +3274,13 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
-                "schedule": {
-                  "frequency": "PT15M"
-                },
-                "displayName": "SFTP File transfer above threshold",
-                "status": "disabled",
-                "id": "[if(true(), 'xdr-sftp-file-transfer-above-threshold-bb6a74c8', 'xdr-sftp-file-transfer-above-threshold-bb6a74c8')]",
                 "queryCondition": {
                   "queryText": "let threshold = 50;\nSyslog\n| where ProcessName has \"sftp\"\n    and SyslogMessage has \"close \"\n    and SyslogMessage has \" bytes read \"\n| parse SyslogMessage with \"close \\\"\" filepath \"\\\" bytes read \" readbytes: int \" written \" writtenbytes: int\n| join kind=leftouter (\n    Syslog\n    | where ProcessName has \"sftp\" and SyslogMessage has \"session opened for\"\n    | parse SyslogMessage with \"session opened for local user \" username: string \" from [\" src_ip \"]\"\n    | project username, src_ip, ProcessID\n    )\n    on ProcessID\n| project-away ProcessID1\n| summarize count_distinct_filepath=dcount(filepath), fileslist=make_set(filepath) by Computer, username, src_ip, bin(TimeGenerated, 15m)\n| where count_distinct_filepath >= threshold\n| extend FileSample = iff(array_length(fileslist) == 1, tostring(fileslist[0]), strcat(\"SeeFilesListField\",\"_\", tostring(hash(tostring(fileslist)))))"
                 },
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Identifies SFTP File Transfers above certain threshold in a 15min time period. It requires SFTP VERBOSE loglevel to be enabled.\n Please note that entity mapping for arrays is not supported, so when there is a single value in an array, we will pull that value from the array as a single string to populate the entity to support entity mapping features within Sentinel. Additionally, if the array is multivalued, we will input a string to indicate this with a unique hash so that matching will not occur.'",
+                    "title": "SFTP File transfer above threshold",
                     "tactics": [
                       {
                         "techniques": [
@@ -3297,7 +3292,7 @@
                       }
                     ],
                     "severity": "medium",
-                    "title": "SFTP File transfer above threshold",
+                    "description": "'Identifies SFTP File Transfers above certain threshold in a 15min time period. It requires SFTP VERBOSE loglevel to be enabled.\n Please note that entity mapping for arrays is not supported, so when there is a single value in an array, we will pull that value from the array as a single string to populate the entity to support entity mapping features within Sentinel. Additionally, if the array is multivalued, we will input a string to indicate this with a unique hash so that matching will not occur.'",
                     "entityMappings": {
                       "hosts": [
                         {
@@ -3313,6 +3308,11 @@
                       ]
                     }
                   }
+                },
+                "displayName": "SFTP File transfer above threshold",
+                "id": "[if(true(), 'xdr-sftp-file-transfer-above-threshold-bb6a74c8', 'xdr-sftp-file-transfer-above-threshold-bb6a74c8')]",
+                "schedule": {
+                  "frequency": "PT15M"
                 }
               }
             }
@@ -3348,18 +3348,13 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
-                "schedule": {
-                  "frequency": "PT15M"
-                },
-                "displayName": "SFTP File transfer folder count above threshold",
-                "status": "disabled",
-                "id": "[if(true(), 'xdr-sftp-file-transfer-folder-count-above-threshold-7355434e', 'xdr-sftp-file-transfer-folder-count-above-threshold-7355434e')]",
                 "queryCondition": {
                   "queryText": "let threshold = 10;\nSyslog\n| where ProcessName has \"sftp\"\n    and SyslogMessage has \"close \"\n    and SyslogMessage has \" bytes read \"\n| parse SyslogMessage with \"close \\\"\" filepath \"\\\" bytes read \" readbytes: int \" written \" writtenbytes: int\n| parse kind=regex filepath with dirpath:string \"/\" filename:string\n| join kind=leftouter (\n    Syslog\n    | where ProcessName has \"sftp\" and SyslogMessage has \"session opened for\"\n    | parse SyslogMessage with \"session opened for local user \" username: string \" from [\" src_ip \"]\"\n    | project username, src_ip, ProcessID\n    )\n    on ProcessID\n| project-away ProcessID1\n| summarize count_distinct_dirpath=dcount(dirpath), dirlist=make_set(dirpath) by Computer, username, src_ip, bin(TimeGenerated, 15m)\n| where count_distinct_dirpath >= threshold\n| extend DirSample = iff(array_length(dirlist) == 1, tostring(dirlist[0]), strcat(\"SeeDirListField\",\"_\", tostring(hash(tostring(dirlist)))))"
                 },
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Identifies SFTP File Transfers with distinct folder count above certain threshold in a 15min time period.\n It requires SFTP VERBOSE loglevel to be enabled.\n Please note that entity mapping for arrays is not supported, so when there is a single value in an array, we will pull that value from the array as a single string to populate the entity to support entity mapping features within Sentinel. Additionally, if the array is multivalued, we will input a string to indicate this with a unique hash so that matching will not occur.'",
+                    "title": "SFTP File transfer folder count above threshold",
                     "tactics": [
                       {
                         "techniques": [
@@ -3371,7 +3366,7 @@
                       }
                     ],
                     "severity": "medium",
-                    "title": "SFTP File transfer folder count above threshold",
+                    "description": "'Identifies SFTP File Transfers with distinct folder count above certain threshold in a 15min time period.\n It requires SFTP VERBOSE loglevel to be enabled.\n Please note that entity mapping for arrays is not supported, so when there is a single value in an array, we will pull that value from the array as a single string to populate the entity to support entity mapping features within Sentinel. Additionally, if the array is multivalued, we will input a string to indicate this with a unique hash so that matching will not occur.'",
                     "entityMappings": {
                       "hosts": [
                         {
@@ -3387,6 +3382,11 @@
                       ]
                     }
                   }
+                },
+                "displayName": "SFTP File transfer folder count above threshold",
+                "id": "[if(true(), 'xdr-sftp-file-transfer-folder-count-above-threshold-7355434e', 'xdr-sftp-file-transfer-folder-count-above-threshold-7355434e')]",
+                "schedule": {
+                  "frequency": "PT15M"
                 }
               }
             }

@@ -307,8 +307,8 @@
                     "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
                     ]
                   }
@@ -317,10 +317,10 @@
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
-                  "Total": "Total",
-                  "baseline": "baseline",
+                  "DNSQueries": "DNSQueries",
                   "AnomalyScore": "score",
-                  "DNSQueries": "DNSQueries"
+                  "baseline": "baseline",
+                  "Total": "Total"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "This client is generating excessive amount of DNS queries for non-existent domains. This can be an indication of possible C2 communications.\n\nBaseline for 'NXDOMAIN' error count for this client: '{{baseline}}'\n\nCurrent 'NXDOMAIN' error count for this client: '{{Total}}'\n\nDNS queries requested by the client include:\n\n'{{DNSQueries}}'",
@@ -418,8 +418,8 @@
                     "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
                     ]
                   }
@@ -428,9 +428,9 @@
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
-                  "NXDOMAINthreshold": "NXDOMAINthreshold",
+                  "DNSQueries": "DNSQueries",
                   "NXDOMAINCount": "NXDOMAINCount",
-                  "DNSQueries": "DNSQueries"
+                  "NXDOMAINthreshold": "NXDOMAINthreshold"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "Client is generating excessive amount of DNS queries for non-existent domains. This can be an indication of possible C2 communications. \n\n'NXDOMAIN' error count threshold: '{{NXDOMAINthreshold}}'\n\nCurrent 'NXDOMAIN' error count from this client: '{{NXDOMAINCount}}'\n\nDNS queries requested by the client include:\n\n'{{DNSQueries}}'",
@@ -529,8 +529,8 @@
                     "entityType": "DNS",
                     "fieldMappings": [
                       {
-                        "identifier": "DomainName",
-                        "columnName": "DnsQuery"
+                        "columnName": "DnsQuery",
+                        "identifier": "DomainName"
                       }
                     ]
                   }
@@ -539,10 +539,10 @@
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
-                  "TotalIPs": "TotalIPs",
                   "SrcIps": "SrcIps",
                   "AnomalyScore": "score",
-                  "baseline": "baseline"
+                  "baseline": "baseline",
+                  "TotalIPs": "TotalIPs"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "Multiple errors were detected on different clients for the same DNS query. These unsuccessful responses can be an indication of C2 communication. \n\nBaseline for total clients reporting errors for this DNS query: '{{baseline}}'\n\nCurrent count of clients reporting errors for this DNS query: '{{TotalIPs}}'\n\nClients requesting this DNS query include:\n'{{SrcIps}}'",
@@ -641,8 +641,8 @@
                     "entityType": "DNS",
                     "fieldMappings": [
                       {
-                        "identifier": "DomainName",
-                        "columnName": "DnsQuery"
+                        "columnName": "DnsQuery",
+                        "identifier": "DomainName"
                       }
                     ]
                   },
@@ -650,8 +650,8 @@
                     "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIP"
+                        "columnName": "SrcIP",
+                        "identifier": "Address"
                       }
                     ]
                   },
@@ -659,8 +659,8 @@
                     "entityType": "AzureResource",
                     "fieldMappings": [
                       {
-                        "identifier": "ResourceId",
-                        "columnName": "ResourceId"
+                        "columnName": "ResourceId",
+                        "identifier": "ResourceId"
                       }
                     ]
                   },
@@ -668,8 +668,8 @@
                     "entityType": "Url",
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "DnsQuery"
+                        "columnName": "DnsQuery",
+                        "identifier": "Url"
                       }
                     ]
                   },
@@ -677,12 +677,12 @@
                     "entityType": "Host",
                     "fieldMappings": [
                       {
-                        "identifier": "HostName",
-                        "columnName": "HostName"
+                        "columnName": "HostName",
+                        "identifier": "HostName"
                       },
                       {
-                        "identifier": "NTDomain",
-                        "columnName": "HostNameDomain"
+                        "columnName": "HostNameDomain",
+                        "identifier": "NTDomain"
                       }
                     ]
                   }
@@ -691,9 +691,9 @@
                   "aggregationKind": "SingleAlert"
                 },
                 "customDetails": {
-                  "TotalIPs": "TotalIPs",
+                  "IPCountthreshold": "IPCountthreshold",
                   "SrcIPs": "SrcIPs",
-                  "IPCountthreshold": "IPCountthreshold"
+                  "TotalIPs": "TotalIPs"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "Multiple errors were detected on different clients for the same DNS query. These unsuccessful responses can be an indication of C2 communication. \n\nThreshold for total clients reporting errors: '{{IPCountthreshold}}'\n\nCurrent count of clients reporting errors for this DNS query: '{{TotalIPs}}'\n\nClients requesting this DNSQuery include:\n\n'{{SrcIPs}}'",
@@ -791,8 +791,8 @@
                     "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
                     ]
                   }
@@ -801,10 +801,10 @@
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
-                  "Total": "Total",
-                  "baseline": "baseline",
+                  "DNSQueries": "DNSQueries",
                   "AnomalyScore": "score",
-                  "DNSQueries": "DNSQueries"
+                  "baseline": "baseline",
+                  "Total": "Total"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "Client has been identified with high NXDomain count which could be indicative of a DGA (cycling through possible C2 domains where most C2s are not live). This client is found to be communicating with multiple Domains which do not exist.\n\nBaseline Domain or DNS query count from this client: '{{baseline}}'\n\nCurrent Domain or DNS query count from this client: '{{Total}}'\n\nDNS queries requested by this client inlcude: '{{DNSQueries}}'",
@@ -902,8 +902,8 @@
                     "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
                     ]
                   }
@@ -912,9 +912,9 @@
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
+                  "DNSQueries": "DNSQueries",
                   "DNSQueryThreshold": "DNSQueryThreshold",
-                  "DNSQueryCount": "DNSQueryCount",
-                  "DNSQueries": "DNSQueries"
+                  "DNSQueryCount": "DNSQueryCount"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "Client has been identified with high NXDomain count which could be indicative of a DGA (cycling through possible C2 domains where most C2s are not live). This client is found to be communicating with multiple Domains which do not exist.\n\nDGA DNS query count baseline is: '{{DNSQueryThreshold}}'\n\nCurrent failed DNS query count from this client: '{{DNSQueryCount}}'\n\nDNS queries requested by this client inlcude: '{{DNSQueries}}'",
@@ -1011,8 +1011,8 @@
                     "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
                     ]
                   }
@@ -1021,10 +1021,10 @@
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
-                  "Total": "Total",
-                  "baseline": "baseline",
+                  "DNSQueries": "DNSQueries",
                   "AnomalyScore": "score",
-                  "DNSQueries": "DNSQueries"
+                  "baseline": "baseline",
+                  "Total": "Total"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "Client has been identified as making high reverse DNS counts which could be carrying out reconnaissance or discovery activity.\n\nReverse DNS lookup count baseline for this client: '{{baseline}}'\n\nCurrent reverse DNS lookup count by this client showing as: '{{Total}}'\n\nDNS queries requested by this client inlcude: '{{DNSQueries}}'",
@@ -1121,8 +1121,8 @@
                     "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
                     ]
                   }
@@ -1131,9 +1131,9 @@
                   "aggregationKind": "AlertPerResult"
                 },
                 "customDetails": {
+                  "DNSQueries": "DNSQueries",
                   "DNSQuerythreshold": "DNSQuerythreshold",
-                  "DNSQueryCount": "DNSQueryCount",
-                  "DNSQueries": "DNSQueries"
+                  "DNSQueryCount": "DNSQueryCount"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "Client identified as making high reverse DNS counts which could be carrying out reconnaissance or discovery activity.\n\nReverse DNS lookup threshold is: '{{DNSQuerythreshold}}'\n\nCurrent reverse DNS lookup count from this client is : '{{DNSQueryCount}}'\n\nDNS queries requested by this client inlcude: '{{DNSQueries}}'",
@@ -1232,8 +1232,8 @@
                     "entityType": "IP",
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SrcIpAddr"
+                        "columnName": "SrcIpAddr",
+                        "identifier": "Address"
                       }
                     ]
                   },
@@ -1241,8 +1241,8 @@
                     "entityType": "DNS",
                     "fieldMappings": [
                       {
-                        "identifier": "DomainName",
-                        "columnName": "Domain"
+                        "columnName": "Domain",
+                        "identifier": "DomainName"
                       }
                     ]
                   }
@@ -1998,7 +1998,7 @@
               "properties": {
                 "dataCollectionEndpointId": "[[resourceId('Microsoft.Insights/dataCollectionEndpoints', variables('DCEName'))]",
                 "streamDeclarations": {
-                  "[[variables('ipStreamName')]": {
+                  "[variables('ipStreamName')]": {
                     "columns": [
                       {
                         "name": "SrcIpAddr",
@@ -2030,7 +2030,7 @@
                       }
                     ]
                   },
-                  "[[variables('sourceInfoStreamName')]": {
+                  "[variables('sourceInfoStreamName')]": {
                     "columns": [
                       {
                         "name": "EventProduct",

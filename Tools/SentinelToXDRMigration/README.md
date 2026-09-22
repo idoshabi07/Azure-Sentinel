@@ -116,6 +116,8 @@ across solution workflows:
 
 ```powershell
 sentinel-xdr-migration configure-workspace `
+  --tenant-id "<tenant-guid>" `
+  --subscription-id "<subscription-guid>" `
   --workspace-resource-id "<workspace-arm-id>" `
   --workspace-customer-id "<workspace-customer-id>"
 ```
@@ -214,8 +216,33 @@ approved non-production lab workflow, initialize with:
 sentinel-xdr-migration workflow-init `
   --solution "Solutions\<solution>" `
   --workflow-profile qualification `
+  --tenant-id "<tenant-guid>" `
+  --subscription-id "<subscription-guid>" `
   --workspace-resource-id "<workspace-arm-id>" `
+  --workspace-customer-id "<workspace-customer-guid>" `
   --version-bump patch
+```
+
+Qualification writes a locked
+`Reports\<solution>\sentinel-xdr-migration\qualification-target.json`. Live
+commands load this context and reject any tenant, subscription, workspace ARM
+ID, or workspace customer-ID mismatch.
+
+Diagnose an unavailable exact ARM path without broad workspace discovery:
+
+```powershell
+sentinel-xdr-migration qualification-diagnose `
+  --solution "Solutions\<solution>"
+```
+
+The diagnostic may perform one exact customer-ID lookup restricted to the
+locked subscription. Apply its unique same-identity correction only after
+explicit approval:
+
+```powershell
+sentinel-xdr-migration qualification-repair-target `
+  --solution "Solutions\<solution>" `
+  --approve-target-update
 ```
 
 Inspect a solution:
@@ -304,7 +331,6 @@ then enable all pairs and ingest all fixtures:
 ```powershell
 sentinel-xdr-migration start-alert-parity-batch `
   --solution "Solutions\<solution>" `
-  --workspace-resource-id "<workspace-arm-id>" `
   --plan "<qualification-plan.json>"
 ```
 
@@ -317,7 +343,6 @@ pairs with a shared fixture:
 ```powershell
 sentinel-xdr-migration start-alert-parity `
   --solution "Solutions\<solution>" `
-  --workspace-resource-id "<workspace-arm-id>" `
   --contract "<ingestion-contract>" `
   --payload "<mock-json>" `
   --scenario-marker "<unique-marker>" `
@@ -386,7 +411,9 @@ plus an appropriate Defender XDR or Entra security role.
 Authenticate once:
 
 ```powershell
-sentinel-xdr-migration setup-deployment --tenant-id "<tenant-id>"
+sentinel-xdr-migration setup-deployment `
+  --solution "Solutions\<solution>" `
+  --tenant-id "<tenant-id>"
 ```
 
 This uses Azure CLI browser authentication by default. Device-code and direct
@@ -394,6 +421,7 @@ browser credential flows are also available:
 
 ```powershell
 sentinel-xdr-migration setup-deployment `
+  --solution "Solutions\<solution>" `
   --tenant-id "<tenant-id>" `
   --auth-method browser
 ```

@@ -102,7 +102,11 @@ def _write_runtime_artifacts(
     return summary
 
 
-def _advanced_hunting_token(state_root: Path) -> str:
+def _advanced_hunting_token(
+    state_root: Path,
+    *,
+    tenant_id: str | None = None,
+) -> str:
     from azure.identity import DeviceCodeCredential, TokenCachePersistenceOptions
 
     record = _load_auth_record(state_root / AUTH_RECORD_NAME)
@@ -112,9 +116,14 @@ def _advanced_hunting_token(state_root: Path) -> str:
             "`sentinel-xdr-migration setup` first"
         )
     config = _read_json(state_root / CONFIG_NAME)
+    configured_tenant = config.get("tenantId") or getattr(record, "tenant_id", None)
+    if tenant_id and configured_tenant and tenant_id.lower() != configured_tenant.lower():
+        raise RuntimeError(
+            "Advanced Hunting authentication tenant does not match the locked target"
+        )
     credential = DeviceCodeCredential(
         client_id=GRAPH_CLIENT_ID,
-        tenant_id=config.get("tenantId") or getattr(record, "tenant_id", None),
+        tenant_id=tenant_id or configured_tenant,
         authentication_record=record,
         cache_persistence_options=TokenCachePersistenceOptions(name=TOKEN_CACHE_NAME),
         disable_automatic_authentication=True,
@@ -192,11 +201,12 @@ def validate_advanced_hunting(
     solution: str | Path,
     *,
     state_dir: str | Path | None = None,
+    tenant_id: str | None = None,
 ) -> dict[str, Any]:
     root = Path(solution).expanduser().resolve()
     output = root / "XDR Detections"
     results: list[dict[str, Any]] = []
-    token = _advanced_hunting_token(_state_dir(state_dir))
+    token = _advanced_hunting_token(_state_dir(state_dir), tenant_id=tenant_id)
     table_status: dict[str, dict[str, Any]] = {}
     for path in _detection_files(output):
         with path.open(encoding="utf-8-sig") as handle:

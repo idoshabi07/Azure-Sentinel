@@ -60,7 +60,31 @@ def _query(document: dict) -> str:
         value = document.get(key)
         if isinstance(value, str) and value.strip():
             return value
+    properties = document.get("properties")
+    if isinstance(properties, dict):
+        condition = properties.get("queryCondition")
+        if isinstance(condition, dict):
+            value = condition.get("queryText")
+            if isinstance(value, str) and value.strip():
+                return value
     raise ScenarioError("The content file does not contain a query.")
+
+
+def _detection_property(document: dict, name: str) -> Any:
+    value = document.get(name)
+    if value is not None:
+        return value
+    properties = document.get("properties")
+    return properties.get(name) if isinstance(properties, dict) else None
+
+
+def _detection_source_id(document: dict) -> str:
+    for key in ("sourceId", "sourceRuleId", "analyticRuleId"):
+        value = document.get(key)
+        if value:
+            return str(value)
+    source = (document.get("contentProvenance") or {}).get("source") or {}
+    return str(source.get("id") or "")
 
 
 def find_analytic_rule(solution: str, selector: str) -> Tuple[Path, dict]:
@@ -114,10 +138,9 @@ def find_custom_detection(
     for path in sorted(folder.glob("*.yaml")):
         detection = _load_yaml(path)
         identifiers = {
-            str(detection.get("sourceId") or ""),
-            str(detection.get("sourceRuleId") or ""),
-            str(detection.get("analyticRuleId") or ""),
-            str(detection.get("name") or ""),
+            _detection_source_id(detection),
+            str(_detection_property(detection, "displayName") or ""),
+            str(_detection_property(detection, "name") or ""),
             path.name,
             path.stem,
         }
@@ -324,6 +347,10 @@ _IN_RE = re.compile(
     r"\b([A-Za-z_][A-Za-z0-9_.]*)\s+(in~?|has_any)\s*\(([^)]*)\)",
     re.I,
 )
+_DYNAMIC_LIST_LET_RE = re.compile(
+    r"\blet\s+([A-Za-z_][A-Za-z0-9_]*)\s*=\s*dynamic\s*\(\s*\[([^\]]*)\]\s*\)\s*;",
+    re.I,
+)
 
 
 def _literal(raw: str) -> Any:
@@ -342,6 +369,14 @@ def _literal(raw: str) -> Any:
 
 def extract_predicates(kql: str) -> List[dict]:
     predicates: List[dict] = []
+    dynamic_lists = {
+        match.group(1): [
+            _literal(item)
+            for item in _split_top_level(match.group(2))
+            if item.strip()
+        ]
+        for match in _DYNAMIC_LIST_LET_RE.finditer(kql)
+    }
     for match in _EQUALITY_RE.finditer(kql):
         predicates.append({
             "column": match.group(1),
@@ -355,11 +390,14 @@ def extract_predicates(kql: str) -> List[dict]:
             "value": "" if match.group(1).lower() == "isempty" else "synthetic-present",
         })
     for match in _IN_RE.finditer(kql):
-        values = [
-            _literal(item)
-            for item in _split_top_level(match.group(3))
-            if item.strip()
-        ]
+        raw_values = match.group(3).strip()
+        values = dynamic_lists.get(raw_values)
+        if values is None:
+            values = [
+                _literal(item)
+                for item in _split_top_level(raw_values)
+                if item.strip()
+            ]
         if values:
             predicates.append({
                 "column": match.group(1),
@@ -838,8 +876,11 @@ def generate_scenario(
         "ruleId": rule.get("id"),
         "ruleName": rule.get("name"),
         "analyticRule": str(rule_path),
-        "customDetectionId": detection.get("id"),
-        "customDetectionName": detection.get("name"),
+        "customDetectionId": _detection_property(detection, "id"),
+        "customDetectionName": (
+            _detection_property(detection, "displayName")
+            or _detection_property(detection, "name")
+        ),
         "customDetection": str(detection_path),
         "scenarioName": scenario_name,
         "hypothesis": hypothesis,

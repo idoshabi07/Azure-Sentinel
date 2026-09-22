@@ -9,6 +9,7 @@ import yaml
 from .artifacts import artifact_path
 from .alert_parity import _arm_request, _arm_token, _sentinel_rule_url
 from .converter import iso_duration, solution_paths
+from .target_context import require_locked_target
 
 
 TRIGGER_OPERATORS = {
@@ -74,9 +75,14 @@ def analytic_rule_payload(document: dict[str, Any]) -> dict[str, Any]:
 def deploy_analytic_rules(
     solution: str | Path,
     *,
-    workspace_resource_id: str,
+    workspace_resource_id: str | None = None,
 ) -> dict[str, Any]:
     root, source_dir, output = solution_paths(solution)
+    target = require_locked_target(
+        root,
+        workspace_resource_id=workspace_resource_id,
+    )
+    workspace_resource_id = target["workspaceResourceId"]
     output.mkdir(parents=True, exist_ok=True)
 
     token = _arm_token()
@@ -128,6 +134,7 @@ def deploy_analytic_rules(
     report = {
         "provider": "azure-resource-manager",
         "workspaceResourceId": workspace_resource_id,
+        "target": target,
         "solution": str(root),
         "total": len(results),
         "succeeded": sum(bool(item["success"]) for item in results),

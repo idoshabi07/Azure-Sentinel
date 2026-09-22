@@ -83,6 +83,42 @@ def _active_account(login: bool) -> dict:
         return _run_az("account", "show")
 
 
+def _load_target_context(path: Path) -> dict:
+    try:
+        target = json.loads(path.expanduser().read_text(encoding="utf-8-sig"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ToolError(f"Qualification target context is invalid: {path}: {exc}") from exc
+    required = (
+        "tenantId",
+        "subscriptionId",
+        "workspaceResourceId",
+        "workspaceCustomerId",
+    )
+    missing = [field for field in required if not str(target.get(field) or "").strip()]
+    if missing or target.get("locked") is not True:
+        raise ToolError(
+            "Qualification target context is not locked or is missing: "
+            + ", ".join(missing)
+        )
+    workspace_id = str(target["workspaceResourceId"]).strip().rstrip("/")
+    parts = workspace_id.split("/")
+    if (
+        len(parts) != 9
+        or parts[1].lower() != "subscriptions"
+        or parts[3].lower() != "resourcegroups"
+        or parts[5].lower() != "providers"
+        or parts[6].lower() != "microsoft.operationalinsights"
+        or parts[7].lower() != "workspaces"
+    ):
+        raise ToolError("Qualification target has an invalid workspace ARM ID.")
+    if parts[2].lower() != str(target["subscriptionId"]).lower():
+        raise ToolError(
+            "Qualification target workspace and subscription identifiers do not match."
+        )
+    target["workspaceResourceId"] = workspace_id
+    return target
+
+
 def _access_token(resource: str) -> str:
     response = _run_az("account", "get-access-token", "--resource", resource)
     token = response.get("accessToken")
@@ -830,6 +866,11 @@ def ingest(
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--workspace", help="Workspace name, customer ID, or ARM resource ID.")
+    parser.add_argument(
+        "--target-context",
+        type=Path,
+        help="Locked qualification-target.json; disables workspace discovery and enforces tenant/subscription/workspace identity.",
+    )
     parser.add_argument("--stream", required=True, help="DCR input stream, such as Custom-Example_CL.")
     parser.add_argument("--payload", type=Path, help="Explicit reviewed JSON array to ingest.")
     parser.add_argument("--solution", help="Solution folder name used for default fixture discovery.")
@@ -871,6 +912,17 @@ def main(argv: Optional[List[str]] = None) -> int:
         help="Run `az login` if Azure CLI has no active authenticated account.",
     )
     args = parser.parse_args(argv)
+    if args.solution and not args.target_context:
+        parser.error("--target-context is required when --solution is used")
+    target = _load_target_context(args.target_context) if args.target_context else None
+    if target:
+        if (
+            args.workspace
+            and args.workspace.strip().rstrip("/").lower()
+            != target["workspaceResourceId"].lower()
+        ):
+            parser.error("--workspace does not match --target-context")
+        args.workspace = target["workspaceResourceId"]
 
     if args.deploy_missing_table:
         if args.discover_only:
@@ -888,6 +940,19 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     try:
         account = _active_account(args.login)
+        if target:
+            if str(account.get("tenantId") or "").lower() != str(
+                target["tenantId"]
+            ).lower():
+                raise ToolError(
+                    "Authenticated tenant does not match the locked qualification target."
+                )
+            if str(account.get("id") or "").lower() != str(
+                target["subscriptionId"]
+            ).lower():
+                raise ToolError(
+                    "Active subscription does not match the locked qualification target."
+                )
         arm_token = _access_token(ARM_RESOURCE)
         workspace, alternatives, selection_source = discover_workspace(
             arm_token,
@@ -900,6 +965,12 @@ def main(argv: Optional[List[str]] = None) -> int:
             args.stream,
         )
         workspace_customer_id = _workspace_customer_id(arm_token, workspace)
+        if target and workspace_customer_id.lower() != str(
+            target["workspaceCustomerId"]
+        ).lower():
+            raise ToolError(
+                "Resolved workspace customer ID does not match the locked qualification target."
+            )
         workspace.setdefault("properties", {})["customerId"] = workspace_customer_id
         table_contract = None
         table_contract_error = None
@@ -924,6 +995,7 @@ def main(argv: Optional[List[str]] = None) -> int:
             "workspace": workspace["name"],
             "workspaceResourceId": workspace["id"],
             "workspaceCustomerId": workspace_customer_id,
+            "targetContext": str(args.target_context.resolve()) if args.target_context else None,
             "workspaceSelectionSource": selection_source,
             "workspaceAlternatives": [
                 {"name": item.get("name"), "id": item.get("id")} for item in alternatives

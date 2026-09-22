@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-20T11:05:38.891234+00:00",
+  "solution": "Azure Activity",
+  "ruleId": "48c026d8-7f36-4a95-9568-6f1420d66e37",
+  "ruleName": "Subscription moved to another tenant",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Activity\\Analytic Rules\\SubscriptionMigration.yaml",
+  "customDetectionId": null,
+  "customDetectionName": null,
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Activity\\XDR Detections\\SubscriptionMigration.yaml",
+  "scenarioName": "automatic-simple-predicate",
+  "hypothesis": "Synthetic records exercise the decisive predicates in Subscription moved to another tenant.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "simple",
+    "reasons": []
+  },
+  "sourceTable": "AzureActivity",
+  "destinationTables": [
+    "AzureActivity"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-AzureActivity",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "CategoryValue",
+        "operator": "=~",
+        "rawPath": "CategoryValue",
+        "value": "Security"
+      },
+      {
+        "ruleColumn": "OperationNameValue",
+        "operator": "=~",
+        "rawPath": "OperationNameValue",
+        "value": "Microsoft.Subscription/updateTenant/action"
+      },
+      {
+        "ruleColumn": "Properties_d",
+        "operator": "isnotempty",
+        "rawPath": "Properties_d",
+        "value": "synthetic-present"
+      }
+    ],
+    "lockedPaths": [
+      "CategoryValue",
+      "OperationNameValue",
+      "Properties_d"
+    ]
+  },
+  "fixtures": {
+    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Azure Activity\\48c026d8-7f36-4a95-9568-6f1420d66e37\\malicious.json",
+    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Azure Activity\\48c026d8-7f36-4a95-9568-6f1420d66e37\\benign.json",
+    "maliciousRecords": 1,
+    "benignRecords": 1
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-run"
+  },
+  "limitations": [
+    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
+  ]
+}

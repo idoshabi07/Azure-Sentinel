@@ -83,7 +83,18 @@ sentinel-xdr-migration workflow-init `
 ```
 
 For an approved qualification run, use `qualification` and include
-`--workspace-resource-id`.
+the complete locked target:
+
+```powershell
+sentinel-xdr-migration workflow-init `
+  --solution "<solution-path>" `
+  --workflow-profile qualification `
+  --tenant-id "<tenant-guid>" `
+  --subscription-id "<subscription-guid>" `
+  --workspace-resource-id "<workspace-arm-id>" `
+  --workspace-customer-id "<workspace-customer-guid>" `
+  --version-bump "<none-patch-minor-or-major>"
+```
 
 Before requesting a workspace value, inspect `doctor`. If
 `configuredWorkspaceResourceId` exists, present it for explicit reuse
@@ -92,6 +103,8 @@ approved and resolved, persist it for future solution workflows:
 
 ```powershell
 sentinel-xdr-migration configure-workspace `
+  --tenant-id "<tenant-guid>" `
+  --subscription-id "<subscription-guid>" `
   --workspace-resource-id "<workspace-arm-id>" `
   --workspace-customer-id "<workspace-customer-id>"
 ```
@@ -109,6 +122,19 @@ list, rediscover, rank, or scan other workspaces. A Log Analytics customer-ID
 GUID may be resolved to an ARM resource ID once, then the ARM ID must be
 persisted. A tenant mismatch is an authentication blocker for the selected
 workspace, not a reason to choose another workspace.
+
+All live stages must load
+`Reports\<solution>\sentinel-xdr-migration\qualification-target.json` and
+verify the tenant, subscription, workspace ARM ID, and workspace customer ID
+before proceeding. Specialist tools must not independently discover or infer
+any of them.
+
+If the exact ARM path fails, the orchestrator may run
+`qualification-diagnose`. It may make one exact customer-ID query restricted
+to the locked subscription. When a unique same-identity correction is found,
+show the old and proposed resource IDs and require explicit approval before
+running `qualification-repair-target --approve-target-update`. No repair may
+change tenant, subscription, or customer ID.
 
 The ignored local file
 `Reports\<solution>\sentinel-xdr-migration\workflow-state.json` records stage status, attempts,

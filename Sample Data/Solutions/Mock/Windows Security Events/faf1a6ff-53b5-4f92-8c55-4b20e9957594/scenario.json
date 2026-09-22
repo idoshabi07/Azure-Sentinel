@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-20T11:05:41.418481+00:00",
+  "solution": "Windows Security Events",
+  "ruleId": "faf1a6ff-53b5-4f92-8c55-4b20e9957594",
+  "ruleName": "Exchange OAB Virtual Directory Attribute Containing Potential Webshell",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\Analytic Rules\\ExchangeOABVirtualDirectoryAttributeContainingPotentialWebshell.yaml",
+  "customDetectionId": null,
+  "customDetectionName": null,
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\XDR Detections\\ExchangeOABVirtualDirectoryAttributeContainingPotentialWebshell.yaml",
+  "scenarioName": "automatic-simple-predicate",
+  "hypothesis": "Synthetic records exercise the decisive predicates in Exchange OAB Virtual Directory Attribute Containing Potential Webshell.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "simple",
+    "reasons": []
+  },
+  "sourceTable": "SecurityEvent",
+  "destinationTables": [
+    "SecurityEvent"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-SecurityEvent",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "EventID",
+        "operator": "==",
+        "rawPath": "EventID",
+        "value": 5136
+      }
+    ],
+    "lockedPaths": [
+      "EventID"
+    ]
+  },
+  "fixtures": {
+    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\faf1a6ff-53b5-4f92-8c55-4b20e9957594\\malicious.json",
+    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\faf1a6ff-53b5-4f92-8c55-4b20e9957594\\benign.json",
+    "maliciousRecords": 1,
+    "benignRecords": 1
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-run"
+  },
+  "limitations": [
+    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
+  ]
+}

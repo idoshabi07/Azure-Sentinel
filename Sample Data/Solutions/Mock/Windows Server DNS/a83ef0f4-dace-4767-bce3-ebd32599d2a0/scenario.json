@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-20T11:06:04.947953+00:00",
+  "solution": "Windows Server DNS",
+  "ruleId": "a83ef0f4-dace-4767-bce3-ebd32599d2a0",
+  "ruleName": "DNS events related to ToR proxies",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Server DNS\\Analytic Rules\\DNS_TorProxies.yaml",
+  "customDetectionId": null,
+  "customDetectionName": null,
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Server DNS\\XDR Detections\\DNS_TorProxies.yaml",
+  "scenarioName": "automatic-simple-predicate",
+  "hypothesis": "Synthetic records exercise the decisive predicates in DNS events related to ToR proxies.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "simple",
+    "reasons": []
+  },
+  "sourceTable": "DnsEvents",
+  "destinationTables": [
+    "DnsEvents"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-DnsEvents",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "Name",
+        "operator": "has_any",
+        "rawPath": "Name",
+        "value": "tor2web.org"
+      }
+    ],
+    "lockedPaths": [
+      "Name"
+    ]
+  },
+  "fixtures": {
+    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Server DNS\\a83ef0f4-dace-4767-bce3-ebd32599d2a0\\malicious.json",
+    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Server DNS\\a83ef0f4-dace-4767-bce3-ebd32599d2a0\\benign.json",
+    "maliciousRecords": 1,
+    "benignRecords": 1
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-run"
+  },
+  "limitations": [
+    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
+  ]
+}

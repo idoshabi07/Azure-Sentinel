@@ -100,9 +100,18 @@ runtime providers are unavailable.
    sentinel-xdr-migration workflow-init `
      --solution "<solution-path>" `
      --workflow-profile "<authoring-or-qualification>" `
+     --tenant-id "<tenant-guid>" `
+     --subscription-id "<subscription-guid>" `
+     --workspace-resource-id "<workspace-arm-id>" `
+     --workspace-customer-id "<workspace-customer-guid>" `
      --version-bump "<none-patch-minor-or-major>"
    ```
 
+   Include all four target identifiers only for Qualification. The CLI locks
+   them into `qualification-target.json`. Every live-stage tool must consume
+   that artifact and fail closed on any tenant, subscription, workspace ARM ID,
+   or workspace customer-ID mismatch. No specialist tool may independently
+   discover or select a workspace.
 3. Persist state under
    `Reports\<solution>\sentinel-xdr-migration\workflow-state.json`.
    If its context already contains a full `workspaceResourceId`, reuse that
@@ -128,12 +137,31 @@ runtime providers are unavailable.
 
    ```powershell
    sentinel-xdr-migration configure-workspace `
+     --tenant-id "<tenant-guid>" `
+     --subscription-id "<subscription-guid>" `
      --workspace-resource-id "<workspace-arm-id>" `
      --workspace-customer-id "<workspace-customer-id>"
    ```
 
    This reusable configuration is cross-solution; workflow state still records
    the confirmed workspace for each individual run.
+   If the locked ARM path becomes unavailable, run only:
+
+   ```powershell
+   sentinel-xdr-migration qualification-diagnose --solution "<solution-path>"
+   ```
+
+   This central diagnostic may perform one exact customer-ID lookup restricted
+   to the locked subscription. If it returns `repair-available`, show the old
+   and proposed target and obtain explicit approval before running:
+
+   ```powershell
+   sentinel-xdr-migration qualification-repair-target `
+     --solution "<solution-path>" `
+     --approve-target-update
+   ```
+
+   No other tool may repeat that lookup.
    Present **Continue**, **Retry permission check**, and **Cancel** as
    selectable buttons. When the exact packaged custom table is confirmed
    missing and table-write permission is ready, also present **Deploy missing

@@ -29,20 +29,23 @@ ingestion.
 
 ## Workspace identity contract
 
-Read `workflow-status` before workspace discovery. When
-`context.workspaceResourceId` contains a full ARM resource ID:
+Read `workflow-status` and the generated `qualification-target.json` before
+preflight. The locked context contains tenant ID, subscription ID, workspace
+ARM resource ID, and workspace customer ID:
 
-- treat it as the authoritative workspace for the entire run;
-- pass it unchanged through `--workspace` to every optional-testing command;
+- treat all four identifiers as authoritative for the entire run;
+- pass the target artifact through `--target-context` to every
+  optional-testing command;
 - never run `az monitor log-analytics workspace list`, Resource Graph workspace
   discovery, table scans across workspaces, or primary-workspace inference;
-- verify access only against that exact resource ID; and
+- fail closed if the authenticated tenant or subscription differs;
+- verify the resolved customer ID still matches; and
 - return no workspace alternatives.
 
-A GUID-style Log Analytics customer ID may be resolved once with an exact
-customer-ID filter because Azure deployment APIs require the workspace ARM
-resource ID. Persist the resolved ARM ID in workflow state and reuse it for
-every later stage. Never repeat broad workspace discovery after resolution.
+This skill must never resolve or rediscover a workspace. When the exact ARM
+path fails, return control to the orchestrator. Only the centralized
+`qualification-diagnose` command may perform one exact customer-ID lookup
+restricted to the locked subscription.
 
 If an Azure or MCP request reports a tenant mismatch, treat it as an
 authentication-context failure for the selected workspace. Ask to
@@ -69,6 +72,7 @@ Run from the Azure-Sentinel repository root:
 
 ```powershell
 python Tools\SolutionMigration\ingest_to_dcr.py `
+  --target-context "Reports\<solution>\sentinel-xdr-migration\qualification-target.json" `
   --stream "<Custom-StreamName_CL>" `
   --solution "<solution-name-or-folder>" `
   --discover-only `
@@ -89,19 +93,9 @@ The preflight writes no telemetry and does not grant write approval. If Azure
 does not allow effective DCR permissions to be inspected, report ingestion
 permission as `unknown` rather than treating it as granted.
 
-The tool uses Azure CLI authentication. It selects workspaces in this order:
-
-1. explicit `--workspace`;
-2. `AZURE_SENTINEL_WORKSPACE_ID`;
-3. `LA_WORKSPACE_ID`;
-4. the first accessible workspace, sorted by name, in the active Azure
-   subscription.
-
-Tell the user which workspace was selected. List alternatives and ask whether
-they want a different workspace only when no full workspace ARM ID was already
-stored or supplied.
-Accept a workspace name, customer ID, or full ARM resource ID. Require a full
-ARM resource ID when a name or customer ID is ambiguous.
+During Qualification, `--target-context` is mandatory. It disables workspace
+selection and verifies the active Azure tenant, subscription, workspace ARM
+ID, and customer ID before DCR inspection.
 
 ## Prerequisites
 
@@ -136,7 +130,7 @@ package defines the exact table schema, add a fourth action:
 
    ```powershell
    python Tools\SolutionMigration\ingest_to_dcr.py `
-     --workspace "<workspace-name-customer-id-or-arm-id>" `
+     --target-context "Reports\<solution>\sentinel-xdr-migration\qualification-target.json" `
      --stream "<Custom-StreamName_CL>" `
      --solution "<solution-name-or-folder>" `
      --deploy-missing-table `
@@ -268,7 +262,7 @@ Only after approval, run:
 
 ```powershell
 python Tools\SolutionMigration\ingest_to_dcr.py `
-  --workspace "<workspace-name-customer-id-or-arm-id>" `
+  --target-context "Reports\<solution>\sentinel-xdr-migration\qualification-target.json" `
   --stream "<Custom-StreamName_CL>" `
   --solution "<solution-folder>" `
   --rule-id "<rule-id>" `
@@ -282,7 +276,7 @@ When the default fixture is not present, use the folder supplied by the user:
 
 ```powershell
 python Tools\SolutionMigration\ingest_to_dcr.py `
-  --workspace "<workspace-name-customer-id-or-arm-id>" `
+  --target-context "Reports\<solution>\sentinel-xdr-migration\qualification-target.json" `
   --stream "<Custom-StreamName_CL>" `
   --solution "<solution-folder>" `
   --rule-id "<rule-id>" `

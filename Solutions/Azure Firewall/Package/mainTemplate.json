@@ -4045,7 +4045,7 @@
           ],
           "metadata": {
             "comments": "This Azure Firewall connector uses Firewall, IP Groups and Firewall Policies APIs to perform different actions on the Firewall, IP Groups and Firewall Policies.",
-            "lastUpdateTime": "2026-09-15T15:34:25.622Z",
+            "lastUpdateTime": "2026-09-19T19:27:39.788Z",
             "releaseNotes": {
               "version": "1.0",
               "title": "[variables('blanks')]",
@@ -6583,8 +6583,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -6592,8 +6592,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "Fqdn"
+                        "columnName": "Fqdn",
+                        "identifier": "Url"
                       }
                     ],
                     "entityType": "URL"
@@ -6711,8 +6711,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -6720,8 +6720,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "Fqdn"
+                        "columnName": "Fqdn",
+                        "identifier": "Url"
                       }
                     ],
                     "entityType": "URL"
@@ -6839,8 +6839,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -6848,8 +6848,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "Fqdn"
+                        "columnName": "Fqdn",
+                        "identifier": "Url"
                       }
                     ],
                     "entityType": "URL"
@@ -6960,8 +6960,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -6969,8 +6969,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "Fqdn"
+                        "columnName": "Fqdn",
+                        "identifier": "Url"
                       }
                     ],
                     "entityType": "URL"
@@ -7083,8 +7083,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -7092,16 +7092,16 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "Fqdn"
+                        "columnName": "Fqdn",
+                        "identifier": "Url"
                       }
                     ],
                     "entityType": "URL"
                   }
                 ],
                 "customDetails": {
-                  "AbnormalPort": "AlertTimeDstPort",
-                  "NetworkProtocol": "AlertTimeProtocol"
+                  "NetworkProtocol": "AlertTimeProtocol",
+                  "AbnormalPort": "AlertTimeDstPort"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "Communication was observed over port {{AlertTimeDstPort}} using protocol {{AlertTimeProtocol}}, which is different from the protocol observed during the learning period. This could indicate potential malicious activity such as C2 communication or data exfiltration.",
@@ -7220,8 +7220,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -7229,16 +7229,16 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Url",
-                        "columnName": "Fqdn"
+                        "columnName": "Fqdn",
+                        "identifier": "Url"
                       }
                     ],
                     "entityType": "URL"
                   }
                 ],
                 "customDetails": {
-                  "AlertCount": "AlertTimeSrcIpDenyRateCount",
-                  "Threshold": "LearningThreshold"
+                  "Threshold": "LearningThreshold",
+                  "AlertCount": "AlertTimeSrcIpDenyRateCount"
                 },
                 "alertDetailsOverride": {
                   "alertDescriptionFormat": "The source IP {{SourceIp}} has an abnormal deny rate to destination {{Fqdn}} with {{AlertTimeSrcIpDenyRateCount}} denies, which is above the calculated threshold. This could indicate potential exfiltration, initial access or C2 activities.\n",
@@ -7342,8 +7342,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -7449,8 +7449,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -7561,8 +7561,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -7671,8 +7671,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -7776,8 +7776,8 @@
                   {
                     "fieldMappings": [
                       {
-                        "identifier": "Address",
-                        "columnName": "SourceIp"
+                        "columnName": "SourceIp",
+                        "identifier": "Address"
                       }
                     ],
                     "entityType": "IP"
@@ -8021,17 +8021,33 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "PT1H"
+                },
+                "displayName": "Abnormal Deny Rate for Source IP",
                 "queryCondition": {
                   "queryText": "let LearningPeriod = 1d;\nlet RunTime = 1h;\nlet StartLearningPeriod = LearningPeriod + RunTime;\nlet EndRunTime = RunTime - 1h;\nlet BinTime = 1h;\nlet NumOfStdsThreshold = 3;\nlet MinThreshold = 5.0;\nlet MinLearningBuckets = 5;\n// Restrict unioned tables to the full analysis window to avoid full-table scans\nlet FullWindowStart = ago(StartLearningPeriod);\nlet FullWindowEnd = now();\nlet TrafficLogs = (union isfuzzy=true\n(AzureDiagnostics\n| where TimeGenerated between (FullWindowStart .. FullWindowEnd)\n| where OperationName == \"AzureFirewallApplicationRuleLog\" or OperationName == \"AzureFirewallNetworkRuleLog\"\n| parse msg_s with * \"from \" SourceIp \":\" SourcePort:int \" to \" Fqdn \":\" DestinationPort:int \". \" * \"Action: \" Action \".\" *\n| where Action == \"Deny\"\n| where isnotempty(Fqdn) and isnotempty(SourceIp)),\n(AZFWNetworkRule\n| where TimeGenerated between (FullWindowStart .. FullWindowEnd)\n| extend Fqdn = DestinationIp\n| where Action == \"Deny\"\n| where isnotempty(Fqdn) and isnotempty(SourceIp)),\n(AZFWFlowTrace\n| where TimeGenerated between (FullWindowStart .. FullWindowEnd)\n| extend Fqdn = DestinationIp\n| where Action == \"Deny\"\n| where isnotempty(Fqdn) and isnotempty(SourceIp)),\n(AZFWIdpsSignature\n| where TimeGenerated between (FullWindowStart .. FullWindowEnd)\n| extend Fqdn = DestinationIp\n| where Action == \"Deny\"\n| where isnotempty(Fqdn) and isnotempty(SourceIp)),\n(AZFWApplicationRule\n| where TimeGenerated between (FullWindowStart .. FullWindowEnd)\n| where Action == \"Deny\"\n| where isnotempty(Fqdn) and isnotempty(SourceIp)));\nlet LearningSrcIpDenyRate = (TrafficLogs\n| where TimeGenerated between (ago(StartLearningPeriod) .. ago(RunTime))\n| summarize count() by SourceIp, bin(TimeGenerated, BinTime), Fqdn\n| summarize LearningTimeSrcIpDenyRateAvg = avg(count_), LearningTimeSrcIpDenyRateStd = stdev(count_), LearningTimeBuckets = count() by SourceIp, Fqdn\n| where LearningTimeBuckets > MinLearningBuckets);\nlet AlertTimeSrcIpDenyRate = (TrafficLogs\n| where TimeGenerated between (ago(RunTime) .. ago(EndRunTime))\n| summarize AlertTimeSrcIpDenyRateCount = count() by SourceIp, Fqdn);\nAlertTimeSrcIpDenyRate\n| join kind=leftouter (LearningSrcIpDenyRate) on SourceIp, Fqdn\n| extend LearningThreshold = max_of(LearningTimeSrcIpDenyRateAvg + NumOfStdsThreshold * LearningTimeSrcIpDenyRateStd, MinThreshold)\n| where AlertTimeSrcIpDenyRateCount > LearningThreshold\n| project SourceIp, Fqdn, AlertTimeSrcIpDenyRateCount, LearningTimeBuckets, LearningThreshold"
                 },
-                "status": "disabled",
-                "displayName": "Abnormal Deny Rate for Source IP",
                 "id": "[if(true(), 'xdr-abnormal-deny-rate-for-source-ip-d36bb1e3', 'xdr-abnormal-deny-rate-for-source-ip-d36bb1e3')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Identifies abnormal deny rate for specific source IP to destination IP based on the normal average and standard deviation learned during a configured period. This can indicate potential exfiltration, initial access or C2, where attacker tries to exploit the same vulnerability on machines in the organization, but is being blocked by firewall rules.\n\nConfigurable Parameters:\n\n- Minimum of stds threshold - the number of stds to use in the threshold calculation. Default is set to 3.\n- Learning period time - learning period for threshold calculation in days. Default is set to 5.\n- Bin time - learn",
-                    "severity": "medium",
                     "title": "Abnormal Deny Rate for Source IP",
+                    "description": "'Identifies abnormal deny rate for specific source IP to destination IP based on the normal average and standard deviation learned during a configured period. This can indicate potential exfiltration, initial access or C2, where attacker tries to exploit the same vulnerability on machines in the organization, but is being blocked by firewall rules.\n\nConfigurable Parameters:\n\n- Minimum of stds threshold - the number of stds to use in the threshold calculation. Default is set to 3.\n- Learning period time - learning period for threshold calculation in days. Default is set to 5.\n- Bin time - learn",
+                    "entityMappings": {
+                      "urls": [
+                        {
+                          "addressColumn": "Fqdn",
+                          "id": "[if(true(), 'url1', 'url1')]"
+                        }
+                      ],
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "Discovery",
@@ -8042,24 +8058,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "urls": [
-                        {
-                          "id": "[if(true(), 'url1', 'url1')]",
-                          "addressColumn": "Fqdn"
-                        }
-                      ],
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "medium"
                   }
-                },
-                "schedule": {
-                  "frequency": "PT1H"
                 }
               }
             }
@@ -8095,17 +8095,33 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "PT1H"
+                },
+                "displayName": "Abnormal Port to Protocol",
                 "queryCondition": {
                   "queryText": "let LearningPeriod = 7d;\nlet RunTime = 1h;\nlet StartLearningPeriod = LearningPeriod + RunTime;\nlet DetectionWindowStart = ago(RunTime);\nlet LearningPortToProtocol1 =  (AzureDiagnostics\n| where TimeGenerated between (ago(StartLearningPeriod) .. ago(RunTime))\n| where OperationName == \"AzureFirewallApplicationRuleLog\"\n| extend msg_s= column_ifexists('msg_s',Message)\n| parse msg_s with Protocol \" request from \" SourceIp \":\" SourcePort:int \" to \" Fqdn \":\" DestinationPort:int \".\" *\n| where isnotempty(DestinationPort)\n| summarize LearningTimeCount = count() by LearningTimeDstPort = DestinationPort, LearningTimeProtocol = Protocol, SourceIp, Fqdn);\nlet LearningPortToProtocol2 = (AZFWNetworkRule\n| where TimeGenerated between (ago(StartLearningPeriod) .. ago(RunTime))\n| where isnotempty(DestinationPort)\n| extend Fqdn = DestinationIp\n| summarize LearningTimeCount = count() by LearningTimeDstPort = DestinationPort, LearningTimeProtocol = Protocol, SourceIp, Fqdn);\nlet LearningPortToProtocol3 = (AZFWApplicationRule\n| where TimeGenerated between (ago(StartLearningPeriod) .. ago(RunTime))\n| where isnotempty(DestinationPort)\n| summarize LearningTimeCount = count() by LearningTimeDstPort = DestinationPort, LearningTimeProtocol = Protocol, SourceIp, Fqdn);\nlet AlertTimePortToProtocol1 = (AzureDiagnostics\n| where TimeGenerated between (DetectionWindowStart .. now())\n| where OperationName == \"AzureFirewallApplicationRuleLog\"\n| extend msg_s= column_ifexists('msg_s',Message)\n| parse msg_s with Protocol \" request from \" SourceIp \":\" SourcePort \" to \" Fqdn \":\" DestinationPort:int \".\" *\n| where isnotempty(DestinationPort)\n| summarize AlertTimeCount = count() by AlertTimeDstPort = DestinationPort, AlertTimeProtocol = Protocol);\nlet AlertTimePortToProtocol2 = (AZFWNetworkRule\n| where TimeGenerated between (DetectionWindowStart .. now())\n| where isnotempty(DestinationPort)\n| extend Fqdn = DestinationIp\n| summarize AlertTimeCount = count() by AlertTimeDstPort = DestinationPort, AlertTimeProtocol = Protocol);\nlet AlertTimePortToProtocol3 = (AZFWApplicationRule\n| where TimeGenerated between (DetectionWindowStart .. now())\n| where isnotempty(DestinationPort)\n| summarize AlertTimeCount = count() by AlertTimeDstPort = DestinationPort, AlertTimeProtocol = Protocol);\n(union isfuzzy=true\n(AlertTimePortToProtocol1\n| join kind=leftouter (LearningPortToProtocol1) on $left.AlertTimeDstPort == $right.LearningTimeDstPort\n| where LearningTimeProtocol != AlertTimeProtocol),\n(AlertTimePortToProtocol2\n| join kind=leftanti (LearningPortToProtocol2) on $left.AlertTimeDstPort == $right.LearningTimeDstPort, $left.AlertTimeProtocol == $right.LearningTimeProtocol),\n(AlertTimePortToProtocol3\n| join kind=leftouter (LearningPortToProtocol3) on $left.AlertTimeDstPort == $right.LearningTimeDstPort\n| where LearningTimeProtocol != AlertTimeProtocol))"
                 },
-                "status": "disabled",
-                "displayName": "Abnormal Port to Protocol",
                 "id": "[if(true(), 'xdr-abnormal-port-to-protocol-826f930c', 'xdr-abnormal-port-to-protocol-826f930c')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Identifies communication for well known protocol over a non-standard port based on learning period activity. This can indicate malicious communication (C2) or exfiltration by attackers trying to communicate over known ports (22:SSH, 80:HTTP) but dont use the known protocol headers to match the port number.\n\nConfigurable Parameters:\n\n- Learning period time - learning period for protocol learning in days. Default is set to 7.'",
-                    "severity": "medium",
                     "title": "Abnormal Port to Protocol",
+                    "description": "'Identifies communication for well known protocol over a non-standard port based on learning period activity. This can indicate malicious communication (C2) or exfiltration by attackers trying to communicate over known ports (22:SSH, 80:HTTP) but dont use the known protocol headers to match the port number.\n\nConfigurable Parameters:\n\n- Learning period time - learning period for protocol learning in days. Default is set to 7.'",
+                    "entityMappings": {
+                      "urls": [
+                        {
+                          "addressColumn": "Fqdn",
+                          "id": "[if(true(), 'url1', 'url1')]"
+                        }
+                      ],
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "CommandAndControl",
@@ -8116,24 +8132,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "urls": [
-                        {
-                          "id": "[if(true(), 'url1', 'url1')]",
-                          "addressColumn": "Fqdn"
-                        }
-                      ],
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "medium"
                   }
-                },
-                "schedule": {
-                  "frequency": "PT1H"
                 }
               }
             }
@@ -8169,17 +8169,27 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "PT1H"
+                },
+                "displayName": "DDoS attack detected",
                 "queryCondition": {
                   "queryText": "let TimeWindow   = 90d;\nlet HitThreshold = 10;\nlet MinSeverity  = 2;\nlet EnableCategoryFilter    = true;\nlet EnableDescriptionFilter = false;\nlet EnableActionFilter      = false;\nlet CategoriesOfInterest = dynamic([\n    \"Attempted Denial of Service\",\n    \"Denial of Service\",\n    \"Detection of a Denial of Service Attack\"\n]);\nlet DescriptionsOfInterest = dynamic([\n    \"attempted-dos\",\n    \"successful-dos\",\n    \"denial-of-service\"\n]);\nlet MatchActions = dynamic([\"Deny\", \"alert\"]);\nAZFWIdpsSignature\n| where TimeGenerated >= ago(TimeWindow)\n| where Severity >= MinSeverity\n| where (EnableCategoryFilter == false) or (Category has_any (CategoriesOfInterest))\n| where (EnableDescriptionFilter == false) or (Description has_any (DescriptionsOfInterest))\n| where (EnableActionFilter == false) or (Action in~ (MatchActions))\n| summarize\n    StartTime   = min(TimeGenerated),\n    EndTime     = max(TimeGenerated),\n    TotalHits   = count(),\n    MaxSeverity = max(Severity),\n    Actions     = make_set(Action, 5),\n    Signatures  = make_set(SignatureId, 20),\n    Description = make_set(substring(tostring(Description), 0, 120), 3)\n    by SourceIp, ThreatCategory = Category\n| where TotalHits >= HitThreshold\n| project\n    StartTime,\n    EndTime,\n    SourceIp,\n    ThreatCategory,\n    TotalHits,\n    MaxSeverity,\n    Actions,\n    Signatures,\n    Description\n| order by MaxSeverity desc, TotalHits desc"
                 },
-                "status": "disabled",
-                "displayName": "DDoS attack detected",
                 "id": "[if(true(), 'xdr-ddos-attack-detected-c3ffdbe6', 'xdr-ddos-attack-detected-c3ffdbe6')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "Identifies DDoS attack in Azure Firewall IDPS logs.",
-                    "severity": "high",
                     "title": "DDoS attack detected",
+                    "description": "Identifies DDoS attack in Azure Firewall IDPS logs.",
+                    "entityMappings": {
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "Impact",
@@ -8190,18 +8200,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "high"
                   }
-                },
-                "schedule": {
-                  "frequency": "PT1H"
                 }
               }
             }
@@ -8237,17 +8237,27 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "PT1H"
+                },
+                "displayName": "Elevation of Privilege attempt detected",
                 "queryCondition": {
                   "queryText": "let TimeWindow   = 90d;    // How far back to look\nlet HitThreshold = 10;     // Minimum hits to alert per SourceIp + Category\nlet MinSeverity  = 1;      // Set Minimum Severity\n// Feature flags for optional filters\nlet EnableCategoryFilter    = true;   // Filter 1\nlet EnableDescriptionFilter = false;  // Filter 2\nlet EnableActionFilter      = false;  // Filter 3\n// Filter 1: Categories of interest\nlet CategoriesOfInterest = dynamic([\n    \"Attempted User Privilege Gain\",\n    \"Unsuccessful User Privilege Gain\",\n    \"Successful User Privilege Gain\",\n    \"Attempted Administrator Privilege Gain\",\n    \"Successful Administrator Privilege Gain\"\n]);\n// Filter 2: Descriptions of interest\nlet DescriptionsOfInterest = dynamic([\n    \"attempted-user\",\n    \"unsuccessful-user\",\n    \"successful-user\",\n    \"attempted-admin\",\n    \"successful-admin\"\n]);\n// Filter 3: Action match\nlet MatchActions = dynamic([\"Deny\", \"alert\"]);\nAZFWIdpsSignature\n| where TimeGenerated >= ago(TimeWindow)\n| where Severity >= MinSeverity\n// Filter 1: Category filter (optional)\n| where (EnableCategoryFilter == false) or (Category has_any (CategoriesOfInterest))\n// Filter 2: Description filter (optional)\n| where (EnableDescriptionFilter == false) or (Description has_any (DescriptionsOfInterest))\n// Filter 3: Action filter (optional)\n| where (EnableActionFilter == false) or (Action in~ (MatchActions))\n| summarize\n    StartTime   = min(TimeGenerated),\n    EndTime     = max(TimeGenerated),\n    TotalHits   = count(),\n    MaxSeverity = max(Severity),\n    Actions     = make_set(Action, 5),\n    Signatures  = make_set(SignatureId, 20),\n    Description = make_set(substring(tostring(Description), 0, 120), 3)\n    by SourceIp, ThreatCategory = Category\n| where TotalHits >= HitThreshold\n| project\n    StartTime,\n    EndTime,\n    SourceIp,\n    ThreatCategory,\n    TotalHits,\n    MaxSeverity,\n    Actions,\n    Signatures,\n    Description\n| order by MaxSeverity desc, TotalHits desc"
                 },
-                "status": "disabled",
-                "displayName": "Elevation of Privilege attempt detected",
                 "id": "[if(true(), 'xdr-elevation-of-privilege-attempt-detected-7a0f78b3', 'xdr-elevation-of-privilege-attempt-detected-7a0f78b3')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "Identifies Elevation of Privilege attempt Azure Firewall IDPS logs.",
-                    "severity": "high",
                     "title": "Elevation of Privilege attempt detected",
+                    "description": "Identifies Elevation of Privilege attempt Azure Firewall IDPS logs.",
+                    "entityMappings": {
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "CredentialAccess",
@@ -8258,18 +8268,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "high"
                   }
-                },
-                "schedule": {
-                  "frequency": "PT1H"
                 }
               }
             }
@@ -8305,17 +8305,27 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "PT1H"
+                },
+                "displayName": "High severity malicious activity detected",
                 "queryCondition": {
                   "queryText": "let TimeWindow   = 90d;    // How far back to look\nlet HitThreshold = 10;     // Minimum hits to alert per SourceIp + Category\nlet MinSeverity  = 1;      // Set Minimum Severity\nlet EnableCategoryFilter    = true;   // Filter 1: use CategoriesOfInterest\nlet EnableDescriptionFilter = false;  // Filter 2: use DescriptionsOfInterest\nlet EnableActionFilter      = false;  // Filter 3: use MatchActions\nlet CategoriesOfInterest    = dynamic([\n    \"Targeted Malicious Activity was Detected\",\n    \"Exploit Kit Activity Detected\",\n    \"Domain Observed Used for C2 Detected\",\n    \"Successful Credential Theft Detected\",\n    \"Malware Command and Control Activity Detected\",\n    \"Executable code was detected\",\n    \"A Network Trojan was detected\"\n]);\nlet DescriptionsOfInterest  = dynamic([\n    \"targeted-activity\",\n    \"exploit-kit\",\n    \"domain-c2\",\n    \"credential-theft\",\n    \"command-and-control\",\n    \"shellcode-detect\",\n    \"trojan-activity\"\n]);\nlet MatchActions = dynamic([\"Deny\", \"alert\"]);\nAZFWIdpsSignature\n| where TimeGenerated >= ago(TimeWindow)\n| where Severity >= MinSeverity\n// Filter 1: Category filter (optional)\n| where (EnableCategoryFilter == false) or (Category has_any (CategoriesOfInterest))\n// Filter 2: Description filter (optional)\n| where (EnableDescriptionFilter == false) or (Description has_any (DescriptionsOfInterest))\n// Filter 3: Action filter (optional)\n| where (EnableActionFilter == false) or (Action in~ (MatchActions))\n| summarize\n    StartTime   = min(TimeGenerated),\n    EndTime     = max(TimeGenerated),\n    TotalHits   = count(),\n    MaxSeverity = max(Severity),\n    Actions     = make_set(Action, 5),\n    Signatures  = make_set(SignatureId, 20),\n    Description = make_set(substring(tostring(Description), 0, 120), 3)\n    by SourceIp, ThreatCategory = Category\n| where TotalHits >= HitThreshold\n| project\n    StartTime,\n    EndTime,\n    SourceIp,\n    ThreatCategory,\n    TotalHits,\n    MaxSeverity,\n    Actions,\n    Signatures,\n    Description\n| order by MaxSeverity desc, TotalHits desc"
                 },
-                "status": "disabled",
-                "displayName": "High severity malicious activity detected",
                 "id": "[if(true(), 'xdr-high-severity-malicious-activity-detected-504257c1', 'xdr-high-severity-malicious-activity-detected-504257c1')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "Identifies high severity malicious activity in Azure Firewall IDPS logs.",
-                    "severity": "high",
                     "title": "High severity malicious activity detected",
+                    "description": "Identifies high severity malicious activity in Azure Firewall IDPS logs.",
+                    "entityMappings": {
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "InitialAccess",
@@ -8326,18 +8336,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "high"
                   }
-                },
-                "schedule": {
-                  "frequency": "PT1H"
                 }
               }
             }
@@ -8373,17 +8373,27 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "PT1H"
+                },
+                "displayName": "Medium severity malicious activity detected",
                 "queryCondition": {
                   "queryText": "let TimeWindow   = 90d;\nlet HitThreshold = 10;\nlet MinSeverity  = 2;\nlet EnableCategoryFilter    = true;\nlet EnableDescriptionFilter = false;\nlet EnableActionFilter      = false;\nlet CategoriesOfInterest = dynamic([\n    \"Possibly Unwanted Program Detected\",\n    \"Possible Social Engineering Attempted\",\n    \"Crypto Currency Mining Activity Detected\",\n    \"A suspicious filename was detected\",\n    \"A system call was detected\"\n]);\nlet DescriptionsOfInterest = dynamic([\n    \"pup-activity\",\n    \"social-engineering\",\n    \"coin-mining\",\n    \"suspicious-filename-detect\",\n    \"system-call-detect\"\n]);\nlet MatchActions = dynamic([\"Deny\", \"alert\"]);\nAZFWIdpsSignature\n| where TimeGenerated >= ago(TimeWindow)\n| where Severity >= MinSeverity\n| where (EnableCategoryFilter == false) or (Category has_any (CategoriesOfInterest))\n| where (EnableDescriptionFilter == false) or (Description has_any (DescriptionsOfInterest))\n| where (EnableActionFilter == false) or (Action in~ (MatchActions))\n| summarize\n    StartTime   = min(TimeGenerated),\n    EndTime     = max(TimeGenerated),\n    TotalHits   = count(),\n    MaxSeverity = max(Severity),\n    Actions     = make_set(Action, 5),\n    Signatures  = make_set(SignatureId, 20),\n    Description = make_set(substring(tostring(Description), 0, 120), 3)\n    by SourceIp, ThreatCategory = Category\n| where TotalHits >= HitThreshold\n| project\n    StartTime,\n    EndTime,\n    SourceIp,\n    ThreatCategory,\n    TotalHits,\n    MaxSeverity,\n    Actions,\n    Signatures,\n    Description\n| order by MaxSeverity desc, TotalHits desc"
                 },
-                "status": "disabled",
-                "displayName": "Medium severity malicious activity detected",
                 "id": "[if(true(), 'xdr-medium-severity-malicious-activity-detected-dfbe3963', 'xdr-medium-severity-malicious-activity-detected-dfbe3963')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "Identifies medium severity malicious activity in Azure Firewall IDPS logs.",
-                    "severity": "medium",
                     "title": "Medium severity malicious activity detected",
+                    "description": "Identifies medium severity malicious activity in Azure Firewall IDPS logs.",
+                    "entityMappings": {
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "Impact",
@@ -8394,18 +8404,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "medium"
                   }
-                },
-                "schedule": {
-                  "frequency": "PT1H"
                 }
               }
             }
@@ -8441,17 +8441,33 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "P1D"
+                },
+                "displayName": "Multiple Sources Affected by the Same TI Destination",
                 "queryCondition": {
                   "queryText": "let Timeframe = 1d;\nlet StartTime = ago(Timeframe);\nlet EndTime = now();\nlet MinAffectedThreshold = 5;\nunion isfuzzy=true\n(AzureDiagnostics\n| where TimeGenerated  between (StartTime .. EndTime)\n| where OperationName == \"AzureFirewallThreatIntelLog\"\n| parse msg_s with * \"from \" SourceIp \":\" SourcePort:int \" to \" Fqdn \":\" DestinationPort:int  \".\" * \"Action: Deny. \" ThreatDescription),\n(AZFWThreatIntel\n| where TimeGenerated between (StartTime .. EndTime))\n| extend Fqdn = DestinationIp\n| summarize TiTrafficCount = count(), dCountSourceIps = dcount(SourceIp), AffectedIps = make_set(SourceIp, 10000) by Fqdn, ThreatDescription\n| where array_length(AffectedIps) > MinAffectedThreshold\n| mv-expand SourceIp = AffectedIps\n| order by TiTrafficCount desc, Fqdn asc, parse_ipv4(tostring(SourceIp)) asc"
                 },
-                "status": "disabled",
-                "displayName": "Multiple Sources Affected by the Same TI Destination",
                 "id": "[if(true(), 'xdr-multiple-sources-affected-by-the-same-ti-destination-4644baf7', 'xdr-multiple-sources-affected-by-the-same-ti-destination-4644baf7')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Identifies multiple machines trying to reach out to the same destination blocked by TI in Azure Firewall. This can indicate attack on the organization by the same attack group.\n\nConfigurable Parameters:\n\n- Minimum affected threshold - alert only if more than this number of hosts affected. Default is set to 5.\n- Recommendation is to use the new resource specific logs. If you are using both, the TiTraffic Count will be duplicated.'",
-                    "severity": "medium",
                     "title": "Multiple Sources Affected by the Same TI Destination",
+                    "description": "'Identifies multiple machines trying to reach out to the same destination blocked by TI in Azure Firewall. This can indicate attack on the organization by the same attack group.\n\nConfigurable Parameters:\n\n- Minimum affected threshold - alert only if more than this number of hosts affected. Default is set to 5.\n- Recommendation is to use the new resource specific logs. If you are using both, the TiTraffic Count will be duplicated.'",
+                    "entityMappings": {
+                      "urls": [
+                        {
+                          "addressColumn": "Fqdn",
+                          "id": "[if(true(), 'url1', 'url1')]"
+                        }
+                      ],
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "CommandAndControl",
@@ -8462,24 +8478,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "urls": [
-                        {
-                          "id": "[if(true(), 'url1', 'url1')]",
-                          "addressColumn": "Fqdn"
-                        }
-                      ],
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "medium"
                   }
-                },
-                "schedule": {
-                  "frequency": "P1D"
                 }
               }
             }
@@ -8515,17 +8515,33 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "P1D"
+                },
+                "displayName": "Port Scan",
                 "queryCondition": {
                   "queryText": "let MinimumDifferentPortsThreshold = 100;\nlet BinTime = 30s;\n// Exclude known benign scanner IPs in your environment to reduce noise\nlet KnownScannerIPs = dynamic([]);\nunion isfuzzy=true(\nAZFWApplicationRule\n| where SourceIp !in (KnownScannerIPs)\n| summarize AlertTimedCountPortsInBinTime = dcount(DestinationPort) by SourceIp, bin(TimeGenerated, BinTime), Fqdn\n| where AlertTimedCountPortsInBinTime > MinimumDifferentPortsThreshold),\n(AZFWNetworkRule\n| where SourceIp !in (KnownScannerIPs)\n| extend Fqdn = DestinationIp\n| summarize AlertTimedCountPortsInBinTime = dcount(DestinationPort) by SourceIp, bin(TimeGenerated, BinTime), Fqdn\n| where AlertTimedCountPortsInBinTime > MinimumDifferentPortsThreshold),\n(AzureDiagnostics\n| where OperationName == \"AzureFirewallApplicationRuleLog\" or OperationName == \"AzureFirewallNetworkRuleLog\"\n| parse msg_s with * \"from \" SourceIp \":\" SourcePort:int \" to \" Fqdn \":\" DestinationPort:int *\n| where isnotempty(Fqdn) and isnotempty(SourceIp)\n| where SourceIp !in (KnownScannerIPs)\n| summarize AlertTimedCountPortsInBinTime = dcount(DestinationPort) by SourceIp, bin(TimeGenerated, BinTime), Fqdn\n| where AlertTimedCountPortsInBinTime > MinimumDifferentPortsThreshold)"
                 },
-                "status": "disabled",
-                "displayName": "Port Scan",
                 "id": "[if(true(), 'xdr-port-scan-b2c5907b', 'xdr-port-scan-b2c5907b')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Identifies a source IP scanning multiple open ports on Azure Firewall. This can indicate malicious scanning of ports by an attacker, trying to reveal open ports in the organization that can be compromised for initial access.\n\nConfigurable Parameters:\n\n- Port scan time - the time range to look for multiple ports scanned. Default is set to 30 seconds.\n- Minimum different ports threshold - alert only if more than this number of ports scanned. Default is set to 100.'",
-                    "severity": "medium",
                     "title": "Port Scan",
+                    "description": "'Identifies a source IP scanning multiple open ports on Azure Firewall. This can indicate malicious scanning of ports by an attacker, trying to reveal open ports in the organization that can be compromised for initial access.\n\nConfigurable Parameters:\n\n- Port scan time - the time range to look for multiple ports scanned. Default is set to 30 seconds.\n- Minimum different ports threshold - alert only if more than this number of ports scanned. Default is set to 100.'",
+                    "entityMappings": {
+                      "urls": [
+                        {
+                          "addressColumn": "Fqdn",
+                          "id": "[if(true(), 'url1', 'url1')]"
+                        }
+                      ],
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "Discovery",
@@ -8536,24 +8552,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "urls": [
-                        {
-                          "id": "[if(true(), 'url1', 'url1')]",
-                          "addressColumn": "Fqdn"
-                        }
-                      ],
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "medium"
                   }
-                },
-                "schedule": {
-                  "frequency": "P1D"
                 }
               }
             }
@@ -8589,17 +8589,33 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "PT1H"
+                },
+                "displayName": "Port Sweep",
                 "queryCondition": {
                   "queryText": "let MinimumDifferentHostsThreshold = 200;\nlet ExcludedPorts = dynamic([80 , 443]);\nlet BinTime = 30s;\nunion isfuzzy=true(\nAZFWApplicationRule\n| where DestinationPort !in (ExcludedPorts)\n| summarize AlertTimedCountHostsInBinTime = make_set(Fqdn) by SourceIp, bin(TimeGenerated, BinTime), DestinationPort\n| where array_length(AlertTimedCountHostsInBinTime) > MinimumDifferentHostsThreshold\n| mv-expand Fqdn = AlertTimedCountHostsInBinTime),\n(AZFWNetworkRule\n| extend Fqdn = DestinationIp\n| where DestinationPort !in (ExcludedPorts)\n| summarize AlertTimedCountHostsInBinTime = make_set(Fqdn) by SourceIp, bin(TimeGenerated, BinTime), DestinationPort\n| where array_length(AlertTimedCountHostsInBinTime) > MinimumDifferentHostsThreshold\n| mv-expand Fqdn = AlertTimedCountHostsInBinTime),\n(AzureDiagnostics\n| where OperationName == \"AzureFirewallApplicationRuleLog\" or OperationName == \"AzureFirewallNetworkRuleLog\"\n| parse msg_s with * \"from \" SourceIp \":\" SourcePort:int \" to \" Fqdn \":\" DestinationPort:int \". \" * \"Action: \" Action \".\" *\n| where DestinationPort !in (ExcludedPorts)\n| where isnotempty(Fqdn) and isnotempty(SourceIp) and isnotempty(DestinationPort)\n| summarize AlertTimedCountHostsInBinTime = make_set(Fqdn) by SourceIp, bin(TimeGenerated, BinTime), DestinationPort\n| where array_length(AlertTimedCountHostsInBinTime) > MinimumDifferentHostsThreshold\n| mv-expand Fqdn = AlertTimedCountHostsInBinTime)\n| project bin(TimeGenerated, BinTime), SourceIp, DestinationPort, AlertTimedCountHostsInBinTime, Fqdn"
                 },
-                "status": "disabled",
-                "displayName": "Port Sweep",
                 "id": "[if(true(), 'xdr-port-sweep-720335f4', 'xdr-port-sweep-720335f4')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Identifies a source IP scanning same open ports on the Azure Firewall IPs. This can indicate malicious scanning of port by an attacker, trying to reveal IPs with specific ports open in the organization. The ports can be compromised by attackers for initial access, most often by exploiting vulnerability.\n\nConfigurable Parameters:\n\n- Port sweep time - the time range to look for multiple hosts scanned. Default is set to 30 seconds.\n- Minimum different hosts threshold - alert only if more than this number of hosts scanned. Default is set to 200.'",
-                    "severity": "medium",
                     "title": "Port Sweep",
+                    "description": "'Identifies a source IP scanning same open ports on the Azure Firewall IPs. This can indicate malicious scanning of port by an attacker, trying to reveal IPs with specific ports open in the organization. The ports can be compromised by attackers for initial access, most often by exploiting vulnerability.\n\nConfigurable Parameters:\n\n- Port sweep time - the time range to look for multiple hosts scanned. Default is set to 30 seconds.\n- Minimum different hosts threshold - alert only if more than this number of hosts scanned. Default is set to 200.'",
+                    "entityMappings": {
+                      "urls": [
+                        {
+                          "addressColumn": "Fqdn",
+                          "id": "[if(true(), 'url1', 'url1')]"
+                        }
+                      ],
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "Discovery",
@@ -8610,24 +8626,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "urls": [
-                        {
-                          "id": "[if(true(), 'url1', 'url1')]",
-                          "addressColumn": "Fqdn"
-                        }
-                      ],
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "medium"
                   }
-                },
-                "schedule": {
-                  "frequency": "PT1H"
                 }
               }
             }
@@ -8663,17 +8663,27 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "PT1H"
+                },
+                "displayName": "Web Application attack detected",
                 "queryCondition": {
                   "queryText": "let TimeWindow   = 90d;\nlet HitThreshold = 10;\nlet MinSeverity  = 2;\nlet EnableCategoryFilter    = true;\nlet EnableDescriptionFilter = false;\nlet EnableActionFilter      = false;\nlet CategoriesOfInterest = dynamic([\n    \"access to a potentially vulnerable web application\",\n    \"Web Application Attack\"\n]);\nlet DescriptionsOfInterest = dynamic([\n    \"web-application-activity\",\n    \"web-application-attack\"\n]);\nlet MatchActions = dynamic([\"Deny\", \"alert\"]);\nAZFWIdpsSignature\n| where TimeGenerated >= ago(TimeWindow)\n| where Severity >= MinSeverity\n| where (EnableCategoryFilter == false) or (Category has_any (CategoriesOfInterest))\n| where (EnableDescriptionFilter == false) or (Description has_any (DescriptionsOfInterest))\n| where (EnableActionFilter == false) or (Action in~ (MatchActions))\n| summarize\n    StartTime   = min(TimeGenerated),\n    EndTime     = max(TimeGenerated),\n    TotalHits   = count(),\n    MaxSeverity = max(Severity),\n    Actions     = make_set(Action, 5),\n    Signatures  = make_set(SignatureId, 20),\n    Description = make_set(substring(tostring(Description), 0, 120), 3)\n    by SourceIp, ThreatCategory = Category\n| where TotalHits >= HitThreshold\n| project\n    StartTime,\n    EndTime,\n    SourceIp,\n    ThreatCategory,\n    TotalHits,\n    MaxSeverity,\n    Actions,\n    Signatures,\n    Description\n| order by MaxSeverity desc, TotalHits desc"
                 },
-                "status": "disabled",
-                "displayName": "Web Application attack detected",
                 "id": "[if(true(), 'xdr-web-application-attack-detected-8159a8d2', 'xdr-web-application-attack-detected-8159a8d2')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "Identifies Web application attack in Azure Firewall IDPS logs.",
-                    "severity": "high",
                     "title": "Web Application attack detected",
+                    "description": "Identifies Web application attack in Azure Firewall IDPS logs.",
+                    "entityMappings": {
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "InitialAccess",
@@ -8684,18 +8694,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "high"
                   }
-                },
-                "schedule": {
-                  "frequency": "PT1H"
                 }
               }
             }
@@ -8731,17 +8731,33 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "schedule": {
+                  "frequency": "PT1H"
+                },
+                "displayName": "Several deny actions registered",
                 "queryCondition": {
                   "queryText": "let threshold = 2;\nunion isfuzzy=true(\nAZFWApplicationRule\n| where Action == \"Deny\"\n| summarize StartTime = min(TimeGenerated), count() by SourceIp, Fqdn, Action, Protocol\n| where count_ >= threshold),\n(AZFWNetworkRule\n| where Action == \"Deny\"\n| extend Fqdn = DestinationIp\n| summarize StartTime = min(TimeGenerated), count_ = dcount(DestinationPort), Protocols = make_set(Protocol) by SourceIp, Fqdn, Action\n| where count_ >= threshold\n| extend Protocol = strcat_array(Protocols, \"/\")),\n(AZFWFlowTrace\n| where Action == \"Deny\"\n| extend Fqdn = DestinationIp\n| summarize StartTime = min(TimeGenerated), count() by SourceIp, Fqdn, Action, Protocol\n| where count_ >= threshold),\n(AZFWIdpsSignature\n| where Action == \"Deny\"\n| extend Fqdn = DestinationIp\n| summarize StartTime = min(TimeGenerated), count() by SourceIp, Fqdn, Action, Protocol\n| where count_ >= threshold),\n(AzureDiagnostics\n| where OperationName in (\"AzureFirewallApplicationRuleLog\",\"AzureFirewallNetworkRuleLog\")\n| extend msg_s_replaced0 = replace(@\"\\s\\s\",@\" \",msg_s)\n| extend msg_s_replaced1 = replace(@\"\\.\\s\",@\" \",msg_s_replaced0)\n| extend msg_a = split(msg_s_replaced1,\" \")\n| extend srcAddr_a = split(msg_a[3],\":\") , destAddr_a = split(msg_a[5],\":\")\n| extend Protocol = tostring(msg_a[0]), SourceIp = tostring(srcAddr_a[0]), srcPort = tostring(srcAddr_a[1]), DestinationIp = tostring(destAddr_a[0]), destPort = tostring(destAddr_a[1]), Action = tostring(msg_a[7])\n| where Action == \"Deny\"\n| extend Fqdn = iff(DestinationIp matches regex \"\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+\",\"\",DestinationIp)\n| summarize StartTime = min(TimeGenerated), count() by SourceIp, Fqdn, Action, Protocol\n| where count_ >= threshold)"
                 },
-                "status": "disabled",
-                "displayName": "Several deny actions registered",
                 "id": "[if(true(), 'xdr-several-deny-actions-registered-f8dad4e9', 'xdr-several-deny-actions-registered-f8dad4e9')]",
+                "status": "disabled",
                 "detectionAction": {
                   "alertTemplate": {
-                    "description": "'Identifies attack pattern when attacker tries to move, or scan, from resource to resource on the network and creates an incident when a source has more than 1 registered deny action in Azure Firewall.'",
-                    "severity": "medium",
                     "title": "Several deny actions registered",
+                    "description": "'Identifies attack pattern when attacker tries to move, or scan, from resource to resource on the network and creates an incident when a source has more than 1 registered deny action in Azure Firewall.'",
+                    "entityMappings": {
+                      "urls": [
+                        {
+                          "addressColumn": "Fqdn",
+                          "id": "[if(true(), 'url1', 'url1')]"
+                        }
+                      ],
+                      "ips": [
+                        {
+                          "addressColumn": "SourceIp",
+                          "id": "[if(true(), 'ip1', 'ip1')]"
+                        }
+                      ]
+                    },
                     "tactics": [
                       {
                         "tactic": "Discovery",
@@ -8752,24 +8768,8 @@
                         ]
                       }
                     ],
-                    "entityMappings": {
-                      "urls": [
-                        {
-                          "id": "[if(true(), 'url1', 'url1')]",
-                          "addressColumn": "Fqdn"
-                        }
-                      ],
-                      "ips": [
-                        {
-                          "id": "[if(true(), 'ip1', 'ip1')]",
-                          "addressColumn": "SourceIp"
-                        }
-                      ]
-                    }
+                    "severity": "medium"
                   }
-                },
-                "schedule": {
-                  "frequency": "PT1H"
                 }
               }
             }

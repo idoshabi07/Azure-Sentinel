@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-20T11:05:34.464222+00:00",
+  "solution": "Azure Activity",
+  "ruleId": "88f453ff-7b9e-45bb-8c12-4058ca5e44ee",
+  "ruleName": "Microsoft Entra ID Hybrid Health AD FS New Server",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Activity\\Analytic Rules\\AADHybridHealthADFSNewServer.yaml",
+  "customDetectionId": null,
+  "customDetectionName": null,
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Activity\\XDR Detections\\AADHybridHealthADFSNewServer.yaml",
+  "scenarioName": "automatic-simple-predicate",
+  "hypothesis": "Synthetic records exercise the decisive predicates in Microsoft Entra ID Hybrid Health AD FS New Server.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "simple",
+    "reasons": []
+  },
+  "sourceTable": "AzureActivity",
+  "destinationTables": [
+    "AzureActivity"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-AzureActivity",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "CategoryValue",
+        "operator": "=~",
+        "rawPath": "CategoryValue",
+        "value": "Administrative"
+      },
+      {
+        "ruleColumn": "ResourceProviderValue",
+        "operator": "=~",
+        "rawPath": "ResourceProviderValue",
+        "value": "Microsoft.ADHybridHealthService"
+      },
+      {
+        "ruleColumn": "OperationNameValue",
+        "operator": "=~",
+        "rawPath": "OperationNameValue",
+        "value": "Microsoft.ADHybridHealthService/services/servicemembers/action"
+      }
+    ],
+    "lockedPaths": [
+      "CategoryValue",
+      "OperationNameValue",
+      "ResourceProviderValue"
+    ]
+  },
+  "fixtures": {
+    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Azure Activity\\88f453ff-7b9e-45bb-8c12-4058ca5e44ee\\malicious.json",
+    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Azure Activity\\88f453ff-7b9e-45bb-8c12-4058ca5e44ee\\benign.json",
+    "maliciousRecords": 1,
+    "benignRecords": 1
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-run"
+  },
+  "limitations": [
+    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
+  ]
+}

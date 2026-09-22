@@ -620,10 +620,10 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "DNS",
                     "dataTypes": [
                       "DnsEvents"
-                    ]
+                    ],
+                    "connectorId": "DNS"
                   }
                 ],
                 "tactics": [
@@ -635,13 +635,13 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
                         "identifier": "Address",
                         "columnName": "ClientIP"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ]
               }
@@ -726,10 +726,10 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "DNS",
                     "dataTypes": [
                       "DnsEvents"
-                    ]
+                    ],
+                    "connectorId": "DNS"
                   }
                 ],
                 "tactics": [
@@ -740,13 +740,13 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
                         "identifier": "Address",
                         "columnName": "ClientIP"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ]
               }
@@ -831,10 +831,10 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "DNS",
                     "dataTypes": [
                       "DnsEvents"
-                    ]
+                    ],
+                    "connectorId": "DNS"
                   }
                 ],
                 "tactics": [
@@ -845,7 +845,6 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "Host",
                     "fieldMappings": [
                       {
                         "identifier": "FullName",
@@ -859,16 +858,17 @@
                         "identifier": "DnsDomain",
                         "columnName": "DnsDomain"
                       }
-                    ]
+                    ],
+                    "entityType": "Host"
                   },
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
                         "identifier": "Address",
                         "columnName": "ClientIP"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ]
               }
@@ -953,10 +953,10 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "DNS",
                     "dataTypes": [
                       "DnsEvents"
-                    ]
+                    ],
+                    "connectorId": "DNS"
                   }
                 ],
                 "tactics": [
@@ -967,7 +967,6 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "Host",
                     "fieldMappings": [
                       {
                         "identifier": "FullName",
@@ -981,16 +980,17 @@
                         "identifier": "DnsDomain",
                         "columnName": "DnsDomain"
                       }
-                    ]
+                    ],
+                    "entityType": "Host"
                   },
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
                         "identifier": "Address",
                         "columnName": "ClientIP"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ]
               }
@@ -1071,10 +1071,10 @@
                 "status": "Available",
                 "requiredDataConnectors": [
                   {
-                    "connectorId": "DNS",
                     "dataTypes": [
                       "DnsEvents"
-                    ]
+                    ],
+                    "connectorId": "DNS"
                   }
                 ],
                 "tactics": [
@@ -1085,7 +1085,6 @@
                 ],
                 "entityMappings": [
                   {
-                    "entityType": "Host",
                     "fieldMappings": [
                       {
                         "identifier": "FullName",
@@ -1099,16 +1098,17 @@
                         "identifier": "DnsDomain",
                         "columnName": "DnsDomain"
                       }
-                    ]
+                    ],
+                    "entityType": "Host"
                   },
                   {
-                    "entityType": "IP",
                     "fieldMappings": [
                       {
                         "identifier": "Address",
                         "columnName": "ClientIP"
                       }
-                    ]
+                    ],
+                    "entityType": "IP"
                   }
                 ]
               }
@@ -2083,6 +2083,7 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "displayName": "Potential DGA detected",
                 "detectionAction": {
                   "alertTemplate": {
                     "entityMappings": {
@@ -2093,9 +2094,9 @@
                         }
                       ]
                     },
-                    "severity": "medium",
                     "tactics": [
                       {
+                        "tactic": "CommandAndControl",
                         "techniques": [
                           {
                             "technique": "T1568"
@@ -2103,17 +2104,16 @@
                           {
                             "technique": "T1008"
                           }
-                        ],
-                        "tactic": "CommandAndControl"
+                        ]
                       }
                     ],
-                    "description": "'Identifies clients with a high NXDomain count, which could be indicative of a DGA (cycling through possible C2 domains where most C2s are not live).\nAlerts are generated when a new IP address is seen (based on not being associated with NXDomain records in the prior 10-day baseline period).'",
-                    "title": "Potential DGA detected"
+                    "title": "Potential DGA detected",
+                    "severity": "medium",
+                    "description": "'Identifies clients with a high NXDomain count, which could be indicative of a DGA (cycling through possible C2 domains where most C2s are not live).\nAlerts are generated when a new IP address is seen (based on not being associated with NXDomain records in the prior 10-day baseline period).'"
                   }
                 },
-                "status": "disabled",
                 "id": "[if(true(), 'xdr-potential-dga-detected-a0907abe', 'xdr-potential-dga-detected-a0907abe')]",
-                "displayName": "Potential DGA detected",
+                "status": "disabled",
                 "schedule": {
                   "frequency": "P1D"
                 },
@@ -2154,6 +2154,7 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "displayName": "Rare client observed with high reverse DNS lookup count",
                 "detectionAction": {
                   "alertTemplate": {
                     "entityMappings": {
@@ -2164,24 +2165,23 @@
                         }
                       ]
                     },
-                    "severity": "medium",
                     "tactics": [
                       {
+                        "tactic": "Discovery",
                         "techniques": [
                           {
                             "technique": "T1046"
                           }
-                        ],
-                        "tactic": "Discovery"
+                        ]
                       }
                     ],
-                    "description": "'Identifies clients with a high reverse DNS counts that could be carrying out reconnaissance or discovery activity.\nAlerts are generated if the IP performing such reverse DNS lookups was not seen doing so in the preceding 7-day period.'",
-                    "title": "Rare client observed with high reverse DNS lookup count"
+                    "title": "Rare client observed with high reverse DNS lookup count",
+                    "severity": "medium",
+                    "description": "'Identifies clients with a high reverse DNS counts that could be carrying out reconnaissance or discovery activity.\nAlerts are generated if the IP performing such reverse DNS lookups was not seen doing so in the preceding 7-day period.'"
                   }
                 },
-                "status": "disabled",
                 "id": "[if(true(), 'xdr-rare-client-observed-with-high-reverse-dns-lookup-count-15ae38a2', 'xdr-rare-client-observed-with-high-reverse-dns-lookup-count-15ae38a2')]",
-                "displayName": "Rare client observed with high reverse DNS lookup count",
+                "status": "disabled",
                 "schedule": {
                   "frequency": "P1D"
                 },
@@ -2222,41 +2222,41 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "displayName": "DNS events related to mining pools",
                 "detectionAction": {
                   "alertTemplate": {
                     "entityMappings": {
-                      "hosts": [
-                        {
-                          "nameColumn": "HostName",
-                          "dnsDomainColumn": "DnsDomain",
-                          "id": "[if(true(), 'host1', 'host1')]"
-                        }
-                      ],
                       "ips": [
                         {
                           "id": "[if(true(), 'ip1', 'ip1')]",
                           "addressColumn": "ClientIP"
                         }
+                      ],
+                      "hosts": [
+                        {
+                          "id": "[if(true(), 'host1', 'host1')]",
+                          "nameColumn": "HostName",
+                          "dnsDomainColumn": "DnsDomain"
+                        }
                       ]
                     },
-                    "severity": "low",
                     "tactics": [
                       {
+                        "tactic": "Impact",
                         "techniques": [
                           {
                             "technique": "T1496"
                           }
-                        ],
-                        "tactic": "Impact"
+                        ]
                       }
                     ],
-                    "description": "'Identifies IP addresses that may be performing DNS lookups associated with common currency mining pools.'",
-                    "title": "DNS events related to mining pools"
+                    "title": "DNS events related to mining pools",
+                    "severity": "low",
+                    "description": "'Identifies IP addresses that may be performing DNS lookups associated with common currency mining pools.'"
                   }
                 },
-                "status": "disabled",
                 "id": "[if(true(), 'xdr-dns-events-related-to-mining-pools-0d76e9cf', 'xdr-dns-events-related-to-mining-pools-0d76e9cf')]",
-                "displayName": "DNS events related to mining pools",
+                "status": "disabled",
                 "schedule": {
                   "frequency": "P1D"
                 },
@@ -2297,41 +2297,41 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "displayName": "DNS events related to ToR proxies",
                 "detectionAction": {
                   "alertTemplate": {
                     "entityMappings": {
-                      "hosts": [
-                        {
-                          "nameColumn": "HostName",
-                          "dnsDomainColumn": "DnsDomain",
-                          "id": "[if(true(), 'host1', 'host1')]"
-                        }
-                      ],
                       "ips": [
                         {
                           "id": "[if(true(), 'ip1', 'ip1')]",
                           "addressColumn": "ClientIP"
                         }
+                      ],
+                      "hosts": [
+                        {
+                          "id": "[if(true(), 'host1', 'host1')]",
+                          "nameColumn": "HostName",
+                          "dnsDomainColumn": "DnsDomain"
+                        }
                       ]
                     },
-                    "severity": "low",
                     "tactics": [
                       {
+                        "tactic": "Exfiltration",
                         "techniques": [
                           {
                             "technique": "T1048"
                           }
-                        ],
-                        "tactic": "Exfiltration"
+                        ]
                       }
                     ],
-                    "description": "'Identifies IP addresses performing DNS lookups associated with common ToR proxies.'",
-                    "title": "DNS events related to ToR proxies"
+                    "title": "DNS events related to ToR proxies",
+                    "severity": "low",
+                    "description": "'Identifies IP addresses performing DNS lookups associated with common ToR proxies.'"
                   }
                 },
-                "status": "disabled",
                 "id": "[if(true(), 'xdr-dns-events-related-to-tor-proxies-a83ef0f4', 'xdr-dns-events-related-to-tor-proxies-a83ef0f4')]",
-                "displayName": "DNS events related to ToR proxies",
+                "status": "disabled",
                 "schedule": {
                   "frequency": "P1D"
                 },
@@ -2372,41 +2372,41 @@
               "import": "MicrosoftSecurity",
               "type": "Microsoft.Security/detectionRules@2026-06-01-preview",
               "properties": {
+                "displayName": "NRT DNS events related to mining pools",
                 "detectionAction": {
                   "alertTemplate": {
                     "entityMappings": {
-                      "hosts": [
-                        {
-                          "nameColumn": "HostName",
-                          "dnsDomainColumn": "DnsDomain",
-                          "id": "[if(true(), 'host1', 'host1')]"
-                        }
-                      ],
                       "ips": [
                         {
                           "id": "[if(true(), 'ip1', 'ip1')]",
                           "addressColumn": "ClientIP"
                         }
+                      ],
+                      "hosts": [
+                        {
+                          "id": "[if(true(), 'host1', 'host1')]",
+                          "nameColumn": "HostName",
+                          "dnsDomainColumn": "DnsDomain"
+                        }
                       ]
                     },
-                    "severity": "low",
                     "tactics": [
                       {
+                        "tactic": "Impact",
                         "techniques": [
                           {
                             "technique": "T1496"
                           }
-                        ],
-                        "tactic": "Impact"
+                        ]
                       }
                     ],
-                    "description": "'Identifies IP addresses that may be performing DNS lookups associated with common currency mining pools.'",
-                    "title": "NRT DNS events related to mining pools"
+                    "title": "NRT DNS events related to mining pools",
+                    "severity": "low",
+                    "description": "'Identifies IP addresses that may be performing DNS lookups associated with common currency mining pools.'"
                   }
                 },
-                "status": "disabled",
                 "id": "[if(true(), 'xdr-nrt-dns-events-related-to-mining-pools-d5b32cd4', 'xdr-nrt-dns-events-related-to-mining-pools-d5b32cd4')]",
-                "displayName": "NRT DNS events related to mining pools",
+                "status": "disabled",
                 "schedule": {
                   "frequency": "PT1H"
                 },

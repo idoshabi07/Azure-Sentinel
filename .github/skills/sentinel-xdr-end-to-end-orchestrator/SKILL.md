@@ -31,6 +31,13 @@ When workflow state contains a full workspace ARM resource ID, reuse it
 unchanged. Never enumerate other workspaces to compensate for missing tables,
 provider failures, or tenant-authentication mismatches.
 
+Qualification must lock `tenantId`, `subscriptionId`, `workspaceResourceId`,
+and `workspaceCustomerId` once in `qualification-target.json`. Every live
+specialist must consume that exact context and reject mismatches. Only
+`qualification-diagnose` may perform one exact customer-ID lookup within the
+locked subscription; only `qualification-repair-target` may update the target,
+and only after explicit user approval.
+
 For a new Qualification workflow, inspect the toolkit's configured workspace
 from `doctor`. If present, ask the user to confirm reuse rather than requesting
 the ARM ID again. Persist a newly approved workspace through

@@ -37,16 +37,16 @@
     "Cloudflare CCF/Analytic Rules/CloudflareCCFXSSProbingPattern.yaml"
   ],
   "XDR Detections": [
-    "Cloudflare CCF/XDR Detections/CloudflareCCFBadClientIp.yaml",
-    "Cloudflare CCF/XDR Detections/CloudflareCCFEmptyUA.yaml",
-    "Cloudflare CCF/XDR Detections/CloudflareCCFMultipleErrorsSource.yaml",
-    "Cloudflare CCF/XDR Detections/CloudflareCCFMultipleUAs.yaml",
-    "Cloudflare CCF/XDR Detections/CloudflareCCFUnexpectedCountry.yaml",
-    "Cloudflare CCF/XDR Detections/CloudflareCCFUnexpectedPost.yaml",
-    "Cloudflare CCF/XDR Detections/CloudflareCCFUnexpectedRequest.yaml",
-    "Cloudflare CCF/XDR Detections/CloudflareCCFUnexpectedUrl.yaml",
-    "Cloudflare CCF/XDR Detections/CloudflareCCFWafThreatAllowed.yaml",
-    "Cloudflare CCF/XDR Detections/CloudflareCCFXSSProbingPattern.yaml"
+    "XDR Detections/CloudflareCCFBadClientIp.yaml",
+    "XDR Detections/CloudflareCCFEmptyUA.yaml",
+    "XDR Detections/CloudflareCCFMultipleErrorsSource.yaml",
+    "XDR Detections/CloudflareCCFMultipleUAs.yaml",
+    "XDR Detections/CloudflareCCFUnexpectedCountry.yaml",
+    "XDR Detections/CloudflareCCFUnexpectedPost.yaml",
+    "XDR Detections/CloudflareCCFUnexpectedRequest.yaml",
+    "XDR Detections/CloudflareCCFUnexpectedUrl.yaml",
+    "XDR Detections/CloudflareCCFWafThreatAllowed.yaml",
+    "XDR Detections/CloudflareCCFXSSProbingPattern.yaml"
   ],
   "XDR Detection Version": "1.0.1",
   "Include XDR Content Registration": false,

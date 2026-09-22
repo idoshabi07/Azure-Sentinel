@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-20T11:05:44.002333+00:00",
+  "solution": "Windows Security Events",
+  "ruleId": "7ad4c32b-d0d2-411c-a0e8-b557afa12fce",
+  "ruleName": "NRT Process executed from binary hidden in Base64 encoded file",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\Analytic Rules\\NRT_execute_base64_decodedpayload.yaml",
+  "customDetectionId": null,
+  "customDetectionName": null,
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\XDR Detections\\NRT_execute_base64_decodedpayload.yaml",
+  "scenarioName": "automatic-simple-predicate",
+  "hypothesis": "Synthetic records exercise the decisive predicates in NRT Process executed from binary hidden in Base64 encoded file.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "simple",
+    "reasons": []
+  },
+  "sourceTable": "SecurityEvent",
+  "destinationTables": [
+    "SecurityEvent"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-SecurityEvent",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "EventID",
+        "operator": "==",
+        "rawPath": "EventID",
+        "value": 4688
+      },
+      {
+        "ruleColumn": "CommandLine",
+        "operator": "isnotempty",
+        "rawPath": "CommandLine",
+        "value": "synthetic-present"
+      }
+    ],
+    "lockedPaths": [
+      "CommandLine",
+      "EventID"
+    ]
+  },
+  "fixtures": {
+    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\7ad4c32b-d0d2-411c-a0e8-b557afa12fce\\malicious.json",
+    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\7ad4c32b-d0d2-411c-a0e8-b557afa12fce\\benign.json",
+    "maliciousRecords": 1,
+    "benignRecords": 1
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-run"
+  },
+  "limitations": [
+    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
+  ]
+}

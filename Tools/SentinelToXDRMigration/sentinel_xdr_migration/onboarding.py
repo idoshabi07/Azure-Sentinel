@@ -89,6 +89,8 @@ def configure_workspace(
     workspace_resource_id: str,
     *,
     workspace_customer_id: str | None = None,
+    tenant_id: str | None = None,
+    subscription_id: str | None = None,
     state_dir: str | Path | None = None,
 ) -> dict[str, Any]:
     normalized = workspace_resource_id.strip().rstrip("/")
@@ -99,6 +101,14 @@ def configure_workspace(
         and "/providers/microsoft.operationalinsights/workspaces/" in lowered
     ):
         raise ValueError("workspace-resource-id must be a full Log Analytics ARM ID")
+    workspace_subscription_id = normalized.split("/")[2]
+    if (
+        subscription_id
+        and workspace_subscription_id.lower() != subscription_id.strip().lower()
+    ):
+        raise ValueError(
+            "workspace ARM ID subscription does not match subscription-id"
+        )
 
     state_root = _state_dir(state_dir)
     state_root.mkdir(parents=True, exist_ok=True)
@@ -107,6 +117,10 @@ def configure_workspace(
     config["workspaceResourceId"] = normalized
     if workspace_customer_id:
         config["workspaceId"] = workspace_customer_id.strip()
+    if tenant_id:
+        config["tenantId"] = tenant_id.strip()
+    if subscription_id:
+        config["subscriptionId"] = subscription_id.strip()
     config_path.write_text(
         json.dumps(config, indent=2) + "\n",
         encoding="utf-8",
@@ -116,6 +130,8 @@ def configure_workspace(
         "status": "configured",
         "workspaceResourceId": normalized,
         "workspaceCustomerId": config.get("workspaceId"),
+        "tenantId": config.get("tenantId"),
+        "subscriptionId": config.get("subscriptionId"),
         "configPath": str(config_path),
     }
 
@@ -245,6 +261,8 @@ def doctor(
         "runtimeValidationAvailable": runtime_ready,
         "configuredWorkspaceResourceId": workspace_resource_id,
         "configuredWorkspaceCustomerId": workspace_id,
+        "configuredTenantId": config.get("tenantId"),
+        "configuredSubscriptionId": config.get("subscriptionId"),
         "checks": checks,
         "recommendedActions": actions,
     }

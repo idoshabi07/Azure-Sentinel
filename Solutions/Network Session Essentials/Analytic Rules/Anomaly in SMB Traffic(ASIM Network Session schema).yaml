@@ -41,7 +41,7 @@ query: |
   // Filter for deviations greater than the threshold
   UserBehaviorAnalysis
     | where Deviation > threshold
-    | project SrcIpAddr, DstPortNumber, Deviation, Count = RecentCount; // Project the required columns
+    | project SrcIpAddr, DstPortNumber, Deviation, Count = RecentCount // Project the required columns
 entityMappings:
   - entityType: IP
     fieldMappings:

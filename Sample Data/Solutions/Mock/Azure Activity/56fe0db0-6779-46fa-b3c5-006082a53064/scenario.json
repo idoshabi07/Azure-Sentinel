@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-20T11:05:38.149048+00:00",
+  "solution": "Azure Activity",
+  "ruleId": "56fe0db0-6779-46fa-b3c5-006082a53064",
+  "ruleName": "NRT Creation of expensive computes in Azure",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Activity\\Analytic Rules\\NRT_Creation_of_Expensive_Computes_in_Azure.yaml",
+  "customDetectionId": null,
+  "customDetectionName": null,
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Activity\\XDR Detections\\NRT_Creation_of_Expensive_Computes_in_Azure.yaml",
+  "scenarioName": "automatic-simple-predicate",
+  "hypothesis": "Synthetic records exercise the decisive predicates in NRT Creation of expensive computes in Azure.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "simple",
+    "reasons": []
+  },
+  "sourceTable": "AzureActivity",
+  "destinationTables": [
+    "AzureActivity"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-AzureActivity",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "OperationNameValue",
+        "operator": "in~",
+        "rawPath": "OperationNameValue",
+        "value": "operationList"
+      }
+    ],
+    "lockedPaths": [
+      "OperationNameValue"
+    ]
+  },
+  "fixtures": {
+    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Azure Activity\\56fe0db0-6779-46fa-b3c5-006082a53064\\malicious.json",
+    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Azure Activity\\56fe0db0-6779-46fa-b3c5-006082a53064\\benign.json",
+    "maliciousRecords": 1,
+    "benignRecords": 1
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-run"
+  },
+  "limitations": [
+    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
+  ]
+}

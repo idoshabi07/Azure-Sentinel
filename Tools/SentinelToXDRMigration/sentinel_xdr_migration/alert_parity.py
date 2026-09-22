@@ -18,6 +18,7 @@ import yaml
 from .artifacts import artifact_path, migrate_legacy_artifact
 from .converter import validate_document, xdr_detection_files
 from .deployment import DEPLOYMENT_ENDPOINT, _deployment_token, _graph_request
+from .target_context import require_locked_target
 
 ARM_SCOPE = "https://management.azure.com/.default"
 SENTINEL_ALERT_RULE_API_VERSION = "2024-03-01"
@@ -253,7 +254,11 @@ def _disable_all(
     state_dir: str | Path | None = None,
 ) -> list[dict[str, Any]]:
     arm = arm_token or _arm_token()
-    graph = graph_token or _deployment_token(state_dir)
+    target = state.get("target") or {}
+    graph = graph_token or _deployment_token(
+        state_dir,
+        tenant_id=target.get("tenantId"),
+    )
     results: list[dict[str, Any]] = []
     for pair in state.get("rules") or []:
         errors = _set_pair_enabled(
@@ -360,7 +365,7 @@ def _capture_queries(pair: dict[str, Any], started_at: str, marker: str) -> dict
 def start_alert_parity(
     solution: str | Path,
     *,
-    workspace_resource_id: str,
+    workspace_resource_id: str | None = None,
     contract: str | Path,
     payload: str | Path,
     scenario_marker: str,
@@ -368,8 +373,11 @@ def start_alert_parity(
     detections: list[str] | None = None,
     state_dir: str | Path | None = None,
 ) -> dict[str, Any]:
-    if not workspace_resource_id.startswith("/subscriptions/"):
-        raise ValueError("workspace-resource-id must be a full Azure resource ID")
+    target = require_locked_target(
+        solution,
+        workspace_resource_id=workspace_resource_id,
+    )
+    workspace_resource_id = target["workspaceResourceId"]
     marker = scenario_marker.strip()
     if not marker:
         raise ValueError("scenario-marker is required")
@@ -389,7 +397,7 @@ def start_alert_parity(
             )
 
     arm_token = _arm_token()
-    graph_token = _deployment_token(state_dir)
+    graph_token = _deployment_token(state_dir, tenant_id=target["tenantId"])
     _read_rule_states(pairs, workspace_resource_id, arm_token, graph_token)
     started_at = _utc_now()
     state = {
@@ -398,6 +406,7 @@ def start_alert_parity(
         "startedAt": started_at,
         "solution": str(root),
         "workspaceResourceId": workspace_resource_id.rstrip("/"),
+        "target": target,
         "scenarioMarker": marker,
         "expectedMatchKeys": expected_keys,
         "contract": str(Path(contract).expanduser().resolve()),
@@ -459,12 +468,15 @@ def start_alert_parity(
 def start_alert_parity_batch(
     solution: str | Path,
     *,
-    workspace_resource_id: str,
+    workspace_resource_id: str | None = None,
     plan_path: str | Path,
     state_dir: str | Path | None = None,
 ) -> dict[str, Any]:
-    if not workspace_resource_id.startswith("/subscriptions/"):
-        raise ValueError("workspace-resource-id must be a full Azure resource ID")
+    target = require_locked_target(
+        solution,
+        workspace_resource_id=workspace_resource_id,
+    )
+    workspace_resource_id = target["workspaceResourceId"]
     plan_file = Path(plan_path).expanduser().resolve()
     plan = json.loads(plan_file.read_text(encoding="utf-8-sig"))
     fixtures = plan.get("fixtures") if isinstance(plan, dict) else None
@@ -528,7 +540,7 @@ def start_alert_parity_batch(
             )
 
     arm_token = _arm_token()
-    graph_token = _deployment_token(state_dir)
+    graph_token = _deployment_token(state_dir, tenant_id=target["tenantId"])
     _read_rule_states(pairs, workspace_resource_id, arm_token, graph_token)
     started_at = _utc_now()
     state = {
@@ -538,6 +550,7 @@ def start_alert_parity_batch(
         "startedAt": started_at,
         "solution": str(root),
         "workspaceResourceId": workspace_resource_id.rstrip("/"),
+        "target": target,
         "plan": str(plan_file),
         "fixtures": list(fixture_by_detection.values()),
         "expectedMatchKeysByDetection": {
@@ -741,6 +754,11 @@ def complete_alert_parity(
     state = json.loads(state_path.read_text(encoding="utf-8"))
     if state.get("status") != "awaiting-alerts":
         raise ValueError(f"alert parity run is not active: {state.get('status')}")
+    target = require_locked_target(root)
+    if (state.get("target") or {}).get("workspaceResourceId", "").lower() != target[
+        "workspaceResourceId"
+    ].lower():
+        raise ValueError("alert parity state does not match the locked target")
 
     comparison_error: str | None = None
     comparisons: list[dict[str, Any]] = []
@@ -804,6 +822,11 @@ def abort_alert_parity(
     if not state_path.exists():
         raise ValueError("no alert parity state exists for this solution")
     state = json.loads(state_path.read_text(encoding="utf-8"))
+    target = require_locked_target(root)
+    if (state.get("target") or {}).get("workspaceResourceId", "").lower() != target[
+        "workspaceResourceId"
+    ].lower():
+        raise ValueError("alert parity state does not match the locked target")
     cleanup = _disable_all(state, state_dir=state_dir)
     success = all(item["disabled"] for item in cleanup)
     state["status"] = "aborted" if success else "cleanup-failed"

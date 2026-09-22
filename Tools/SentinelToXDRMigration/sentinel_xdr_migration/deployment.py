@@ -22,6 +22,7 @@ from .onboarding import (
     _read_json,
     _state_dir,
 )
+from .target_context import require_locked_target
 
 DEPLOYMENT_SCOPE = "https://graph.microsoft.com/CustomDetection.ReadWrite.All"
 DEPLOYMENT_ENDPOINT = (
@@ -129,16 +130,19 @@ def _deployment_token(
     state_dir: str | Path | None = None,
     *,
     require_record: bool = False,
+    tenant_id: str | None = None,
 ) -> str:
     state_root = _state_dir(state_dir)
     if (state_root / DEPLOYMENT_AUTH_RECORD_NAME).exists():
-        credential = _deployment_credential(state_root)
+        credential = _deployment_credential(state_root, tenant_id=tenant_id)
         return credential.get_token(DEPLOYMENT_SCOPE).token
     if not require_record:
         from azure.identity import AzureCliCredential
 
         try:
-            return AzureCliCredential().get_token(DEPLOYMENT_SCOPE).token
+            return AzureCliCredential(tenant_id=tenant_id).get_token(
+                DEPLOYMENT_SCOPE
+            ).token
         except Exception:
             pass
     if not (state_root / DEPLOYMENT_AUTH_RECORD_NAME).exists():
@@ -196,11 +200,12 @@ def deploy_solution(
     state_dir: str | Path | None = None,
 ) -> dict[str, Any]:
     root = Path(solution).expanduser().resolve()
+    target = require_locked_target(root)
     output = root / "XDR Detections"
     files = xdr_detection_files(output)
     if not files:
         raise ValueError(f"no generated XDR Detection YAML files found under {output}")
-    token = _deployment_token(state_dir)
+    token = _deployment_token(state_dir, tenant_id=target["tenantId"])
     results: list[dict[str, Any]] = []
     for path in files:
         try:
@@ -269,6 +274,7 @@ def deploy_solution(
     report = {
         "solution": str(root),
         "provider": "microsoft-graph-beta",
+        "target": target,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "total": len(results),
         "succeeded": sum(result["success"] for result in results),

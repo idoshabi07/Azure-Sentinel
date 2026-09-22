@@ -26,6 +26,7 @@ from .alert_parity import (
 )
 from .runtime import record_runtime_validation, validate_advanced_hunting
 from .solution_report import build_solution_report
+from .target_context import diagnose_target, repair_target, require_locked_target
 from .workflow import (
     STAGES,
     WORKFLOW_PROFILES,
@@ -111,11 +112,25 @@ def main(argv: list[str] | None = None) -> int:
     )
     workspace_config.add_argument("--workspace-resource-id", required=True)
     workspace_config.add_argument("--workspace-customer-id")
+    workspace_config.add_argument("--tenant-id")
+    workspace_config.add_argument("--subscription-id")
+    target_diagnostics = subparsers.add_parser(
+        "qualification-diagnose",
+        help="Diagnose the one locked Qualification target without broad discovery.",
+    )
+    target_diagnostics.add_argument("--solution", required=True)
+    target_repair = subparsers.add_parser(
+        "qualification-repair-target",
+        help="Apply the exact target correction proposed by current diagnostics.",
+    )
+    target_repair.add_argument("--solution", required=True)
+    target_repair.add_argument("--approve-target-update", action="store_true")
     deployment_setup = subparsers.add_parser(
         "setup-deployment",
         help="Authenticate for Microsoft Graph Custom Detection deployment.",
     )
     deployment_setup.add_argument("--tenant-id")
+    deployment_setup.add_argument("--solution", required=True)
     deployment_setup.add_argument(
         "--auth-method",
         choices=["azure-cli", "device-code", "browser"],
@@ -131,13 +146,13 @@ def main(argv: list[str] | None = None) -> int:
         help="Create or update source Sentinel analytic rules through Azure Resource Manager.",
     )
     analytic_deployment.add_argument("--solution", required=True)
-    analytic_deployment.add_argument("--workspace-resource-id", required=True)
+    analytic_deployment.add_argument("--workspace-resource-id")
     parity_start = subparsers.add_parser(
         "start-alert-parity",
         help="Enable disabled AR/CD pairs, ingest a marked mock payload, and emit capture queries.",
     )
     parity_start.add_argument("--solution", required=True)
-    parity_start.add_argument("--workspace-resource-id", required=True)
+    parity_start.add_argument("--workspace-resource-id")
     parity_start.add_argument("--contract", required=True)
     parity_start.add_argument("--payload", required=True)
     parity_start.add_argument("--scenario-marker", required=True)
@@ -164,7 +179,7 @@ def main(argv: list[str] | None = None) -> int:
         help="Enable all reviewed AR/CD pairs and ingest one fixture per detection.",
     )
     parity_batch.add_argument("--solution", required=True)
-    parity_batch.add_argument("--workspace-resource-id", required=True)
+    parity_batch.add_argument("--workspace-resource-id")
     parity_batch.add_argument("--plan", required=True)
     parity_abort = subparsers.add_parser(
         "abort-alert-parity",
@@ -208,7 +223,10 @@ def main(argv: list[str] | None = None) -> int:
         help="Create or resume the gated end-to-end migration workflow state.",
     )
     workflow_init.add_argument("--solution", required=True)
+    workflow_init.add_argument("--tenant-id")
+    workflow_init.add_argument("--subscription-id")
     workflow_init.add_argument("--workspace-resource-id")
+    workflow_init.add_argument("--workspace-customer-id")
     workflow_init.add_argument(
         "--version-bump",
         choices=["none", "patch", "minor", "major"],
@@ -278,10 +296,23 @@ def main(argv: list[str] | None = None) -> int:
             result = configure_workspace(
                 args.workspace_resource_id,
                 workspace_customer_id=args.workspace_customer_id,
+                tenant_id=args.tenant_id,
+                subscription_id=args.subscription_id,
+            )
+        elif args.command == "qualification-diagnose":
+            result = diagnose_target(args.solution)
+        elif args.command == "qualification-repair-target":
+            result = repair_target(
+                args.solution,
+                approve_target_update=args.approve_target_update,
             )
         elif args.command == "setup-deployment":
-            result = setup_deployment_authentication(
+            target = require_locked_target(
+                args.solution,
                 tenant_id=args.tenant_id,
+            )
+            result = setup_deployment_authentication(
+                tenant_id=target["tenantId"],
                 auth_method=args.auth_method,
             )
         elif args.command == "deploy":
@@ -333,7 +364,20 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "validate":
             result = validate_solution(args.solution)
         elif args.command == "validate-advanced-hunting":
-            result = validate_advanced_hunting(args.solution)
+            try:
+                state = workflow_status(args.solution)
+            except ValueError:
+                state = None
+            target = (
+                require_locked_target(args.solution)
+                if state
+                and state["context"]["workflowProfile"] == "qualification"
+                else None
+            )
+            result = validate_advanced_hunting(
+                args.solution,
+                tenant_id=target["tenantId"] if target else None,
+            )
         elif args.command == "record-runtime-validation":
             result = record_runtime_validation(
                 args.solution,
@@ -343,7 +387,10 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "workflow-init":
             result = initialize_workflow(
                 args.solution,
+                tenant_id=args.tenant_id,
+                subscription_id=args.subscription_id,
                 workspace_resource_id=args.workspace_resource_id,
+                workspace_customer_id=args.workspace_customer_id,
                 version_bump=args.version_bump,
                 workflow_profile=args.workflow_profile,
             )

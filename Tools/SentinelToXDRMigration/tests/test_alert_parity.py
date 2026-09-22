@@ -16,6 +16,16 @@ from sentinel_xdr_migration.alert_parity import (
 )
 from sentinel_xdr_migration.artifacts import artifact_path
 
+TARGET = {
+    "tenantId": "39768270-33ce-4b90-a1a6-e0caeb3ba0ab",
+    "subscriptionId": "42382e39-f157-46d1-a931-b8cfd779ece5",
+    "workspaceResourceId": (
+        "/subscriptions/42382e39-f157-46d1-a931-b8cfd779ece5/"
+        "resourceGroups/r/providers/Microsoft.OperationalInsights/workspaces/w"
+    ),
+    "workspaceCustomerId": "756386d8-e2d4-4f09-905a-74b24313721f",
+}
+
 
 def alert(match_key: str, *, account: str = "user@example.test") -> dict:
     return {
@@ -192,8 +202,12 @@ class AlertParityTests(unittest.TestCase):
             {"detection": "Rule.yaml", "disabled": True, "errors": []}
         ],
     )
+    @mock.patch(
+        "sentinel_xdr_migration.alert_parity.require_locked_target",
+        return_value=TARGET,
+    )
     def test_complete_always_disables_rules_on_invalid_capture(
-        self, disable: mock.Mock
+        self, _target: mock.Mock, disable: mock.Mock
     ) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -203,7 +217,8 @@ class AlertParityTests(unittest.TestCase):
                 "runId": "run-1",
                 "status": "awaiting-alerts",
                 "scenarioMarker": "scenario-1",
-                "workspaceResourceId": "/subscriptions/s/resourceGroups/r/providers/Microsoft.OperationalInsights/workspaces/w",
+                "workspaceResourceId": TARGET["workspaceResourceId"],
+                "target": TARGET,
                 "rules": [{"detection": "Rule.yaml"}],
             }
             (output / "alert-parity-state.json").write_text(
@@ -241,8 +256,13 @@ class AlertParityTests(unittest.TestCase):
         "sentinel_xdr_migration.alert_parity._arm_token",
         return_value="arm-token",
     )
+    @mock.patch(
+        "sentinel_xdr_migration.alert_parity.require_locked_target",
+        return_value=TARGET,
+    )
     def test_start_disables_rules_when_ingestion_fails(
         self,
+        _target: mock.Mock,
         _arm: mock.Mock,
         _graph: mock.Mock,
         _read: mock.Mock,
@@ -274,10 +294,7 @@ class AlertParityTests(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, "rejected"):
                     start_alert_parity(
                         root,
-                        workspace_resource_id=(
-                            "/subscriptions/s/resourceGroups/r/providers/"
-                            "Microsoft.OperationalInsights/workspaces/w"
-                        ),
+                        workspace_resource_id=TARGET["workspaceResourceId"],
                         contract=root / "contract.json",
                         payload=payload,
                         scenario_marker="scenario-user@example.test",
@@ -310,8 +327,13 @@ class AlertParityTests(unittest.TestCase):
         "sentinel_xdr_migration.alert_parity._arm_token",
         return_value="arm-token",
     )
+    @mock.patch(
+        "sentinel_xdr_migration.alert_parity.require_locked_target",
+        return_value=TARGET,
+    )
     def test_batch_start_enables_all_and_ingests_each_fixture(
         self,
+        _target: mock.Mock,
         _arm: mock.Mock,
         _graph: mock.Mock,
         _read: mock.Mock,
@@ -359,10 +381,7 @@ class AlertParityTests(unittest.TestCase):
             ):
                 result = start_alert_parity_batch(
                     root,
-                    workspace_resource_id=(
-                        "/subscriptions/s/resourceGroups/r/providers/"
-                        "Microsoft.OperationalInsights/workspaces/w"
-                    ),
+                    workspace_resource_id=TARGET["workspaceResourceId"],
                     plan_path=plan,
                 )
 

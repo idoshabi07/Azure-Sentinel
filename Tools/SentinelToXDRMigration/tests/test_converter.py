@@ -813,6 +813,8 @@ AzureActivity
         configure_workspace(
             resource_id,
             workspace_customer_id="customer-id",
+            tenant_id="tenant-id",
+            subscription_id="subscription-id",
             state_dir=state_dir,
         )
 
@@ -820,6 +822,8 @@ AzureActivity
 
         self.assertEqual(resource_id, result["configuredWorkspaceResourceId"])
         self.assertEqual("customer-id", result["configuredWorkspaceCustomerId"])
+        self.assertEqual("tenant-id", result["configuredTenantId"])
+        self.assertEqual("subscription-id", result["configuredSubscriptionId"])
 
 
 if __name__ == "__main__":

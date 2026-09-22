@@ -13,6 +13,16 @@ from sentinel_xdr_migration.deployment import (
     graph_detection_payload,
 )
 
+TARGET = {
+    "tenantId": "39768270-33ce-4b90-a1a6-e0caeb3ba0ab",
+    "subscriptionId": "42382e39-f157-46d1-a931-b8cfd779ece5",
+    "workspaceResourceId": (
+        "/subscriptions/42382e39-f157-46d1-a931-b8cfd779ece5/"
+        "resourceGroups/rg/providers/Microsoft.OperationalInsights/workspaces/ws"
+    ),
+    "workspaceCustomerId": "756386d8-e2d4-4f09-905a-74b24313721f",
+}
+
 
 def document(rule_id: str = "test-rule") -> dict:
     return {
@@ -94,9 +104,13 @@ class DeploymentTests(unittest.TestCase):
         "sentinel_xdr_migration.deployment._deployment_token",
         return_value="token",
     )
+    @mock.patch(
+        "sentinel_xdr_migration.deployment.require_locked_target",
+        return_value=TARGET,
+    )
     @mock.patch("sentinel_xdr_migration.deployment._graph_request")
     def test_deploy_creates_missing_rule(
-        self, request: mock.Mock, _token: mock.Mock
+        self, request: mock.Mock, _target: mock.Mock, _token: mock.Mock
     ) -> None:
         request.side_effect = [
             (404, {"error": {"code": "NotFound"}}),
@@ -122,9 +136,13 @@ class DeploymentTests(unittest.TestCase):
         "sentinel_xdr_migration.deployment._deployment_token",
         return_value="token",
     )
+    @mock.patch(
+        "sentinel_xdr_migration.deployment.require_locked_target",
+        return_value=TARGET,
+    )
     @mock.patch("sentinel_xdr_migration.deployment._graph_request")
     def test_deploy_updates_existing_rule(
-        self, request: mock.Mock, _token: mock.Mock
+        self, request: mock.Mock, _target: mock.Mock, _token: mock.Mock
     ) -> None:
         request.side_effect = [
             (200, {"id": "test-rule"}),

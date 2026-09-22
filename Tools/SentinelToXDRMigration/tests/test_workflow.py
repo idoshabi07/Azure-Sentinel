@@ -50,6 +50,18 @@ class WorkflowTests(unittest.TestCase):
             **{name: str(path) for name, path in paths.items()},
         }
 
+    def _qualification_args(self) -> dict[str, str]:
+        return {
+            "tenant_id": "39768270-33ce-4b90-a1a6-e0caeb3ba0ab",
+            "subscription_id": "42382e39-f157-46d1-a931-b8cfd779ece5",
+            "workspace_resource_id": (
+                "/subscriptions/42382e39-f157-46d1-a931-b8cfd779ece5/"
+                "resourceGroups/rg/providers/Microsoft.OperationalInsights/"
+                "workspaces/ws"
+            ),
+            "workspace_customer_id": "756386d8-e2d4-4f09-905a-74b24313721f",
+        }
+
     def _complete_passed_stage(self, stage: str) -> None:
         start_workflow_stage(self.solution, stage)
         complete_workflow_stage(
@@ -170,6 +182,7 @@ class WorkflowTests(unittest.TestCase):
         initialized = initialize_workflow(
             self.solution,
             workflow_profile="qualification",
+            **self._qualification_args(),
         )
         self.assertEqual(initialized["stages"]["mockIngestion"]["status"], "pending")
         for stage in ("discovery", "conversion", "validation", "packaging"):
@@ -185,6 +198,7 @@ class WorkflowTests(unittest.TestCase):
         changed = initialize_workflow(
             self.solution,
             workflow_profile="qualification",
+            **self._qualification_args(),
         )
 
         self.assertEqual("qualification", changed["context"]["workflowProfile"])

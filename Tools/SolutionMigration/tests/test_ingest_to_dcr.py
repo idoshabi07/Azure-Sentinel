@@ -17,6 +17,55 @@ import ingest_to_dcr
 
 
 class ScenarioHandoffTests(unittest.TestCase):
+    def test_target_context_rejects_subscription_mismatch(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "qualification-target.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "locked": True,
+                        "tenantId": "tenant-id",
+                        "subscriptionId": "expected-subscription",
+                        "workspaceResourceId": (
+                            "/subscriptions/other-subscription/resourceGroups/rg/"
+                            "providers/Microsoft.OperationalInsights/workspaces/ws"
+                        ),
+                        "workspaceCustomerId": "customer-id",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(
+                ingest_to_dcr.ToolError,
+                "workspace and subscription identifiers do not match",
+            ):
+                ingest_to_dcr._load_target_context(path)
+
+    def test_target_context_forces_exact_workspace(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "qualification-target.json"
+            workspace_id = (
+                "/subscriptions/subscription-id/resourceGroups/rg/providers/"
+                "Microsoft.OperationalInsights/workspaces/ws"
+            )
+            path.write_text(
+                json.dumps(
+                    {
+                        "locked": True,
+                        "tenantId": "tenant-id",
+                        "subscriptionId": "subscription-id",
+                        "workspaceResourceId": workspace_id,
+                        "workspaceCustomerId": "customer-id",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            target = ingest_to_dcr._load_target_context(path)
+
+        self.assertEqual(workspace_id, target["workspaceResourceId"])
+
     @mock.patch.object(ingest_to_dcr.shutil, "which")
     def test_windows_azure_cli_resolution_uses_command_shim(
         self,
@@ -389,7 +438,7 @@ class ScenarioHandoffTests(unittest.TestCase):
             "name": "subscription",
         }
         workspace = {
-            "id": "/subscriptions/s/resourceGroups/r/providers/"
+            "id": "/subscriptions/subscription-id/resourceGroups/r/providers/"
             "Microsoft.OperationalInsights/workspaces/w",
             "name": "w",
             "subscriptionId": "subscription-id",
@@ -439,20 +488,34 @@ class ScenarioHandoffTests(unittest.TestCase):
             "tableName": "Example_CL",
         }
 
-        stdout = io.StringIO()
-        with redirect_stdout(stdout):
-            exit_code = ingest_to_dcr.main(
-                [
-                    "--workspace",
-                    workspace["id"],
-                    "--stream",
-                    "Custom-Example_CL",
-                    "--solution",
-                    "Sample",
-                    "--deploy-missing-table",
-                    "--approve-table-write",
-                ]
+        with tempfile.TemporaryDirectory() as temp:
+            target_path = Path(temp) / "qualification-target.json"
+            target_path.write_text(
+                json.dumps(
+                    {
+                        "locked": True,
+                        "tenantId": "tenant-id",
+                        "subscriptionId": "subscription-id",
+                        "workspaceResourceId": workspace["id"],
+                        "workspaceCustomerId": "customer-id",
+                    }
+                ),
+                encoding="utf-8",
             )
+            stdout = io.StringIO()
+            with redirect_stdout(stdout):
+                exit_code = ingest_to_dcr.main(
+                    [
+                        "--target-context",
+                        str(target_path),
+                        "--stream",
+                        "Custom-Example_CL",
+                        "--solution",
+                        "Sample",
+                        "--deploy-missing-table",
+                        "--approve-table-write",
+                    ]
+                )
 
         self.assertEqual(0, exit_code)
         deploy_table.assert_called_once_with("arm-token", workspace, contract)

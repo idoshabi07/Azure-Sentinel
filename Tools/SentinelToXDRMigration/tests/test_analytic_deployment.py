@@ -55,9 +55,22 @@ class AnalyticDeploymentTests(unittest.TestCase):
         "sentinel_xdr_migration.analytic_deployment._arm_token",
         return_value="token",
     )
+    @mock.patch(
+        "sentinel_xdr_migration.analytic_deployment.require_locked_target",
+        return_value={
+            "tenantId": "39768270-33ce-4b90-a1a6-e0caeb3ba0ab",
+            "subscriptionId": "42382e39-f157-46d1-a931-b8cfd779ece5",
+            "workspaceResourceId": (
+                "/subscriptions/42382e39-f157-46d1-a931-b8cfd779ece5/"
+                "resourceGroups/rg/providers/Microsoft.OperationalInsights/"
+                "workspaces/ws"
+            ),
+            "workspaceCustomerId": "756386d8-e2d4-4f09-905a-74b24313721f",
+        },
+    )
     @mock.patch("sentinel_xdr_migration.analytic_deployment._arm_request")
     def test_deploy_upserts_rule_disabled(
-        self, request: mock.Mock, _token: mock.Mock
+        self, request: mock.Mock, _target: mock.Mock, _token: mock.Mock
     ) -> None:
         request.return_value = (
             201,

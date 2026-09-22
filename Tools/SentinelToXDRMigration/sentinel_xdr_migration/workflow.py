@@ -8,6 +8,7 @@ from typing import Any
 from jsonschema import Draft202012Validator
 
 from .artifacts import artifact_path, existing_artifact_path, migrate_legacy_artifact
+from .target_context import build_target, write_target
 
 STATE_FILE_NAME = "workflow-state.json"
 SCHEMA_VERSION = "1.1.0"
@@ -114,7 +115,10 @@ def _stage_result(name: str, *, required: bool = True) -> dict[str, Any]:
 def initialize_workflow(
     solution: str | Path,
     *,
+    tenant_id: str | None = None,
+    subscription_id: str | None = None,
     workspace_resource_id: str | None = None,
+    workspace_customer_id: str | None = None,
     version_bump: str | None = None,
     workflow_profile: str | None = None,
 ) -> dict[str, Any]:
@@ -127,8 +131,39 @@ def initialize_workflow(
         )
     if workflow_profile not in WORKFLOW_PROFILES:
         raise ValueError("workflow profile must be authoring or qualification")
+    target = None
+    if workflow_profile == "qualification":
+        missing = [
+            name
+            for name, value in (
+                ("tenant-id", tenant_id),
+                ("subscription-id", subscription_id),
+                ("workspace-resource-id", workspace_resource_id),
+                ("workspace-customer-id", workspace_customer_id),
+            )
+            if not value
+        ]
+        if missing:
+            raise ValueError(
+                "qualification requires a locked target context: "
+                + ", ".join(missing)
+            )
+        target = build_target(
+            tenant_id=tenant_id or "",
+            subscription_id=subscription_id or "",
+            workspace_resource_id=workspace_resource_id or "",
+            workspace_customer_id=workspace_customer_id or "",
+        )
     requested_context = {
-        "workspaceResourceId": workspace_resource_id,
+        "tenantId": target["tenantId"] if target else tenant_id,
+        "subscriptionId": target["subscriptionId"] if target else subscription_id,
+        "workspaceResourceId": (
+            target["workspaceResourceId"] if target else workspace_resource_id
+        ),
+        "workspaceCustomerId": (
+            target["workspaceCustomerId"] if target else workspace_customer_id
+        ),
+        "targetContextLocked": bool(target),
         "versionBump": version_bump,
     }
     existing_path = existing_artifact_path(root, STATE_FILE_NAME)
@@ -136,6 +171,10 @@ def initialize_workflow(
         _, state = _load(root)
         context = state["context"]
         for key, value in requested_context.items():
+            if key == "targetContextLocked":
+                if value:
+                    context[key] = True
+                continue
             if value is not None and context.get(key) not in (None, value):
                 raise ValueError(
                     f"workflow already uses {key}={context.get(key)!r}, "
@@ -145,6 +184,8 @@ def initialize_workflow(
                 context[key] = value
         _select_workflow_profile(state, workflow_profile)
         _write(path, state)
+        if target:
+            write_target(root, target)
         return {
             **state,
             "statePath": str(path),
@@ -174,6 +215,8 @@ def initialize_workflow(
     state["context"]["workflowProfile"] = workflow_profile
     state["context"]["profileSelectionConfirmed"] = True
     _write(path, state)
+    if target:
+        write_target(root, target)
     return {
         **state,
         "statePath": str(path),

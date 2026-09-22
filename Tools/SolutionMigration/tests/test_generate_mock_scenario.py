@@ -32,6 +32,53 @@ DETECTION = {
 }
 
 
+class QueryExtractionTests(unittest.TestCase):
+    def test_reads_converted_custom_detection_query(self) -> None:
+        document = {
+            "properties": {
+                "queryCondition": {
+                    "queryText": "DeviceEvents | take 1",
+                }
+            }
+        }
+
+        self.assertEqual(
+            "DeviceEvents | take 1",
+            generator._query(document),
+        )
+
+    def test_extracts_first_value_from_dynamic_let_list(self) -> None:
+        query = (
+            "let reputation = dynamic(['unknown', 'badHost']);\n"
+            "Cloudflare\n"
+            "| where ClientIPClass in~ (reputation)"
+        )
+
+        self.assertEqual(
+            [{
+                "column": "ClientIPClass",
+                "operator": "in~",
+                "value": "unknown",
+            }],
+            generator.extract_predicates(query),
+        )
+
+    def test_reads_converted_custom_detection_identity(self) -> None:
+        document = {
+            "contentProvenance": {"source": {"id": "rule-123"}},
+            "properties": {
+                "id": "detection-123",
+                "displayName": "Example detection",
+            },
+        }
+
+        self.assertEqual("rule-123", generator._detection_source_id(document))
+        self.assertEqual(
+            "detection-123",
+            generator._detection_property(document, "id"),
+        )
+
+
 def _write_yaml(path: Path, value: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(yaml.safe_dump(value, sort_keys=False), encoding="utf-8")
