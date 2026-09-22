@@ -1,0 +1,51 @@
+{
+  "version": 2,
+  "generatedAt": "2026-09-22T12:32:47Z",
+  "solution": "Network Session Essentials",
+  "ruleId": "1da9853f-3dea-4ea9-b7e5-26730da3d537",
+  "ruleName": "Port scan detected  (ASIM Network Session schema)",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Network Session Essentials\\Analytic Rules\\PortScan.yaml",
+  "customDetectionId": "xdr-port-scan-detected-asim-network-session-schema-1da9853f",
+  "customDetectionName": "Port scan detected  (ASIM Network Session schema)",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Network Session Essentials\\XDR Detections\\PortScan.yaml",
+  "scenarioName": "reviewed-shared-ar-cd-payload",
+  "hypothesis": "One non-private source reaches fifty-one distinct destination ports in one five-minute bin.",
+  "generationStatus": "reviewed-offline-only",
+  "queryAssessment": {
+    "status": "reviewed",
+    "analyticAndCustomDetectionQueriesEquivalent": true
+  },
+  "sourceTable": "ASimNetworkSessionLogs",
+  "destinationTables": [
+    "ASimNetworkSessionLogs"
+  ],
+  "parserMapping": "vimNetworkSessionNative -> ASimNetworkSessionLogs",
+  "decisivePredicates": [
+    "SrcIpAddr is public and is not loopback",
+    "records share SrcIpAddr",
+    "DstPortNumber has fifty-one distinct values",
+    "EventVendor and EventProduct identify the reporting source"
+  ],
+  "fixtures": {
+    "shared": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Network Session Essentials\\1da9853f-3dea-4ea9-b7e5-26730da3d537\\mock.json",
+    "records": 51,
+    "usedBy": [
+      "analyticRule",
+      "customDetection"
+    ],
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Network Session Essentials\\1da9853f-3dea-4ea9-b7e5-26730da3d537\\mock.json",
+    "mockRecords": 51
+  },
+  "validation": {
+    "json": "passed",
+    "tableSchemaFieldNamesAndTypes": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "alertParity": "not-run"
+  },
+  "limitations": [
+    "The payload was validated locally only and was not ingested.",
+    "The payload demonstrates query mechanics, not production threshold quality or SOC value."
+  ]
+}

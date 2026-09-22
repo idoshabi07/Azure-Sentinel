@@ -235,18 +235,28 @@ Use `sentinel-solution-optional-testing` for this stage:
    permission preflight before fixture preparation.
 2. Present Continue, Retry permission check, or Cancel. Continue is not write
    approval.
-3. Check the default rule-specific fixture path first.
+3. Check the default rule-specific `mock.json` path first.
 4. Reuse a complete reviewed scenario or invoke
    `sentinel-solution-mock-data-generation`.
 5. Require reviewed input for joins, thresholds, aggregation, sequences,
    historical baselines, watchlists, anomalies, and absence-of-data behavior.
 6. Require separate exact-scope approval immediately before ingestion.
-7. Track ingestion acceptance and query visibility independently.
+7. Group compatible rules by source table and supported ingestion path, then
+   ingest each shared `mock.json` exactly once.
+8. Track ingestion acceptance and query visibility independently.
+9. Run the exact AR and CD queries over the same unique scenario markers and
+   require identical matching source-row keys before alert parity.
 
-Every fixture needs a unique scenario marker and expected malicious match-key
-set. Pass only after ingestion is accepted and the exact target query can
-observe the records. The existing runtime-validation and alert-parity stages
-remain unchanged.
+Each AR/CD pair owns one shared `mock.json`; separate AR and CD payloads are
+prohibited. `mock.json` may contain multiple correlated records when the
+detection requires them. Never create a recurring ingestion job, and never
+redirect an unsupported native table to a custom lookalike table. Use a
+documented native telemetry generator or mark the rule blocked.
+
+Every payload needs a unique scenario marker and expected malicious match-key
+set. Pass only after ingestion is accepted and both exact queries observe the
+same marked records. The existing alert-parity stage then compares alerts from
+that same one-time ingestion.
 
 ### Alert parity — qualification only
 
@@ -254,7 +264,8 @@ Use `start-alert-parity-batch` with a plan covering every converted detection:
 
 1. Verify all ARs and CDs are disabled.
 2. Enable all reviewed pairs.
-3. Ingest every dedicated fixture.
+3. Reuse the already ingested shared `mock.json` records; do not ingest a
+   second AR- or CD-specific payload.
 4. Capture alerts for every pair.
 5. Compare counts, match keys, severity, tactics, entities, decisive evidence,
    and benign controls.

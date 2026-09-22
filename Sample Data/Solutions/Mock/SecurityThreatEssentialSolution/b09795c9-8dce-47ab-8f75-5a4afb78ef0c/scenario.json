@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-22T12:26:07.565Z",
+  "solution": "SecurityThreatEssentialSolution",
+  "ruleId": "b09795c9-8dce-47ab-8f75-5a4afb78ef0c",
+  "ruleName": "Threat Essentials - User Assigned Privileged Role",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\SecurityThreatEssentialSolution\\Analytic Rules\\Threat_Essentials_UserAssignedPrivilegedRole.yaml",
+  "analyticRuleQuerySha256": "788e7d0e631f28a01e71a8e82cad9e64a08a67d718dcc9734e8479537af6ccb0",
+  "customDetectionId": "xdr-threat-essentials-user-assigned-privileged-role-b09795c9",
+  "customDetectionName": "Threat Essentials - User Assigned Privileged Role",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\SecurityThreatEssentialSolution\\XDR Detections\\Threat_Essentials_UserAssignedPrivilegedRole.yaml",
+  "customDetectionQuerySha256": "788e7d0e631f28a01e71a8e82cad9e64a08a67d718dcc9734e8479537af6ccb0",
+  "scenarioName": "reviewed-shared-ar-cd-payload",
+  "hypothesis": "A user is assigned a role whose parsed display name contains Admin.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "reviewed-complex",
+    "reasons": [
+      "Every decisive AR/CD predicate was modeled manually.",
+      "The shared payload was validated against checked-in table metadata."
+    ]
+  },
+  "sourceTable": "AuditLogs",
+  "sourceTables": [
+    "AuditLogs"
+  ],
+  "destinationTables": [
+    "AuditLogs"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-AuditLogs",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisivePredicates": [
+      "Category =~ RoleManagement",
+      "AADOperationType is Assign or AssignEligibleRole",
+      "ActivityDisplayName contains Add member to role or Add eligible member to role",
+      "TargetResources.modifiedProperties includes Role.DisplayName",
+      "The parsed newValue contains Admin",
+      "InitiatedBy resolves to a non-empty initiating user",
+      "TargetResources includes a target userPrincipalName"
+    ],
+    "lockedPaths": [
+      "Category",
+      "AADOperationType",
+      "ActivityDisplayName",
+      "InitiatedBy",
+      "TargetResources"
+    ]
+  },
+  "fixtures": {
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\SecurityThreatEssentialSolution\\b09795c9-8dce-47ab-8f75-5a4afb78ef0c\\mock.json",
+    "mockRecords": 1,
+    "benignValidationRecords": 0
+  },
+  "validation": {
+    "json": "passed",
+    "schemaValidation": "passed",
+    "analyticAndCustomDetectionQueriesRead": true,
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "alertParity": "not-run"
+  },
+  "limitations": [
+    "Synthetic payload only; no Azure ingestion or detection execution was performed.",
+    "Timestamps must be refreshed consistently before any future time-windowed test."
+  ]
+}

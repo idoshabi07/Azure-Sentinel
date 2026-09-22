@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-22T12:26:07Z",
+  "solution": "Azure Firewall",
+  "ruleId": "dfbe3963-42fb-4ebe-a00c-1cc44e2aa9f0",
+  "ruleName": "Medium severity malicious activity detected",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Firewall\\Analytic Rules\\Azure Firewall - Medium severity malicious activity detected.yaml",
+  "customDetectionId": "xdr-medium-severity-malicious-activity-detected-dfbe3963",
+  "customDetectionName": "Medium severity malicious activity detected",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Firewall\\XDR Detections\\Azure Firewall - Medium severity malicious activity detected.yaml",
+  "scenarioName": "Reviewed shared AR/CD scenario for Medium severity malicious activity detected",
+  "hypothesis": "Ten Azure Firewall IDPS signature events from one source share the qualifying category 'Crypto Currency Mining Activity Detected' and meet the minimum severity, satisfying the per-source/category hit threshold.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "manual-review-required",
+    "reasons": [
+      "The query applies category and severity predicates.",
+      "The query aggregates by source IP and category and requires at least ten hits."
+    ]
+  },
+  "sourceTable": "AZFWIdpsSignature",
+  "destinationTables": [
+    "AZFWIdpsSignature"
+  ],
+  "sourceContract": {
+    "schema": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Tables\\AZFWIdpsSignature\\metadata.json",
+    "baseEvent": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Tables\\AZFWIdpsSignature\\base-event.json",
+    "parser": null,
+    "mapping": "identity mapping to the native Azure Firewall resource-specific table"
+  },
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-AZFWIdpsSignature",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "TimeGenerated",
+        "operator": ">=",
+        "rawPath": "TimeGenerated",
+        "value": "ago(90d)"
+      },
+      {
+        "ruleColumn": "Severity",
+        "operator": ">=",
+        "rawPath": "Severity",
+        "value": 2
+      },
+      {
+        "ruleColumn": "Category",
+        "operator": "has_any",
+        "rawPath": "Category",
+        "value": "Crypto Currency Mining Activity Detected"
+      },
+      {
+        "ruleColumn": "TotalHits",
+        "operator": ">=",
+        "rawPath": "SourceIp + Category",
+        "value": 10,
+        "modeledValue": 10
+      }
+    ],
+    "lockedPaths": [
+      "Category",
+      "Severity",
+      "SourceIp",
+      "TimeGenerated"
+    ]
+  },
+  "fixtures": {
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Azure Firewall\\dfbe3963-42fb-4ebe-a00c-1cc44e2aa9f0\\mock.json",
+    "mockRecords": 10,
+    "benignValidationRecords": 0
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-required-offline-only"
+  },
+  "limitations": [
+    "Azure Firewall resource-specific logs are Azure platform logs; the solution package declares no writable Custom-* DCR input stream for these tables.",
+    "The shared mock payload models both queries offline and must not be treated as live-ingestion or alert-parity evidence."
+  ]
+}

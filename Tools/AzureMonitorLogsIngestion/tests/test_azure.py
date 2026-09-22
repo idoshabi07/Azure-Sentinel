@@ -265,6 +265,39 @@ def test_merge_dcr_body_preserves_existing_streams():
     assert "id" not in merged
 
 
+def test_isolated_dcr_rejects_another_declared_stream():
+    existing = {
+        "properties": {
+            "streamDeclarations": {
+                "Custom-Requested": {"columns": []},
+                "Custom-Other": {"columns": []},
+            },
+            "dataFlows": [
+                {"streams": ["Custom-Requested"]},
+                {"streams": ["Custom-Other"]},
+            ],
+        }
+    }
+
+    with pytest.raises(RuntimeError, match="contract-specific DCR"):
+        AzureClient._assert_isolated_dcr(existing, "Custom-Requested")
+
+
+def test_isolated_dcr_accepts_only_requested_stream():
+    existing = {
+        "properties": {
+            "streamDeclarations": {
+                "Custom-Requested": {"columns": []},
+            },
+            "dataFlows": [
+                {"streams": ["Custom-Requested"]},
+            ],
+        }
+    }
+
+    AzureClient._assert_isolated_dcr(existing, "Custom-Requested")
+
+
 @pytest.mark.parametrize(
     ("row_count", "found"),
     [(0, False), (3, True)],

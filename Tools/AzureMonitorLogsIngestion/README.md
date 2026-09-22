@@ -94,15 +94,19 @@ azure-monitor-logs-ingestion run `
 The command writes `ingestion-report.json` beside the payload by default. Use
 `--report <path>` to choose another location.
 
-The default DCE and DCR names are derived from `name`. Existing resources are
-updated only when they carry the tool's `managed-by` tag. A name collision with
-an unrelated resource fails safely; change `resources.dce` or `resources.dcr`
-in the contract rather than overwriting it.
+The default DCE and DCR names are derived from `name`. Keep those names unique
+per ingestion contract. The tool tags new resources with both `managed-by` and
+`ingestion-contract`.
 
-Multiple contracts may deliberately name the same tool-managed DCE and DCR.
-Provisioning then preserves the existing stream declarations and data flows and
-adds or updates only the contract's input stream. The shared DCR must use the
-same DCE and target the same workspace.
+Existing resources are updated only when they are owned by this tool and the
+DCR already contains exactly the requested input stream. The tool does not add
+a new stream to an existing DCR. Azure can expose later stream additions in ARM
+while the Logs Ingestion endpoint continues to reject them against the DCR's
+immutable ID. Use a separate contract-specific DCE/DCR pair instead.
+
+A name collision with an unrelated resource, a different ingestion contract,
+or a shared DCR fails safely. Change `resources.dce` and `resources.dcr` in the
+contract rather than overwriting or extending the existing resources.
 
 Optionally grant a service principal or managed identity permission while
 provisioning:

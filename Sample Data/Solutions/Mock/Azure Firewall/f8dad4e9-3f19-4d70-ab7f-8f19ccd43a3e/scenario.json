@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-22T12:26:07Z",
+  "solution": "Azure Firewall",
+  "ruleId": "f8dad4e9-3f19-4d70-ab7f-8f19ccd43a3e",
+  "ruleName": "Several deny actions registered",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Firewall\\Analytic Rules\\SeveralDenyActionsRegistered.yaml",
+  "customDetectionId": "xdr-several-deny-actions-registered-f8dad4e9",
+  "customDetectionName": "Several deny actions registered",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Firewall\\XDR Detections\\SeveralDenyActionsRegistered.yaml",
+  "scenarioName": "Reviewed shared AR/CD scenario for Several deny actions registered",
+  "hypothesis": "A single source receives denies on two distinct destination ports for the same destination, satisfying the AZFWNetworkRule branch threshold of at least two distinct ports.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "manual-review-required",
+    "reasons": [
+      "The query unions several Azure Firewall log types.",
+      "The selected network-rule branch groups deny events and requires at least two distinct destination ports."
+    ]
+  },
+  "sourceTable": "AZFWNetworkRule",
+  "destinationTables": [
+    "AZFWNetworkRule"
+  ],
+  "sourceContract": {
+    "schema": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Tables\\AZFWNetworkRule\\metadata.json",
+    "baseEvent": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Tables\\AZFWNetworkRule\\base-event.json",
+    "parser": null,
+    "mapping": "identity mapping to the native Azure Firewall resource-specific table"
+  },
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-AZFWNetworkRule",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "Action",
+        "operator": "==",
+        "rawPath": "Action",
+        "value": "Deny"
+      },
+      {
+        "ruleColumn": "SourceIp",
+        "operator": "group",
+        "rawPath": "SourceIp",
+        "value": "192.0.2.72"
+      },
+      {
+        "ruleColumn": "Fqdn",
+        "operator": "extend/group",
+        "rawPath": "DestinationIp",
+        "value": "198.51.100.72"
+      },
+      {
+        "ruleColumn": "count_",
+        "operator": ">= dcount",
+        "rawPath": "DestinationPort",
+        "value": 2,
+        "modeledValue": 2
+      }
+    ],
+    "lockedPaths": [
+      "Action",
+      "DestinationIp",
+      "DestinationPort",
+      "SourceIp",
+      "TimeGenerated"
+    ]
+  },
+  "fixtures": {
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Azure Firewall\\f8dad4e9-3f19-4d70-ab7f-8f19ccd43a3e\\mock.json",
+    "mockRecords": 2,
+    "benignValidationRecords": 0
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-required-offline-only"
+  },
+  "limitations": [
+    "Azure Firewall resource-specific logs are Azure platform logs; the solution package declares no writable Custom-* DCR input stream for these tables.",
+    "The shared mock payload models both queries offline and must not be treated as live-ingestion or alert-parity evidence."
+  ]
+}

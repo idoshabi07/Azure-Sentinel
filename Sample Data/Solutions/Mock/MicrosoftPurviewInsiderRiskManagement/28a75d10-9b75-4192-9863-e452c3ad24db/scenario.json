@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-22T12:26:07.565Z",
+  "solution": "MicrosoftPurviewInsiderRiskManagement",
+  "ruleId": "28a75d10-9b75-4192-9863-e452c3ad24db",
+  "ruleName": "Insider Risk_High User Security Incidents Correlation",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\MicrosoftPurviewInsiderRiskManagement\\Analytic Rules\\InsiderRiskHighUserIncidentsCorrelation.yaml",
+  "analyticRuleQuerySha256": "1f6edab976e3017fe39ce62d07804e65cfcf26d55f4d9ea0008f521149beed37",
+  "customDetectionId": "xdr-insider-risk-high-user-security-incidents-correlation-28a75d10",
+  "customDetectionName": "Insider Risk_High User Security Incidents Correlation",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\MicrosoftPurviewInsiderRiskManagement\\XDR Detections\\InsiderRiskHighUserIncidentsCorrelation.yaml",
+  "customDetectionQuerySha256": "59e1662a20c72576627f7307b7b85a093e8137b11b77684a4d4f5037d9ec5f31",
+  "scenarioName": "blocked-honest-representation",
+  "hypothesis": "Insider Risk_High User Security Incidents Correlation",
+  "generationStatus": "blocked",
+  "queryAssessment": {
+    "status": "blocked",
+    "reasons": [
+      "The query requires more than five SecurityIncident rows joined through AlertIds to matching SecurityAlert rows. The repository mock.json contract is a single-table JSON array and has no table-routing field or multi-table ingestion mapping, so the join cannot be represented by one shared payload honestly."
+    ]
+  },
+  "sourceTable": "SecurityAlert",
+  "sourceTables": [
+    "SecurityAlert",
+    "SecurityIncident"
+  ],
+  "destinationTables": [
+    "SecurityAlert",
+    "SecurityIncident"
+  ],
+  "fixtures": {
+    "mock": null,
+    "mockRecords": 0,
+    "benignValidationRecords": 0
+  },
+  "validation": {
+    "json": "not-applicable",
+    "schemaValidation": "not-applicable",
+    "analyticAndCustomDetectionQueriesRead": true,
+    "liveIngestion": "not-run"
+  },
+  "limitations": [
+    "The query requires more than five SecurityIncident rows joined through AlertIds to matching SecurityAlert rows. The repository mock.json contract is a single-table JSON array and has no table-routing field or multi-table ingestion mapping, so the join cannot be represented by one shared payload honestly."
+  ]
+}

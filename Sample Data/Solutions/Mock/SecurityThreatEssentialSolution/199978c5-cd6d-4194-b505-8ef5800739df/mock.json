@@ -1,0 +1,83 @@
+[
+  {
+    "TimeGenerated": "2026-09-22T11:40:00Z",
+    "ActivityDateTime": "2026-09-22T11:40:00Z",
+    "Category": "RoleManagement",
+    "AADOperationType": "Assign",
+    "ActivityDisplayName": "Add member to role",
+    "OperationName": "Add member to role",
+    "Result": "success",
+    "InitiatedBy": {
+      "user": {
+        "userPrincipalName": "synthetic.creator@example.invalid"
+      }
+    },
+    "TargetResources": [
+      {
+        "userPrincipalName": "synthetic.newadmin@example.invalid",
+        "modifiedProperties": [
+          {
+            "displayName": "Role.DisplayName",
+            "newValue": "\"Global Administrator\"",
+            "oldValue": null
+          }
+        ]
+      }
+    ],
+    "Type": "AuditLogs"
+  },
+  {
+    "TimeGenerated": "2026-09-22T12:05:00Z",
+    "ActivityDateTime": "2026-09-22T12:05:00Z",
+    "Category": "RoleManagement",
+    "AADOperationType": "Unassign",
+    "ActivityDisplayName": "Remove member from role",
+    "OperationName": "Remove member from role",
+    "Result": "success",
+    "InitiatedBy": {
+      "user": {
+        "userPrincipalName": "synthetic.newadmin@example.invalid"
+      }
+    },
+    "TargetResources": [
+      {
+        "userPrincipalName": "synthetic.admin1@example.invalid",
+        "modifiedProperties": [
+          {
+            "displayName": "Role.DisplayName",
+            "newValue": null,
+            "oldValue": "\"Global Administrator\""
+          }
+        ]
+      }
+    ],
+    "Type": "AuditLogs"
+  },
+  {
+    "TimeGenerated": "2026-09-22T12:10:00Z",
+    "ActivityDateTime": "2026-09-22T12:10:00Z",
+    "Category": "RoleManagement",
+    "AADOperationType": "Unassign",
+    "ActivityDisplayName": "Remove member from role",
+    "OperationName": "Remove member from role",
+    "Result": "success",
+    "InitiatedBy": {
+      "user": {
+        "userPrincipalName": "synthetic.newadmin@example.invalid"
+      }
+    },
+    "TargetResources": [
+      {
+        "userPrincipalName": "synthetic.admin2@example.invalid",
+        "modifiedProperties": [
+          {
+            "displayName": "Role.DisplayName",
+            "newValue": null,
+            "oldValue": "\"Global Administrator\""
+          }
+        ]
+      }
+    ],
+    "Type": "AuditLogs"
+  }
+]

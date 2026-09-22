@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-22T12:26:07.565Z",
+  "solution": "MicrosoftPurviewInsiderRiskManagement",
+  "ruleId": "69660e65-0e5c-4700-8b99-5caf59786606",
+  "ruleName": "Insider Risk_Microsoft Purview Insider Risk Management Alert Observed",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\MicrosoftPurviewInsiderRiskManagement\\Analytic Rules\\InsiderRiskM365IRMAlertObserved.yaml",
+  "analyticRuleQuerySha256": "f17d96d9b7ab5b2fb111d12d2d87ac2cbfbeaef3acaf9e2beffe485f53572f99",
+  "customDetectionId": "xdr-insider-risk-microsoft-purview-insider-risk-management-alert-observed-69660e65",
+  "customDetectionName": "Insider Risk_Microsoft Purview Insider Risk Management Alert Observed",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\MicrosoftPurviewInsiderRiskManagement\\XDR Detections\\InsiderRiskM365IRMAlertObserved.yaml",
+  "customDetectionQuerySha256": "c2d5d25de74360f58b234a079bf25b7e369eb2efac92424aef3d4beebc068406",
+  "scenarioName": "reviewed-shared-ar-cd-payload",
+  "hypothesis": "A Microsoft Purview Insider Risk Management SecurityAlert contains a resolvable account entity and alert link.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "reviewed-complex",
+    "reasons": [
+      "Every decisive AR/CD predicate was modeled manually.",
+      "The shared payload was validated against checked-in table metadata."
+    ]
+  },
+  "sourceTable": "SecurityAlert",
+  "sourceTables": [
+    "SecurityAlert"
+  ],
+  "destinationTables": [
+    "SecurityAlert"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-SecurityAlert",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisivePredicates": [
+      "ProductName == Microsoft 365 Insider Risk Management",
+      "Entities is a JSON account array",
+      "The account entity has non-empty Name and UPNSuffix, producing a non-empty UPN",
+      "ExtendedLinks is a JSON array with Href",
+      "The same UPN is present in the AlertLinks branch so the inner join succeeds"
+    ],
+    "lockedPaths": [
+      "SystemAlertId",
+      "ProductName",
+      "Entities",
+      "ExtendedLinks",
+      "AlertLink"
+    ]
+  },
+  "fixtures": {
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\MicrosoftPurviewInsiderRiskManagement\\69660e65-0e5c-4700-8b99-5caf59786606\\mock.json",
+    "mockRecords": 1,
+    "benignValidationRecords": 0
+  },
+  "validation": {
+    "json": "passed",
+    "schemaValidation": "passed",
+    "analyticAndCustomDetectionQueriesRead": true,
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "alertParity": "not-run"
+  },
+  "limitations": [
+    "Synthetic payload only; no Azure ingestion or detection execution was performed.",
+    "Timestamps must be refreshed consistently before any future time-windowed test."
+  ]
+}

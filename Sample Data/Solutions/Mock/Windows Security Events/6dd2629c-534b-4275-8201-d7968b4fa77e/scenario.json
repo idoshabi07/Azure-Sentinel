@@ -1,30 +1,33 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-20T11:05:45.911894+00:00",
+  "generatedAt": "2026-09-22T12:21:22.541070+00:00",
   "solution": "Windows Security Events",
   "ruleId": "6dd2629c-534b-4275-8201-d7968b4fa77e",
   "ruleName": "Scheduled Task Hide",
   "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\Analytic Rules\\ScheduleTaskHide.yaml",
-  "customDetectionId": null,
-  "customDetectionName": null,
+  "customDetectionId": "xdr-scheduled-task-hide-6dd2629c",
+  "customDetectionName": "Scheduled Task Hide",
   "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\XDR Detections\\ScheduleTaskHide.yaml",
-  "scenarioName": "automatic-simple-predicate",
-  "hypothesis": "Synthetic records exercise the decisive predicates in Scheduled Task Hide.",
-  "generationStatus": "generated-offline-only",
+  "scenarioName": "Scheduled task security descriptor deletion one-time reviewed scenario",
+  "hypothesis": "A 4657 event deleting the SD value below Schedule TaskCache Tree should match; an event changing another value should not.",
+  "generationStatus": "qualification-ready",
   "queryAssessment": {
-    "status": "simple",
-    "reasons": []
+    "status": "manual-review-required",
+    "reasons": [
+      "The query parses or expands structured event content.",
+      "The query uses a content predicate that automatic fixtures do not model."
+    ]
   },
   "sourceTable": "SecurityEvent",
   "destinationTables": [
     "SecurityEvent"
   ],
   "ingestion": {
-    "mode": "offline-standard-table",
-    "dcr": null,
-    "stream": null,
+    "mode": "custom-dcr-standard-table",
+    "dcr": "xdr-migration-standard-mock-dcr",
+    "stream": "Custom-XDRMigrationSecurityEventMock",
     "outputStream": "Microsoft-SecurityEvent",
-    "directLogsIngestionSupported": false
+    "directLogsIngestionSupported": true
   },
   "mapping": {
     "decisiveFields": [
@@ -48,28 +51,26 @@
       }
     ],
     "lockedPaths": [
-      "EventID",
-      "ObjectValueName",
-      "OperationType"
+      "Computer",
+      "Correlation",
+      "EventData",
+      "EventID"
     ]
   },
   "fixtures": {
-    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\6dd2629c-534b-4275-8201-d7968b4fa77e\\malicious.json",
-    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\6dd2629c-534b-4275-8201-d7968b4fa77e\\benign.json",
-    "maliciousRecords": 1,
-    "benignRecords": 1
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\6dd2629c-534b-4275-8201-d7968b4fa77e\\mock.json",
+    "mockRecords": 1,
+    "benignValidationRecords": 1
   },
   "validation": {
     "schemaValidation": "passed",
-    "sentinelSeededQuery": "not-run",
-    "advancedHuntingSeededQuery": "not-run",
-    "liveIngestion": "not-run",
-    "liveSentinel": "not-run",
-    "liveAdvancedHunting": "not-run",
-    "alertParity": "not-run",
-    "cleanup": "not-run"
+    "sentinelSeededQuery": "passed",
+    "advancedHuntingSeededQuery": "passed",
+    "liveIngestion": "passed",
+    "liveSentinel": "passed",
+    "liveAdvancedHunting": "passed",
+    "alertParity": "query-parity-passed",
+    "cleanup": "not-required-one-time-data"
   },
-  "limitations": [
-    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
-  ]
+  "limitations": []
 }

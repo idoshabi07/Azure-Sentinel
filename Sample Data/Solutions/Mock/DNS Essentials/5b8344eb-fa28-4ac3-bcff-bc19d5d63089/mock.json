@@ -1,0 +1,36 @@
+[
+  {
+    "TimeGenerated": "2026-09-22T12:00:00Z",
+    "EventStartTime": "2026-09-22T12:00:00Z",
+    "EventEndTime": "2026-09-22T12:00:01Z",
+    "EventType": "Query",
+    "EventResult": "Failure",
+    "EventResultDetails": "NXDOMAIN",
+    "EventCount": 1,
+    "EventVendor": "MockVendor",
+    "EventProduct": "MockDns",
+    "DnsQuery": "shared.failure.example.invalid",
+    "DnsQueryTypeName": "A",
+    "SrcIpAddr": "10.40.0.25",
+    "Dvc": "mock-client-1.example.invalid",
+    "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/mock/providers/Microsoft.Compute/virtualMachines/mock-dns-01",
+    "DnsSessionId": "multi-error-1"
+  },
+  {
+    "TimeGenerated": "2026-09-22T12:00:01Z",
+    "EventStartTime": "2026-09-22T12:00:01Z",
+    "EventEndTime": "2026-09-22T12:00:02Z",
+    "EventType": "Query",
+    "EventResult": "Failure",
+    "EventResultDetails": "NXDOMAIN",
+    "EventCount": 1,
+    "EventVendor": "MockVendor",
+    "EventProduct": "MockDns",
+    "DnsQuery": "shared.failure.example.invalid",
+    "DnsQueryTypeName": "A",
+    "SrcIpAddr": "10.40.0.26",
+    "Dvc": "mock-client-2.example.invalid",
+    "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/mock/providers/Microsoft.Compute/virtualMachines/mock-dns-01",
+    "DnsSessionId": "multi-error-2"
+  }
+]

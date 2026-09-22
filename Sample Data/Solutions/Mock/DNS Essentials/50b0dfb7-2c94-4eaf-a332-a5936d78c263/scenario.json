@@ -1,0 +1,50 @@
+{
+  "version": 2,
+  "generatedAt": "2026-09-22T12:32:47Z",
+  "solution": "DNS Essentials",
+  "ruleId": "50b0dfb7-2c94-4eaf-a332-a5936d78c263",
+  "ruleName": "Ngrok Reverse Proxy on Network (ASIM DNS Solution)",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\DNS Essentials\\Analytic Rules\\NgrokReverseProxyOnNetwork.yaml",
+  "customDetectionId": "xdr-ngrok-reverse-proxy-on-network-asim-dns-solution-50b0dfb7",
+  "customDetectionName": "Ngrok Reverse Proxy on Network (ASIM DNS Solution)",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\DNS Essentials\\XDR Detections\\NgrokReverseProxyOnNetwork.yaml",
+  "scenarioName": "reviewed-shared-ar-cd-payload",
+  "hypothesis": "A normalized DNS query contains a listed Ngrok reverse-proxy domain.",
+  "generationStatus": "reviewed-offline-only",
+  "queryAssessment": {
+    "status": "reviewed",
+    "analyticAndCustomDetectionQueriesEquivalent": true
+  },
+  "sourceTable": "ASimDnsActivityLogs",
+  "destinationTables": [
+    "ASimDnsActivityLogs"
+  ],
+  "parserMapping": "vimDnsNative -> ASimDnsActivityLogs",
+  "decisivePredicates": [
+    "DnsQuery is non-empty",
+    "DnsQuery matches the Ngrok domain list",
+    "EventStartTime, EventEndTime, EventCount, EventResult, SrcIpAddr, and Dvc support summarization"
+  ],
+  "fixtures": {
+    "shared": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\DNS Essentials\\50b0dfb7-2c94-4eaf-a332-a5936d78c263\\mock.json",
+    "records": 1,
+    "usedBy": [
+      "analyticRule",
+      "customDetection"
+    ],
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\DNS Essentials\\50b0dfb7-2c94-4eaf-a332-a5936d78c263\\mock.json",
+    "mockRecords": 1
+  },
+  "validation": {
+    "json": "passed",
+    "tableSchemaFieldNamesAndTypes": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "alertParity": "not-run"
+  },
+  "limitations": [
+    "The payload was validated locally only and was not ingested.",
+    "The payload demonstrates query mechanics, not production threshold quality or SOC value."
+  ]
+}

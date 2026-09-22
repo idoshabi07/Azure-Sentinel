@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-22T12:26:07.565Z",
+  "solution": "MicrosoftPurviewInsiderRiskManagement",
+  "ruleId": "a4fb4255-f55b-4c24-b396-976ee075d406",
+  "ruleName": "Insider Risk_High User Security Alert Correlations",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\MicrosoftPurviewInsiderRiskManagement\\Analytic Rules\\InsiderRiskHighUserAlertsCorrelation.yaml",
+  "analyticRuleQuerySha256": "c15da3c30ddd94215f1b2eece26cd18d19a7625d0f25aef40d025fc28bf0c5f9",
+  "customDetectionId": "xdr-insider-risk-high-user-security-alert-correlations-a4fb4255",
+  "customDetectionName": "Insider Risk_High User Security Alert Correlations",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\MicrosoftPurviewInsiderRiskManagement\\XDR Detections\\InsiderRiskHighUserAlertsCorrelation.yaml",
+  "customDetectionQuerySha256": "af9e411ed73d8c923be53b54368156a6f1bbbbae689d9c2aa71911fd33d49227",
+  "scenarioName": "blocked-honest-representation",
+  "hypothesis": "Insider Risk_High User Security Alert Correlations",
+  "generationStatus": "blocked",
+  "queryAssessment": {
+    "status": "blocked",
+    "reasons": [
+      "The query requires coordinated SecurityAlert and SecurityIncident records plus an evaluate basket result. The repository mock.json contract is a single-table JSON array and has no table-routing field or multi-table ingestion mapping, so one shared payload cannot represent both native tables honestly."
+    ]
+  },
+  "sourceTable": "SecurityAlert",
+  "sourceTables": [
+    "SecurityAlert",
+    "SecurityIncident"
+  ],
+  "destinationTables": [
+    "SecurityAlert",
+    "SecurityIncident"
+  ],
+  "fixtures": {
+    "mock": null,
+    "mockRecords": 0,
+    "benignValidationRecords": 0
+  },
+  "validation": {
+    "json": "not-applicable",
+    "schemaValidation": "not-applicable",
+    "analyticAndCustomDetectionQueriesRead": true,
+    "liveIngestion": "not-run"
+  },
+  "limitations": [
+    "The query requires coordinated SecurityAlert and SecurityIncident records plus an evaluate basket result. The repository mock.json contract is a single-table JSON array and has no table-routing field or multi-table ingestion mapping, so one shared payload cannot represent both native tables honestly."
+  ]
+}

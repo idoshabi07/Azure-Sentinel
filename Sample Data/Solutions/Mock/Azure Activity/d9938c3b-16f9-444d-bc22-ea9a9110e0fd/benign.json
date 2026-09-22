@@ -20,7 +20,7 @@
     "Level": "synthetic-level",
     "OperationId": "953dba64-5ef3-5e3a-a07c-b821c5958767",
     "OperationName": "synthetic-operation-name",
-    "OperationNameValue": "operationNamesList",
+    "OperationNameValue": "Microsoft.ADHybridHealthService/services/servicemembers/action",
     "Properties": "synthetic-properties",
     "Properties_d": {},
     "Resource": "synthetic-resource",

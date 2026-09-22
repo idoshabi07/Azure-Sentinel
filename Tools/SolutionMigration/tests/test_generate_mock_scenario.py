@@ -63,6 +63,31 @@ class QueryExtractionTests(unittest.TestCase):
             generator.extract_predicates(query),
         )
 
+    def test_structured_event_parsing_requires_review(self) -> None:
+        assessment = generator.assess_query(
+            "SecurityEvent | extend EventData=parse_xml(EventData) "
+            "| mv-expand EventData | evaluate bag_unpack(EventData)",
+            {},
+        )
+
+        self.assertEqual("manual-review-required", assessment["status"])
+        self.assertIn(
+            "The query parses or expands structured event content.",
+            assessment["reasons"],
+        )
+
+    def test_unmodeled_content_predicate_requires_review(self) -> None:
+        assessment = generator.assess_query(
+            'SecurityEvent | where CommandLine has_all ("-r", "-s")',
+            {},
+        )
+
+        self.assertEqual("manual-review-required", assessment["status"])
+        self.assertIn(
+            "The query uses a content predicate that automatic fixtures do not model.",
+            assessment["reasons"],
+        )
+
     def test_reads_converted_custom_detection_identity(self) -> None:
         document = {
             "contentProvenance": {"source": {"id": "rule-123"}},
@@ -206,16 +231,14 @@ class MockScenarioGeneratorTests(unittest.TestCase):
                 existing = generator.generate_scenario("Example", "rule-123")
 
             scenario = result["scenario"]
-            malicious = json.loads(Path(result["maliciousPath"]).read_text(encoding="utf-8"))
-            benign = json.loads(Path(result["benignPath"]).read_text(encoding="utf-8"))
+            mock_records = json.loads(Path(result["mockPath"]).read_text(encoding="utf-8"))
 
         self.assertEqual("qualification-ready", scenario["generationStatus"])
         self.assertEqual("Custom-Example_CL", scenario["ingestion"]["stream"])
         self.assertEqual("message", scenario["mapping"]["decisiveFields"][0]["rawPath"])
-        self.assertEqual(2, len(malicious))
-        self.assertEqual(2, len(benign))
-        self.assertTrue(all(item["message"] == "Delete activity" for item in malicious))
-        self.assertTrue(all(item["message"] == "__benign_non_match__" for item in benign))
+        self.assertEqual(2, len(mock_records))
+        self.assertTrue(all(item["message"] == "Delete activity" for item in mock_records))
+        self.assertEqual(2, scenario["fixtures"]["benignValidationRecords"])
         self.assertEqual("existing-scenario", existing["status"])
 
     def test_generates_standard_table_offline_scenario(self):

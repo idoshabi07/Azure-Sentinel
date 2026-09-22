@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-22T12:26:07.565Z",
+  "solution": "SecurityThreatEssentialSolution",
+  "ruleId": "fa2658fe-3714-4c55-bb12-2b7275c628e8",
+  "ruleName": "Threat Essentials - Mass Cloud resource deletions Time Series Anomaly",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\SecurityThreatEssentialSolution\\Analytic Rules\\Threat_Essentials_TimeSeriesAnomaly_Mass_Cloud_Resource_Deletions.yaml",
+  "analyticRuleQuerySha256": "5ea8ae31ce1854e31b0fdf4a642ddda03813ca4f218ec5faf97af92a3d62a386",
+  "customDetectionId": "xdr-threat-essentials-mass-cloud-resource-deletions-time-series-anomaly-fa2658fe",
+  "customDetectionName": "Threat Essentials - Mass Cloud resource deletions Time Series Anomaly",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\SecurityThreatEssentialSolution\\XDR Detections\\Threat_Essentials_TimeSeriesAnomaly_Mass_Cloud_Resource_Deletions.yaml",
+  "customDetectionQuerySha256": "1aa4c60b52ff4d46b60050e9de2b5c5d1d845fb89d889399fe48f8573f37b5d7",
+  "scenarioName": "blocked-honest-representation",
+  "hypothesis": "Threat Essentials - Mass Cloud resource deletions Time Series Anomaly",
+  "generationStatus": "blocked",
+  "queryAssessment": {
+    "status": "blocked",
+    "reasons": [
+      "The query requires a 14-to-1-day hourly deletion time series, series_decompose_anomalies, a positive fitted baseline, and more than 25 events in an anomalous bucket. A static fixture cannot honestly establish that production baseline."
+    ]
+  },
+  "sourceTable": "AzureActivity",
+  "sourceTables": [
+    "AzureActivity"
+  ],
+  "destinationTables": [
+    "AzureActivity"
+  ],
+  "fixtures": {
+    "mock": null,
+    "mockRecords": 0,
+    "benignValidationRecords": 0
+  },
+  "validation": {
+    "json": "not-applicable",
+    "schemaValidation": "not-applicable",
+    "analyticAndCustomDetectionQueriesRead": true,
+    "liveIngestion": "not-run"
+  },
+  "limitations": [
+    "The query requires a 14-to-1-day hourly deletion time series, series_decompose_anomalies, a positive fitted baseline, and more than 25 events in an anomalous bucket. A static fixture cannot honestly establish that production baseline."
+  ]
+}

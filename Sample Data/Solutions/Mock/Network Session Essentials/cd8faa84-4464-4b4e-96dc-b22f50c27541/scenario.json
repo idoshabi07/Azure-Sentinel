@@ -1,0 +1,51 @@
+{
+  "version": 2,
+  "generatedAt": "2026-09-22T12:32:47Z",
+  "solution": "Network Session Essentials",
+  "ruleId": "cd8faa84-4464-4b4e-96dc-b22f50c27541",
+  "ruleName": "Network Port Sweep from External Network (ASIM Network Session schema)",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Network Session Essentials\\Analytic Rules\\NetworkPortSweepFromExternalNetwork.yaml",
+  "customDetectionId": "xdr-network-port-sweep-from-external-network-asim-network-session-schema-cd8faa84",
+  "customDetectionName": "Network Port Sweep from External Network (ASIM Network Session schema)",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Network Session Essentials\\XDR Detections\\NetworkPortSweepFromExternalNetwork.yaml",
+  "scenarioName": "reviewed-shared-ar-cd-payload",
+  "hypothesis": "One external source reaches twenty-one distinct destination IPs on the same destination port.",
+  "generationStatus": "reviewed-offline-only",
+  "queryAssessment": {
+    "status": "reviewed",
+    "analyticAndCustomDetectionQueriesEquivalent": true
+  },
+  "sourceTable": "ASimNetworkSessionLogs",
+  "destinationTables": [
+    "ASimNetworkSessionLogs"
+  ],
+  "parserMapping": "vimNetworkSessionNative -> ASimNetworkSessionLogs",
+  "decisivePredicates": [
+    "_Im_NetworkSession native parser receives current records",
+    "NetworkDirection equals Inbound",
+    "records share SrcIpAddr and DstPortNumber",
+    "destination-IP set length is greater than 20"
+  ],
+  "fixtures": {
+    "shared": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Network Session Essentials\\cd8faa84-4464-4b4e-96dc-b22f50c27541\\mock.json",
+    "records": 21,
+    "usedBy": [
+      "analyticRule",
+      "customDetection"
+    ],
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Network Session Essentials\\cd8faa84-4464-4b4e-96dc-b22f50c27541\\mock.json",
+    "mockRecords": 21
+  },
+  "validation": {
+    "json": "passed",
+    "tableSchemaFieldNamesAndTypes": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "alertParity": "not-run"
+  },
+  "limitations": [
+    "The payload was validated locally only and was not ingested.",
+    "The payload demonstrates query mechanics, not production threshold quality or SOC value."
+  ]
+}

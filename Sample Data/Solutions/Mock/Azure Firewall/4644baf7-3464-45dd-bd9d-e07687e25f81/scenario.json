@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-22T12:26:07Z",
+  "solution": "Azure Firewall",
+  "ruleId": "4644baf7-3464-45dd-bd9d-e07687e25f81",
+  "ruleName": "Multiple Sources Affected by the Same TI Destination",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Firewall\\Analytic Rules\\Azure Firewall - Multiple Sources Affected by the Same TI Destination.yaml",
+  "customDetectionId": "xdr-multiple-sources-affected-by-the-same-ti-destination-4644baf7",
+  "customDetectionName": "Multiple Sources Affected by the Same TI Destination",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Firewall\\XDR Detections\\Azure Firewall - Multiple Sources Affected by the Same TI Destination.yaml",
+  "scenarioName": "Reviewed shared AR/CD scenario for Multiple Sources Affected by the Same TI Destination",
+  "hypothesis": "Six distinct source IPs contact the same threat-intelligence destination with the same threat description inside one day, exceeding the affected-source threshold of five.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "manual-review-required",
+    "reasons": [
+      "The query groups threat-intelligence events by destination and description.",
+      "The query requires more than five unique affected sources and expands the resulting source set."
+    ]
+  },
+  "sourceTable": "AZFWThreatIntel",
+  "destinationTables": [
+    "AZFWThreatIntel"
+  ],
+  "sourceContract": {
+    "schema": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Tables\\AZFWThreatIntel\\metadata.json",
+    "baseEvent": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Tables\\AZFWThreatIntel\\base-event.json",
+    "parser": null,
+    "mapping": "identity mapping to the native Azure Firewall resource-specific table"
+  },
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-AZFWThreatIntel",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "Fqdn",
+        "operator": "extend",
+        "rawPath": "DestinationIp",
+        "value": "203.0.113.200"
+      },
+      {
+        "ruleColumn": "ThreatDescription",
+        "operator": "group",
+        "rawPath": "ThreatDescription",
+        "value": "Synthetic threat-intelligence destination"
+      },
+      {
+        "ruleColumn": "AffectedIps",
+        "operator": "array_length >",
+        "rawPath": "SourceIp",
+        "value": 5,
+        "modeledValue": 6
+      }
+    ],
+    "lockedPaths": [
+      "DestinationIp",
+      "SourceIp",
+      "ThreatDescription",
+      "TimeGenerated"
+    ]
+  },
+  "fixtures": {
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Azure Firewall\\4644baf7-3464-45dd-bd9d-e07687e25f81\\mock.json",
+    "mockRecords": 6,
+    "benignValidationRecords": 0
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-required-offline-only"
+  },
+  "limitations": [
+    "Azure Firewall resource-specific logs are Azure platform logs; the solution package declares no writable Custom-* DCR input stream for these tables.",
+    "The shared mock payload models both queries offline and must not be treated as live-ingestion or alert-parity evidence."
+  ]
+}

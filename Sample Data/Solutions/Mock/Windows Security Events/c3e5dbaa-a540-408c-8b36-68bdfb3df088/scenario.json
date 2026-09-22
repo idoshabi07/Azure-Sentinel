@@ -1,30 +1,32 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-20T11:05:43.584259+00:00",
+  "generatedAt": "2026-09-22T12:21:21.788777+00:00",
   "solution": "Windows Security Events",
   "ruleId": "c3e5dbaa-a540-408c-8b36-68bdfb3df088",
   "ruleName": "NRT Base64 Encoded Windows Process Command-lines",
   "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\Analytic Rules\\NRT_base64_encoded_pefile.yaml",
-  "customDetectionId": null,
-  "customDetectionName": null,
+  "customDetectionId": "xdr-nrt-base64-encoded-windows-process-command-lines-c3e5dbaa",
+  "customDetectionName": "NRT Base64 Encoded Windows Process Command-lines",
   "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\XDR Detections\\NRT_base64_encoded_pefile.yaml",
-  "scenarioName": "automatic-simple-predicate",
-  "hypothesis": "Synthetic records exercise the decisive predicates in NRT Base64 Encoded Windows Process Command-lines.",
-  "generationStatus": "generated-offline-only",
+  "scenarioName": "Base64 PE command line one-time reviewed scenario",
+  "hypothesis": "A 4688 process command line containing the PE Base64 prefix should match; a normal command line should not.",
+  "generationStatus": "qualification-ready",
   "queryAssessment": {
-    "status": "simple",
-    "reasons": []
+    "status": "manual-review-required",
+    "reasons": [
+      "The query uses a content predicate that automatic fixtures do not model."
+    ]
   },
   "sourceTable": "SecurityEvent",
   "destinationTables": [
     "SecurityEvent"
   ],
   "ingestion": {
-    "mode": "offline-standard-table",
-    "dcr": null,
-    "stream": null,
+    "mode": "custom-dcr-standard-table",
+    "dcr": "xdr-migration-standard-mock-dcr",
+    "stream": "Custom-XDRMigrationSecurityEventMock",
     "outputStream": "Microsoft-SecurityEvent",
-    "directLogsIngestionSupported": false
+    "directLogsIngestionSupported": true
   },
   "mapping": {
     "decisiveFields": [
@@ -43,26 +45,25 @@
     ],
     "lockedPaths": [
       "CommandLine",
+      "Computer",
+      "Correlation",
       "EventID"
     ]
   },
   "fixtures": {
-    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\c3e5dbaa-a540-408c-8b36-68bdfb3df088\\malicious.json",
-    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\c3e5dbaa-a540-408c-8b36-68bdfb3df088\\benign.json",
-    "maliciousRecords": 1,
-    "benignRecords": 1
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\c3e5dbaa-a540-408c-8b36-68bdfb3df088\\mock.json",
+    "mockRecords": 1,
+    "benignValidationRecords": 1
   },
   "validation": {
     "schemaValidation": "passed",
-    "sentinelSeededQuery": "not-run",
-    "advancedHuntingSeededQuery": "not-run",
-    "liveIngestion": "not-run",
-    "liveSentinel": "not-run",
-    "liveAdvancedHunting": "not-run",
-    "alertParity": "not-run",
-    "cleanup": "not-run"
+    "sentinelSeededQuery": "passed",
+    "advancedHuntingSeededQuery": "passed",
+    "liveIngestion": "passed",
+    "liveSentinel": "passed",
+    "liveAdvancedHunting": "passed",
+    "alertParity": "query-parity-passed",
+    "cleanup": "not-required-one-time-data"
   },
-  "limitations": [
-    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
-  ]
+  "limitations": []
 }

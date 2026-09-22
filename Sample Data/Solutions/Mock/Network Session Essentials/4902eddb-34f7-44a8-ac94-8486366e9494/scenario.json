@@ -1,0 +1,50 @@
+{
+  "version": 2,
+  "generatedAt": "2026-09-22T12:32:47Z",
+  "solution": "Network Session Essentials",
+  "ruleId": "4902eddb-34f7-44a8-ac94-8486366e9494",
+  "ruleName": "Excessive number of failed connections from a single source (ASIM Network Session schema)",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Network Session Essentials\\Analytic Rules\\ExcessiveHTTPFailuresFromSource.yaml",
+  "customDetectionId": "xdr-excessive-number-of-failed-connections-from-a-single-source-asim-network-4902eddb",
+  "customDetectionName": "Excessive number of failed connections from a single source (ASIM Network Session schema)",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Network Session Essentials\\XDR Detections\\ExcessiveHTTPFailuresFromSource.yaml",
+  "scenarioName": "reviewed-shared-ar-cd-payload",
+  "hypothesis": "Five thousand and one normalized failed sessions from one source occur in one five-minute bin.",
+  "generationStatus": "reviewed-offline-only",
+  "queryAssessment": {
+    "status": "reviewed",
+    "analyticAndCustomDetectionQueriesEquivalent": true
+  },
+  "sourceTable": "ASimNetworkSessionLogs",
+  "destinationTables": [
+    "ASimNetworkSessionLogs"
+  ],
+  "parserMapping": "vimNetworkSessionNative -> ASimNetworkSessionLogs",
+  "decisivePredicates": [
+    "_Im_NetworkSession native parser receives EventResult Failure",
+    "all records share SrcIpAddr",
+    "count in one five-minute bin is greater than 5000"
+  ],
+  "fixtures": {
+    "shared": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Network Session Essentials\\4902eddb-34f7-44a8-ac94-8486366e9494\\mock.json",
+    "records": 5001,
+    "usedBy": [
+      "analyticRule",
+      "customDetection"
+    ],
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Network Session Essentials\\4902eddb-34f7-44a8-ac94-8486366e9494\\mock.json",
+    "mockRecords": 5001
+  },
+  "validation": {
+    "json": "passed",
+    "tableSchemaFieldNamesAndTypes": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "alertParity": "not-run"
+  },
+  "limitations": [
+    "The payload was validated locally only and was not ingested.",
+    "The payload demonstrates query mechanics, not production threshold quality or SOC value."
+  ]
+}

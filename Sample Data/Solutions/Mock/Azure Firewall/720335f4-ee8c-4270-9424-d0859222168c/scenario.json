@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-22T12:26:07Z",
+  "solution": "Azure Firewall",
+  "ruleId": "720335f4-ee8c-4270-9424-d0859222168c",
+  "ruleName": "Port Sweep",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Firewall\\Analytic Rules\\Azure Firewall - Port Sweep.yaml",
+  "customDetectionId": "xdr-port-sweep-720335f4",
+  "customDetectionName": "Port Sweep",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Azure Firewall\\XDR Detections\\Azure Firewall - Port Sweep.yaml",
+  "scenarioName": "Reviewed shared AR/CD scenario for Port Sweep",
+  "hypothesis": "One source scans port 22 on 201 distinct destination IPs in the same 30-second bin, exceeding the strict greater-than-200 host threshold while avoiding excluded ports 80 and 443.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "manual-review-required",
+    "reasons": [
+      "The query excludes ports 80 and 443 and bins events into 30-second windows.",
+      "The query requires more than 200 distinct destinations and expands the resulting host set."
+    ]
+  },
+  "sourceTable": "AZFWNetworkRule",
+  "destinationTables": [
+    "AZFWNetworkRule"
+  ],
+  "sourceContract": {
+    "schema": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Tables\\AZFWNetworkRule\\metadata.json",
+    "baseEvent": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Tables\\AZFWNetworkRule\\base-event.json",
+    "parser": null,
+    "mapping": "identity mapping to the native Azure Firewall resource-specific table"
+  },
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-AZFWNetworkRule",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisiveFields": [
+      {
+        "ruleColumn": "DestinationPort",
+        "operator": "!in",
+        "rawPath": "DestinationPort",
+        "value": [
+          80,
+          443
+        ],
+        "modeledValue": 22
+      },
+      {
+        "ruleColumn": "SourceIp",
+        "operator": "group",
+        "rawPath": "SourceIp",
+        "value": "192.0.2.71"
+      },
+      {
+        "ruleColumn": "AlertTimedCountHostsInBinTime",
+        "operator": "array_length >",
+        "rawPath": "DestinationIp",
+        "value": 200,
+        "modeledValue": 201
+      },
+      {
+        "ruleColumn": "TimeGenerated",
+        "operator": "bin",
+        "rawPath": "TimeGenerated",
+        "value": "30s"
+      }
+    ],
+    "lockedPaths": [
+      "DestinationIp",
+      "DestinationPort",
+      "SourceIp",
+      "TimeGenerated"
+    ]
+  },
+  "fixtures": {
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Azure Firewall\\720335f4-ee8c-4270-9424-d0859222168c\\mock.json",
+    "mockRecords": 201,
+    "benignValidationRecords": 0
+  },
+  "validation": {
+    "schemaValidation": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "liveSentinel": "not-run",
+    "liveAdvancedHunting": "not-run",
+    "alertParity": "not-run",
+    "cleanup": "not-required-offline-only"
+  },
+  "limitations": [
+    "Azure Firewall resource-specific logs are Azure platform logs; the solution package declares no writable Custom-* DCR input stream for these tables.",
+    "The shared mock payload models both queries offline and must not be treated as live-ingestion or alert-parity evidence."
+  ]
+}

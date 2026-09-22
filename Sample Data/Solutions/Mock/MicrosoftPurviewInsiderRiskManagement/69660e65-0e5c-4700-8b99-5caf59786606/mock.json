@@ -1,0 +1,19 @@
+[
+  {
+    "TimeGenerated": "2026-09-22T12:10:00Z",
+    "StartTime": "2026-09-22T12:05:00Z",
+    "EndTime": "2026-09-22T12:10:00Z",
+    "ProcessingEndTime": "2026-09-22T12:10:05Z",
+    "SystemAlertId": "55555555-5555-4555-8555-555555555555",
+    "AlertName": "Synthetic insider risk alert",
+    "AlertSeverity": "High",
+    "ProductName": "Microsoft 365 Insider Risk Management",
+    "ProviderName": "Microsoft",
+    "Status": "New",
+    "Tactics": "Execution",
+    "AlertLink": "https://security.microsoft.com/alerts/synthetic",
+    "Entities": "[{\"Type\":\"account\",\"Name\":\"synthetic.insider\",\"UPNSuffix\":\"example.invalid\",\"AadUserId\":\"66666666-6666-4666-8666-666666666666\",\"AadTenantId\":\"22222222-2222-4222-8222-222222222222\",\"IsDomainJoined\":false}]",
+    "ExtendedLinks": "[{\"Href\":\"https://security.microsoft.com/alerts/synthetic\"}]",
+    "Type": "SecurityAlert"
+  }
+]

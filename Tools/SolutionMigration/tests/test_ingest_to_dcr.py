@@ -141,6 +141,128 @@ class ScenarioHandoffTests(unittest.TestCase):
             ingest_to_dcr.INGESTION_ACTION,
         ))
 
+    @mock.patch.object(ingest_to_dcr, "_request_json")
+    @mock.patch.object(ingest_to_dcr, "_resource_graph_query")
+    def test_dcr_discovery_prefers_isolated_standard_stream(
+        self,
+        resource_graph_query: mock.Mock,
+        request_json: mock.Mock,
+    ):
+        workspace = {
+            "id": "/subscriptions/s/resourceGroups/r/providers/"
+            "Microsoft.OperationalInsights/workspaces/w",
+            "subscriptionId": "s",
+        }
+        resource_graph_query.return_value = [
+            {
+                "id": "/shared",
+                "name": "shared",
+                "properties": {
+                    "immutableId": "shared-id",
+                    "dataCollectionEndpointId": "/shared-dce",
+                    "streamDeclarations": {
+                        "Custom-Example": {},
+                        "Custom-Other": {},
+                    },
+                    "destinations": {
+                        "logAnalytics": [{
+                            "workspaceResourceId": workspace["id"],
+                        }]
+                    },
+                    "dataFlows": [
+                        {
+                            "streams": ["Custom-Example"],
+                            "outputStream": "Microsoft-Event",
+                        },
+                        {
+                            "streams": ["Custom-Other"],
+                            "outputStream": "Microsoft-Syslog",
+                        },
+                    ],
+                },
+            },
+            {
+                "id": "/isolated",
+                "name": "isolated",
+                "properties": {
+                    "immutableId": "isolated-id",
+                    "dataCollectionEndpointId": "/isolated-dce",
+                    "streamDeclarations": {"Custom-Example": {}},
+                    "destinations": {
+                        "logAnalytics": [{
+                            "workspaceResourceId": workspace["id"],
+                        }]
+                    },
+                    "dataFlows": [{
+                        "streams": ["Custom-Example"],
+                        "outputStream": "Microsoft-Event",
+                    }],
+                },
+            },
+        ]
+        request_json.return_value = (
+            200,
+            {
+                "properties": {
+                    "logsIngestion": {
+                        "endpoint": "https://isolated.ingest.monitor.azure.com"
+                    }
+                }
+            },
+        )
+
+        result = ingest_to_dcr.find_dcr_for_stream(
+            "arm-token",
+            workspace,
+            "Custom-Example",
+        )
+
+        self.assertEqual("isolated", result["name"])
+        self.assertTrue(result["isolated"])
+        self.assertIn("/isolated-dce", request_json.call_args.args[1])
+
+    @mock.patch.object(ingest_to_dcr, "_resource_graph_query")
+    def test_dcr_discovery_rejects_shared_standard_stream(
+        self,
+        resource_graph_query: mock.Mock,
+    ):
+        workspace = {
+            "id": "/subscriptions/s/resourceGroups/r/providers/"
+            "Microsoft.OperationalInsights/workspaces/w",
+            "subscriptionId": "s",
+        }
+        resource_graph_query.return_value = [{
+            "id": "/shared",
+            "name": "shared",
+            "properties": {
+                "immutableId": "shared-id",
+                "dataCollectionEndpointId": "/shared-dce",
+                "streamDeclarations": {
+                    "Custom-Example": {},
+                    "Custom-Other": {},
+                },
+                "destinations": {
+                    "logAnalytics": [{
+                        "workspaceResourceId": workspace["id"],
+                    }]
+                },
+                "dataFlows": [{
+                    "streams": ["Custom-Example"],
+                    "outputStream": "Microsoft-Event",
+                }],
+            },
+        }]
+
+        with self.assertRaisesRegex(
+            ingest_to_dcr.ToolError,
+            "contract-specific DCE/DCR pair",
+        ):
+            ingest_to_dcr.find_dcr_for_stream(
+                "arm-token",
+                workspace,
+                "Custom-Example",
+            )
+
     @mock.patch.object(
         ingest_to_dcr,
         "_access_token",
@@ -524,7 +646,7 @@ class ScenarioHandoffTests(unittest.TestCase):
     def test_accepts_qualification_ready_matching_stream(self):
         with tempfile.TemporaryDirectory() as temp:
             folder = Path(temp)
-            payload = folder / "malicious.json"
+            payload = folder / "mock.json"
             payload.write_text('[{"message":"match"}]', encoding="utf-8")
             scenario = {
                 "generationStatus": "qualification-ready",
@@ -532,7 +654,7 @@ class ScenarioHandoffTests(unittest.TestCase):
                     "directLogsIngestionSupported": True,
                     "stream": "Custom-Example_CL",
                 },
-                "fixtures": {"maliciousRecords": 1, "benignRecords": 1},
+                "fixtures": {"mockRecords": 1},
                 "validation": {"schemaValidation": "passed"},
             }
             (folder / "scenario.json").write_text(json.dumps(scenario), encoding="utf-8")
@@ -540,15 +662,31 @@ class ScenarioHandoffTests(unittest.TestCase):
             result = ingest_to_dcr.validate_scenario_for_ingestion(
                 payload,
                 "Custom-Example_CL",
-                "malicious",
+                "mock",
             )
 
         self.assertEqual(folder / "scenario.json", result)
 
+    def test_default_payload_discovery_uses_shared_mock_json(self):
+        with tempfile.TemporaryDirectory() as temp:
+            folder = Path(temp)
+            mock_path = folder / "mock.json"
+            mock_path.write_text('[{"message":"match"}]', encoding="utf-8")
+
+            result = ingest_to_dcr.resolve_payload_path(
+                None,
+                "Sample",
+                "rule-id",
+                "mock",
+                folder,
+            )
+
+        self.assertEqual(mock_path, result)
+
     def test_rejects_offline_only_scenario(self):
         with tempfile.TemporaryDirectory() as temp:
             folder = Path(temp)
-            payload = folder / "malicious.json"
+            payload = folder / "mock.json"
             payload.write_text('[{"message":"match"}]', encoding="utf-8")
             scenario = {
                 "generationStatus": "generated-offline-only",
@@ -556,7 +694,7 @@ class ScenarioHandoffTests(unittest.TestCase):
                     "directLogsIngestionSupported": False,
                     "stream": None,
                 },
-                "fixtures": {"maliciousRecords": 1, "benignRecords": 1},
+                "fixtures": {"mockRecords": 1},
                 "validation": {"schemaValidation": "passed"},
             }
             (folder / "scenario.json").write_text(json.dumps(scenario), encoding="utf-8")
@@ -565,7 +703,7 @@ class ScenarioHandoffTests(unittest.TestCase):
                 ingest_to_dcr.validate_scenario_for_ingestion(
                     payload,
                     "Microsoft-DeviceEvents",
-                    "malicious",
+                    "mock",
                 )
 
 

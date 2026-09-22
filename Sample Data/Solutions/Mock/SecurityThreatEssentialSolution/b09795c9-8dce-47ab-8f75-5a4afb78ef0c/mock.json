@@ -1,0 +1,29 @@
+[
+  {
+    "TimeGenerated": "2026-09-22T12:10:00Z",
+    "ActivityDateTime": "2026-09-22T12:10:00Z",
+    "Category": "RoleManagement",
+    "AADOperationType": "Assign",
+    "ActivityDisplayName": "Add member to role",
+    "OperationName": "Add member to role",
+    "Result": "success",
+    "InitiatedBy": {
+      "user": {
+        "userPrincipalName": "synthetic.creator@example.invalid"
+      }
+    },
+    "TargetResources": [
+      {
+        "userPrincipalName": "synthetic.target@example.invalid",
+        "modifiedProperties": [
+          {
+            "displayName": "Role.DisplayName",
+            "newValue": "\"Global Administrator\"",
+            "oldValue": null
+          }
+        ]
+      }
+    ],
+    "Type": "AuditLogs"
+  }
+]

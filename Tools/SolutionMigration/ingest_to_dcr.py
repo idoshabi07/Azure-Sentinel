@@ -243,6 +243,7 @@ def find_dcr_for_stream(token: str, workspace: dict, stream: str) -> dict:
         [subscription_id],
     )
 
+    candidates = []
     for dcr in rows:
         properties = dcr.get("properties") or {}
         flow = next(
@@ -265,25 +266,71 @@ def find_dcr_for_stream(token: str, workspace: dict, stream: str) -> dict:
         endpoint_id = properties.get("dataCollectionEndpointId")
         if not immutable_id or not endpoint_id:
             continue
-        _, dce = _request_json(
-            "GET",
-            f"https://management.azure.com{endpoint_id}?api-version={DCE_API_VERSION}",
-            token,
+        declared_streams = set(
+            (properties.get("streamDeclarations") or {}).keys()
         )
-        endpoint = ((dce or {}).get("properties") or {}).get("logsIngestion", {}).get("endpoint")
-        if endpoint:
-            output_stream = str(flow.get("outputStream") or stream)
-            return {
-                "id": dcr["id"],
-                "name": dcr["name"],
-                "immutableId": immutable_id,
-                "endpoint": endpoint,
-                "outputStream": output_stream,
-                "outputTable": _custom_table_name(output_stream),
+        flow_streams = {
+            declared
+            for candidate in properties.get("dataFlows", [])
+            for declared in candidate.get("streams", [])
+        }
+        candidates.append(
+            {
+                "resource": dcr,
+                "properties": properties,
+                "flow": flow,
+                "endpointId": endpoint_id,
+                "isolated": (
+                    declared_streams == {stream}
+                    and flow_streams == {stream}
+                ),
             }
+        )
+
+    candidates.sort(
+        key=lambda candidate: (
+            not candidate["isolated"],
+            str(candidate["resource"].get("name") or "").lower(),
+        )
+    )
+    if not candidates:
+        raise ToolError(
+            f"No DCR targeting workspace {workspace_id!r} declares stream {stream!r}."
+        )
+
+    candidate = candidates[0]
+    flow = candidate["flow"]
+    output_stream = str(flow.get("outputStream") or stream)
+    if output_stream.startswith("Microsoft-") and not candidate["isolated"]:
+        raise ToolError(
+            f"Only shared DCRs were found for standard-table stream {stream!r}. "
+            "Provision a contract-specific DCE/DCR pair with exactly one declared "
+            "input stream, then retry."
+        )
+    dcr = candidate["resource"]
+    properties = candidate["properties"]
+    endpoint_id = candidate["endpointId"]
+    _, dce = _request_json(
+        "GET",
+        f"https://management.azure.com{endpoint_id}?api-version={DCE_API_VERSION}",
+        token,
+    )
+    endpoint = ((dce or {}).get("properties") or {}).get(
+        "logsIngestion", {}
+    ).get("endpoint")
+    if endpoint:
+        return {
+            "id": dcr["id"],
+            "name": dcr["name"],
+            "immutableId": properties["immutableId"],
+            "endpoint": endpoint,
+            "outputStream": output_stream,
+            "outputTable": _custom_table_name(output_stream),
+            "isolated": candidate["isolated"],
+        }
 
     raise ToolError(
-        f"No DCR targeting workspace {workspace_id!r} declares stream {stream!r}."
+        f"DCR {dcr['name']!r} does not expose a Logs Ingestion endpoint."
     )
 
 
@@ -797,7 +844,9 @@ def resolve_payload_path(
         / solution
         / rule_id
     )
-    candidate = folder / f"{fixture}.json"
+    candidate = folder / "mock.json"
+    if not candidate.is_file() and fixture in {"malicious", "benign"}:
+        candidate = folder / f"{fixture}.json"
     if not candidate.is_file():
         raise ToolError(
             f"Mock fixture was not found at {candidate}. Ask the user for the mock-data "
@@ -842,9 +891,9 @@ def validate_scenario_for_ingestion(
             f"Scenario stream {scenario_stream!r} does not match requested stream {stream!r}."
         )
     fixtures = scenario.get("fixtures") or {}
-    count_field = f"{fixture}Records"
+    count_field = "mockRecords" if payload_path.name == "mock.json" else f"{fixture}Records"
     if not isinstance(fixtures.get(count_field), int) or fixtures[count_field] < 1:
-        raise ToolError(f"Scenario has no reviewed {fixture} records.")
+        raise ToolError("Scenario has no reviewed mock records.")
     return scenario_path
 
 
@@ -877,14 +926,17 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--rule-id", help="Rule folder name or identifier used for default fixture discovery.")
     parser.add_argument(
         "--fixture",
-        choices=("malicious", "benign"),
-        default="malicious",
-        help="Fixture file to select when using default folder discovery.",
+        choices=("mock", "malicious", "benign"),
+        default="mock",
+        help=(
+            "Payload to select during default folder discovery. mock.json is the "
+            "standard shared AR/CD payload; malicious and benign are legacy fallbacks."
+        ),
     )
     parser.add_argument(
         "--mock-data-folder",
         type=Path,
-        help="Override folder containing malicious.json and benign.json.",
+        help="Override folder containing the shared mock.json payload.",
     )
     parser.add_argument(
         "--discover-only",

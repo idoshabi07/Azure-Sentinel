@@ -1,0 +1,51 @@
+{
+  "version": 2,
+  "generatedAt": "2026-09-22T12:32:47Z",
+  "solution": "DNS Essentials",
+  "ruleId": "5b8344eb-fa28-4ac3-bcff-bc19d5d63089",
+  "ruleName": "Detect DNS queries reporting multiple errors from different clients - Static threshold based (ASIM DNS Solution)",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\DNS Essentials\\Analytic Rules\\MultipleErrorsReportedForSameDNSQueryStaticThresholdBased.yaml",
+  "customDetectionId": "xdr-detect-dns-queries-reporting-multiple-errors-from-different-clients-stat-5b8344eb",
+  "customDetectionName": "Detect DNS queries reporting multiple errors from different clients - Static threshold based (ASIM DNS Solution)",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\DNS Essentials\\XDR Detections\\MultipleErrorsReportedForSameDNSQueryStaticThresholdBased.yaml",
+  "scenarioName": "reviewed-shared-ar-cd-payload",
+  "hypothesis": "The same failed DNS query is reported by two distinct clients in one ten-minute bin.",
+  "generationStatus": "reviewed-offline-only",
+  "queryAssessment": {
+    "status": "reviewed",
+    "analyticAndCustomDetectionQueriesEquivalent": true
+  },
+  "sourceTable": "ASimDnsActivityLogs",
+  "destinationTables": [
+    "ASimDnsActivityLogs"
+  ],
+  "parserMapping": "vimDnsNative -> ASimDnsActivityLogs",
+  "decisivePredicates": [
+    "EventResultDetails is one of NXDOMAIN, SERVFAIL, or REFUSED",
+    "records share DnsQuery",
+    "records use two distinct SrcIpAddr values",
+    "Dvc and _ResourceId are populated for expansion and entity output"
+  ],
+  "fixtures": {
+    "shared": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\DNS Essentials\\5b8344eb-fa28-4ac3-bcff-bc19d5d63089\\mock.json",
+    "records": 2,
+    "usedBy": [
+      "analyticRule",
+      "customDetection"
+    ],
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\DNS Essentials\\5b8344eb-fa28-4ac3-bcff-bc19d5d63089\\mock.json",
+    "mockRecords": 2
+  },
+  "validation": {
+    "json": "passed",
+    "tableSchemaFieldNamesAndTypes": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "alertParity": "not-run"
+  },
+  "limitations": [
+    "The payload was validated locally only and was not ingested.",
+    "The payload demonstrates query mechanics, not production threshold quality or SOC value."
+  ]
+}

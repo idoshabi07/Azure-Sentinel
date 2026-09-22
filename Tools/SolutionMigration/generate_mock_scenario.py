@@ -1,4 +1,4 @@
-"""Generate reviewed mock fixtures from Azure-Sentinel repository content.
+"""Generate a shared AR/CD mock payload from Azure-Sentinel repository content.
 
 The tool is standalone within Azure-Sentinel. It reads a source Analytic Rule,
 the converted Custom Detection, checked-in Standard-table base events, and the
@@ -6,7 +6,9 @@ solution package's DCR/transform/parser definitions. It never writes to Azure.
 
 Existing valid scenarios are reused by default. Automatic generation is limited
 to simple decisive predicates. Complex behavior requires a reviewed scenario
-JSON containing maliciousRecords and benignRecords.
+JSON containing maliciousRecords and benignRecords. Only the malicious records
+are persisted as mock.json for the shared one-time AR/CD ingestion. Benign
+records remain validation controls and are not a second ingestion payload.
 """
 from __future__ import annotations
 
@@ -166,31 +168,26 @@ def scenario_directory(solution: str, rule: dict) -> Path:
 
 def validate_existing_scenario(path: Path, solution: str, rule: dict) -> dict:
     scenario_path = path / "scenario.json"
-    malicious_path = path / "malicious.json"
-    benign_path = path / "benign.json"
-    if not all(candidate.is_file() for candidate in (scenario_path, malicious_path, benign_path)):
+    mock_path = path / "mock.json"
+    if not all(candidate.is_file() for candidate in (scenario_path, mock_path)):
         raise ScenarioError(f"Existing scenario folder is incomplete: {path}")
     scenario = _load_json(scenario_path)
-    malicious = _load_json(malicious_path)
-    benign = _load_json(benign_path)
+    mock_records = _load_json(mock_path)
     if not isinstance(scenario, dict):
         raise ScenarioError(f"Scenario manifest must be an object: {scenario_path}")
     if scenario.get("solution") != solution:
         raise ScenarioError(f"Scenario solution does not match {solution!r}: {scenario_path}")
     if str(scenario.get("ruleId")) != str(rule.get("id")):
         raise ScenarioError(f"Scenario rule ID does not match the selected rule: {scenario_path}")
-    if not isinstance(malicious, list) or not malicious:
-        raise ScenarioError(f"Malicious fixture must be a non-empty array: {malicious_path}")
-    if not isinstance(benign, list) or not benign:
-        raise ScenarioError(f"Benign fixture must be a non-empty array: {benign_path}")
+    if not isinstance(mock_records, list) or not mock_records:
+        raise ScenarioError(f"Mock payload must be a non-empty array: {mock_path}")
     validation = scenario.get("validation") or {}
     if validation.get("schemaValidation") != "passed":
         raise ScenarioError(f"Existing scenario has not passed schema validation: {scenario_path}")
     return {
         "status": "existing-scenario",
         "scenarioPath": str(scenario_path),
-        "maliciousPath": str(malicious_path),
-        "benignPath": str(benign_path),
+        "mockPath": str(mock_path),
         "scenario": scenario,
     }
 
@@ -428,6 +425,15 @@ def assess_query(query: str, rule: dict) -> dict:
         (r"\bsummarize\b", "The query summarizes multiple events."),
         (r"_getwatchlist|externaldata", "The query depends on external reference data."),
         (r"\bseries_|anomal", "The query depends on anomaly or baseline behavior."),
+        (
+            r"\bparse_xml\s*\(|\bparse_json\s*\(|\|\s*mv-expand\b|"
+            r"\|\s*evaluate\s+(?:bag_unpack|pivot)\b",
+            "The query parses or expands structured event content.",
+        ),
+        (
+            r"\b(?:contains|has_all|has_any|has|startswith|endswith|matches\s+regex)\b",
+            "The query uses a content predicate that automatic fixtures do not model.",
+        ),
     )
     for pattern, reason in checks:
         if re.search(pattern, lower):
@@ -859,10 +865,8 @@ def generate_scenario(
     validate_records(benign, columns)
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    malicious_path = output_dir / "malicious.json"
-    benign_path = output_dir / "benign.json"
-    malicious_path.write_text(json.dumps(malicious, indent=2) + "\n", encoding="utf-8")
-    benign_path.write_text(json.dumps(benign, indent=2) + "\n", encoding="utf-8")
+    mock_path = output_dir / "mock.json"
+    mock_path.write_text(json.dumps(malicious, indent=2) + "\n", encoding="utf-8")
 
     status = (
         "qualification-ready"
@@ -906,10 +910,9 @@ def generate_scenario(
             "lockedPaths": locked_paths,
         },
         "fixtures": {
-            "malicious": str(malicious_path),
-            "benign": str(benign_path),
-            "maliciousRecords": len(malicious),
-            "benignRecords": len(benign),
+            "mock": str(mock_path),
+            "mockRecords": len(malicious),
+            "benignValidationRecords": len(benign),
         },
         "validation": {
             "schemaValidation": "passed",
@@ -935,8 +938,7 @@ def generate_scenario(
     return {
         "status": "generated",
         "scenarioPath": str(scenario_path),
-        "maliciousPath": str(malicious_path),
-        "benignPath": str(benign_path),
+        "mockPath": str(mock_path),
         "scenario": manifest,
     }
 

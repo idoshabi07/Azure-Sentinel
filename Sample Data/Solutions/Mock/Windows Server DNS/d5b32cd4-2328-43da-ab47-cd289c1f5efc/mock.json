@@ -1,0 +1,10 @@
+[
+  {
+    "TimeGenerated": "2026-09-22T12:00:00Z",
+    "ClientIP": "10.40.0.25",
+    "Computer": "mock-dns-01.example.invalid",
+    "Name": "monerohash.com",
+    "QueryType": "A",
+    "ResultCode": 0
+  }
+]

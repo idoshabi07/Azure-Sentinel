@@ -1,0 +1,19 @@
+[
+  {
+    "TimeGenerated": "2026-09-22T12:00:00Z",
+    "EventStartTime": "2026-09-22T12:00:00Z",
+    "EventEndTime": "2026-09-22T12:00:01Z",
+    "EventType": "Query",
+    "EventResult": "Success",
+    "EventResultDetails": "NOERROR",
+    "EventCount": 1,
+    "EventVendor": "MockVendor",
+    "EventProduct": "MockDns",
+    "DnsQuery": "agent-7f3a.ngrok.io",
+    "DnsQueryTypeName": "A",
+    "SrcIpAddr": "10.40.0.25",
+    "Dvc": "mock-dns-01.example.invalid",
+    "_ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/mock/providers/Microsoft.Compute/virtualMachines/mock-dns-01",
+    "DnsSessionId": "ngrok-001"
+  }
+]

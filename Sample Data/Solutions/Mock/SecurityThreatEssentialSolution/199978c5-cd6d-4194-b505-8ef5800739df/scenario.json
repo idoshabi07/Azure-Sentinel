@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "generatedAt": "2026-09-22T12:26:07.565Z",
+  "solution": "SecurityThreatEssentialSolution",
+  "ruleId": "199978c5-cd6d-4194-b505-8ef5800739df",
+  "ruleName": "Threat Essentials - Multiple admin membership removals from newly created admin.",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\SecurityThreatEssentialSolution\\Analytic Rules\\Threat_Essentials_MultipleAdmin_membership_removals_from_NewAdmin.yaml",
+  "analyticRuleQuerySha256": "9d57621f77c53e7fbecb5732e2b29c8747ffe5d9a0e495577c28cfe5e6d6b539",
+  "customDetectionId": "xdr-threat-essentials-multiple-admin-membership-removals-from-newly-created--199978c5",
+  "customDetectionName": "Threat Essentials - Multiple admin membership removals from newly created admin.",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\SecurityThreatEssentialSolution\\XDR Detections\\Threat_Essentials_MultipleAdmin_membership_removals_from_NewAdmin.yaml",
+  "customDetectionQuerySha256": "c96c36e697dfa69b0730fc3aaf3d27bb28d2c47fafc10448625f6374b5e06e00",
+  "scenarioName": "reviewed-shared-ar-cd-payload",
+  "hypothesis": "A newly assigned Global Administrator subsequently removes two other Global Administrators within the one-hour removal window.",
+  "generationStatus": "generated-offline-only",
+  "queryAssessment": {
+    "status": "reviewed-complex",
+    "reasons": [
+      "Every decisive AR/CD predicate was modeled manually.",
+      "The shared payload was validated against checked-in table metadata."
+    ]
+  },
+  "sourceTable": "AuditLogs",
+  "sourceTables": [
+    "AuditLogs"
+  ],
+  "destinationTables": [
+    "AuditLogs"
+  ],
+  "ingestion": {
+    "mode": "offline-standard-table",
+    "dcr": null,
+    "stream": null,
+    "outputStream": "Microsoft-AuditLogs",
+    "directLogsIngestionSupported": false
+  },
+  "mapping": {
+    "decisivePredicates": [
+      "The assignment record is within seven days and precedes both removal records",
+      "The assignment is a successful Global Administrator assignment",
+      "The assigned target UPN equals the remover Initiator UPN",
+      "Both removal records are within one hour",
+      "Both removals resolve Role.DisplayName oldValue to Global Administrator",
+      "The remover is not MS-PIM or MS-PIM-Fairfax",
+      "The two removed target UPNs are distinct so array_length(TargetAdmins) > 1"
+    ],
+    "lockedPaths": [
+      "TimeGenerated",
+      "Category",
+      "AADOperationType",
+      "ActivityDisplayName",
+      "Result",
+      "InitiatedBy",
+      "TargetResources"
+    ]
+  },
+  "fixtures": {
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\SecurityThreatEssentialSolution\\199978c5-cd6d-4194-b505-8ef5800739df\\mock.json",
+    "mockRecords": 3,
+    "benignValidationRecords": 0
+  },
+  "validation": {
+    "json": "passed",
+    "schemaValidation": "passed",
+    "analyticAndCustomDetectionQueriesRead": true,
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "alertParity": "not-run"
+  },
+  "limitations": [
+    "Synthetic payload only; no Azure ingestion or detection execution was performed.",
+    "Timestamps must be refreshed consistently before any future time-windowed test."
+  ]
+}

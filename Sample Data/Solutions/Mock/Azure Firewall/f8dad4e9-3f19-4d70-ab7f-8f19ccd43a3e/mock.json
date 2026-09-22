@@ -1,0 +1,38 @@
+[
+  {
+    "Action": "Deny",
+    "ActionReason": "Synthetic reviewed Azure Firewall scenario",
+    "DestinationIp": "198.51.100.72",
+    "DestinationPort": 22,
+    "Policy": "synthetic-policy",
+    "Protocol": "TCP",
+    "Rule": "synthetic-rule",
+    "RuleCollection": "synthetic-rule-collection",
+    "RuleCollectionGroup": "synthetic-rule-collection-group",
+    "SourceIp": "192.0.2.72",
+    "SourcePort": 51000,
+    "SourceSystem": "Azure",
+    "TenantId": "39768270-33ce-4b90-a1a6-e0caeb3ba0ab",
+    "TimeGenerated": "2026-09-22T12:18:00Z",
+    "Type": "AZFWNetworkRule",
+    "_ResourceId": "/subscriptions/42382e39-f157-46d1-a931-b8cfd779ece5/resourceGroups/synthetic-mock-rg/providers/Microsoft.Network/azureFirewalls/synthetic-firewall"
+  },
+  {
+    "Action": "Deny",
+    "ActionReason": "Synthetic reviewed Azure Firewall scenario",
+    "DestinationIp": "198.51.100.72",
+    "DestinationPort": 3389,
+    "Policy": "synthetic-policy",
+    "Protocol": "TCP",
+    "Rule": "synthetic-rule",
+    "RuleCollection": "synthetic-rule-collection",
+    "RuleCollectionGroup": "synthetic-rule-collection-group",
+    "SourceIp": "192.0.2.72",
+    "SourcePort": 51000,
+    "SourceSystem": "Azure",
+    "TenantId": "39768270-33ce-4b90-a1a6-e0caeb3ba0ab",
+    "TimeGenerated": "2026-09-22T12:18:01Z",
+    "Type": "AZFWNetworkRule",
+    "_ResourceId": "/subscriptions/42382e39-f157-46d1-a931-b8cfd779ece5/resourceGroups/synthetic-mock-rg/providers/Microsoft.Network/azureFirewalls/synthetic-firewall"
+  }
+]

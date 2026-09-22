@@ -199,6 +199,20 @@ class AzureClient:
                     f"resource {resource_id!r} already exists but is not managed by "
                     f"this tool; choose a different resource name"
                 )
+            requested_contract = (body.get("tags", {}) or {}).get(
+                "ingestion-contract"
+            )
+            existing_contract = tags.get("ingestion-contract")
+            if (
+                requested_contract
+                and existing_contract
+                and requested_contract != existing_contract
+            ):
+                raise RuntimeError(
+                    f"resource {resource_id!r} belongs to ingestion contract "
+                    f"{existing_contract!r}, not {requested_contract!r}; choose a "
+                    "contract-specific resource name"
+                )
         return self._put_resource(resource_id, api_version, body)
 
     def _wait_for_operation(self, url: str, attempts: int = 60) -> None:
@@ -277,6 +291,25 @@ class AzureClient:
         )
 
     @staticmethod
+    def _assert_isolated_dcr(existing: dict[str, Any], input_stream: str) -> None:
+        properties = existing.get("properties", {}) or {}
+        declared_streams = set(
+            (properties.get("streamDeclarations", {}) or {}).keys()
+        )
+        flow_streams = {
+            stream
+            for flow in properties.get("dataFlows", []) or []
+            for stream in flow.get("streams", []) or []
+        }
+        if declared_streams != {input_stream} or flow_streams != {input_stream}:
+            raise RuntimeError(
+                "existing managed DCR is shared with another input stream. "
+                "Standard-table ingestion requires one contract-specific DCR; "
+                "choose a different resources.dcr name instead of adding a stream "
+                "to the existing immutable DCR."
+            )
+
+    @staticmethod
     def _merge_dcr_body(
         existing: dict[str, Any],
         body: dict[str, Any],
@@ -353,7 +386,10 @@ class AzureClient:
                 "properties": {
                     "networkAcls": {"publicNetworkAccess": "Enabled"}
                 },
-                "tags": {"managed-by": MANAGED_BY},
+                "tags": {
+                    "managed-by": MANAGED_BY,
+                    "ingestion-contract": contract.name,
+                },
             },
         )
         dcr_body = {
@@ -385,7 +421,10 @@ class AzureClient:
                     }
                 ],
             },
-            "tags": {"managed-by": MANAGED_BY},
+            "tags": {
+                "managed-by": MANAGED_BY,
+                "ingestion-contract": contract.name,
+            },
         }
         existing_dcr = self.request(
             "GET",
@@ -400,6 +439,10 @@ class AzureClient:
                     f"resource {dcr_id!r} already exists but is not managed by "
                     f"this tool; choose a different resource name"
                 )
+            self._assert_isolated_dcr(
+                existing_value,
+                contract.input_stream,
+            )
             dcr_body = self._merge_dcr_body(
                 existing_value,
                 dcr_body,

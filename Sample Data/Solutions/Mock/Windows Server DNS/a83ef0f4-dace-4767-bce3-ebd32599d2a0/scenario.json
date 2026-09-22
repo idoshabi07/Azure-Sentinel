@@ -1,61 +1,50 @@
 {
-  "version": 1,
-  "generatedAt": "2026-09-20T11:06:04.947953+00:00",
+  "version": 2,
+  "generatedAt": "2026-09-22T12:32:47Z",
   "solution": "Windows Server DNS",
   "ruleId": "a83ef0f4-dace-4767-bce3-ebd32599d2a0",
   "ruleName": "DNS events related to ToR proxies",
   "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Server DNS\\Analytic Rules\\DNS_TorProxies.yaml",
-  "customDetectionId": null,
-  "customDetectionName": null,
+  "customDetectionId": "xdr-dns-events-related-to-tor-proxies-a83ef0f4",
+  "customDetectionName": "DNS events related to ToR proxies",
   "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Server DNS\\XDR Detections\\DNS_TorProxies.yaml",
-  "scenarioName": "automatic-simple-predicate",
-  "hypothesis": "Synthetic records exercise the decisive predicates in DNS events related to ToR proxies.",
-  "generationStatus": "generated-offline-only",
+  "scenarioName": "reviewed-shared-ar-cd-payload",
+  "hypothesis": "A Windows DNS event contains a listed Tor proxy domain.",
+  "generationStatus": "reviewed-offline-only",
   "queryAssessment": {
-    "status": "simple",
-    "reasons": []
+    "status": "reviewed",
+    "analyticAndCustomDetectionQueriesEquivalent": true
   },
   "sourceTable": "DnsEvents",
   "destinationTables": [
     "DnsEvents"
   ],
-  "ingestion": {
-    "mode": "offline-standard-table",
-    "dcr": null,
-    "stream": null,
-    "outputStream": "Microsoft-DnsEvents",
-    "directLogsIngestionSupported": false
-  },
-  "mapping": {
-    "decisiveFields": [
-      {
-        "ruleColumn": "Name",
-        "operator": "has_any",
-        "rawPath": "Name",
-        "value": "tor2web.org"
-      }
-    ],
-    "lockedPaths": [
-      "Name"
-    ]
-  },
+  "parserMapping": null,
+  "decisivePredicates": [
+    "Name contains a dot",
+    "Name matches the Tor proxy list",
+    "Computer supports host and DNS-domain projection"
+  ],
   "fixtures": {
-    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Server DNS\\a83ef0f4-dace-4767-bce3-ebd32599d2a0\\malicious.json",
-    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Server DNS\\a83ef0f4-dace-4767-bce3-ebd32599d2a0\\benign.json",
-    "maliciousRecords": 1,
-    "benignRecords": 1
+    "shared": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Server DNS\\a83ef0f4-dace-4767-bce3-ebd32599d2a0\\mock.json",
+    "records": 1,
+    "usedBy": [
+      "analyticRule",
+      "customDetection"
+    ],
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Server DNS\\a83ef0f4-dace-4767-bce3-ebd32599d2a0\\mock.json",
+    "mockRecords": 1
   },
   "validation": {
-    "schemaValidation": "passed",
+    "json": "passed",
+    "tableSchemaFieldNamesAndTypes": "passed",
     "sentinelSeededQuery": "not-run",
     "advancedHuntingSeededQuery": "not-run",
     "liveIngestion": "not-run",
-    "liveSentinel": "not-run",
-    "liveAdvancedHunting": "not-run",
-    "alertParity": "not-run",
-    "cleanup": "not-run"
+    "alertParity": "not-run"
   },
   "limitations": [
-    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
+    "The payload was validated locally only and was not ingested.",
+    "The payload demonstrates query mechanics, not production threshold quality or SOC value."
   ]
 }

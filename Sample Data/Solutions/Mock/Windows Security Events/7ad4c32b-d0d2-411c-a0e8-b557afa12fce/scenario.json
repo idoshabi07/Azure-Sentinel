@@ -1,30 +1,32 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-20T11:05:44.002333+00:00",
+  "generatedAt": "2026-09-22T12:21:22.038394+00:00",
   "solution": "Windows Security Events",
   "ruleId": "7ad4c32b-d0d2-411c-a0e8-b557afa12fce",
   "ruleName": "NRT Process executed from binary hidden in Base64 encoded file",
   "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\Analytic Rules\\NRT_execute_base64_decodedpayload.yaml",
-  "customDetectionId": null,
-  "customDetectionName": null,
+  "customDetectionId": "xdr-nrt-process-executed-from-binary-hidden-in-base64-encoded-file-7ad4c32b",
+  "customDetectionName": "NRT Process executed from binary hidden in Base64 encoded file",
   "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\Windows Security Events\\XDR Detections\\NRT_execute_base64_decodedpayload.yaml",
-  "scenarioName": "automatic-simple-predicate",
-  "hypothesis": "Synthetic records exercise the decisive predicates in NRT Process executed from binary hidden in Base64 encoded file.",
-  "generationStatus": "generated-offline-only",
+  "scenarioName": "Base64 decode command line one-time reviewed scenario",
+  "hypothesis": "A 4688 process using a recognized Base64 decode signature should match; a normal Python command should not.",
+  "generationStatus": "qualification-ready",
   "queryAssessment": {
-    "status": "simple",
-    "reasons": []
+    "status": "manual-review-required",
+    "reasons": [
+      "The query uses a content predicate that automatic fixtures do not model."
+    ]
   },
   "sourceTable": "SecurityEvent",
   "destinationTables": [
     "SecurityEvent"
   ],
   "ingestion": {
-    "mode": "offline-standard-table",
-    "dcr": null,
-    "stream": null,
+    "mode": "custom-dcr-standard-table",
+    "dcr": "xdr-migration-standard-mock-dcr",
+    "stream": "Custom-XDRMigrationSecurityEventMock",
     "outputStream": "Microsoft-SecurityEvent",
-    "directLogsIngestionSupported": false
+    "directLogsIngestionSupported": true
   },
   "mapping": {
     "decisiveFields": [
@@ -43,26 +45,25 @@
     ],
     "lockedPaths": [
       "CommandLine",
+      "Computer",
+      "Correlation",
       "EventID"
     ]
   },
   "fixtures": {
-    "malicious": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\7ad4c32b-d0d2-411c-a0e8-b557afa12fce\\malicious.json",
-    "benign": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\7ad4c32b-d0d2-411c-a0e8-b557afa12fce\\benign.json",
-    "maliciousRecords": 1,
-    "benignRecords": 1
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\Windows Security Events\\7ad4c32b-d0d2-411c-a0e8-b557afa12fce\\mock.json",
+    "mockRecords": 1,
+    "benignValidationRecords": 1
   },
   "validation": {
     "schemaValidation": "passed",
-    "sentinelSeededQuery": "not-run",
-    "advancedHuntingSeededQuery": "not-run",
-    "liveIngestion": "not-run",
-    "liveSentinel": "not-run",
-    "liveAdvancedHunting": "not-run",
-    "alertParity": "not-run",
-    "cleanup": "not-run"
+    "sentinelSeededQuery": "passed",
+    "advancedHuntingSeededQuery": "passed",
+    "liveIngestion": "passed",
+    "liveSentinel": "passed",
+    "liveAdvancedHunting": "passed",
+    "alertParity": "query-parity-passed",
+    "cleanup": "not-required-one-time-data"
   },
-  "limitations": [
-    "The selected table does not expose a declared Custom-* input stream for direct Logs Ingestion API testing."
-  ]
+  "limitations": []
 }

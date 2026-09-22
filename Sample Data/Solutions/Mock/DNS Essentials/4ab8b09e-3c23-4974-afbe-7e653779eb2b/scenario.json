@@ -1,0 +1,51 @@
+{
+  "version": 2,
+  "generatedAt": "2026-09-22T12:32:47Z",
+  "solution": "DNS Essentials",
+  "ruleId": "4ab8b09e-3c23-4974-afbe-7e653779eb2b",
+  "ruleName": "Detect excessive NXDOMAIN DNS queries - Static threshold based (ASIM DNS Solution)",
+  "analyticRule": "C:\\tmp\\Azure-Sentinel\\Solutions\\DNS Essentials\\Analytic Rules\\ExcessiveNXDOMAINDNSQueriesStaticThresholdBased.yaml",
+  "customDetectionId": "xdr-detect-excessive-nxdomain-dns-queries-static-threshold-based-asim-dns-so-4ab8b09e",
+  "customDetectionName": "Detect excessive NXDOMAIN DNS queries - Static threshold based (ASIM DNS Solution)",
+  "customDetection": "C:\\tmp\\Azure-Sentinel\\Solutions\\DNS Essentials\\XDR Detections\\ExcessiveNXDOMAINDNSQueriesStaticThresholdBased.yaml",
+  "scenarioName": "reviewed-shared-ar-cd-payload",
+  "hypothesis": "Two hundred and one normalized NXDOMAIN queries from one client occur in one fifteen-minute bin.",
+  "generationStatus": "reviewed-offline-only",
+  "queryAssessment": {
+    "status": "reviewed",
+    "analyticAndCustomDetectionQueriesEquivalent": true
+  },
+  "sourceTable": "ASimDnsActivityLogs",
+  "destinationTables": [
+    "ASimDnsActivityLogs"
+  ],
+  "parserMapping": "vimDnsNative -> ASimDnsActivityLogs",
+  "decisivePredicates": [
+    "_Im_Dns native parser receives EventResultDetails NXDOMAIN",
+    "all records share SrcIpAddr",
+    "count in one fifteen-minute bin is greater than 200",
+    "the joined branch can collect the same DNS query set"
+  ],
+  "fixtures": {
+    "shared": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\DNS Essentials\\4ab8b09e-3c23-4974-afbe-7e653779eb2b\\mock.json",
+    "records": 201,
+    "usedBy": [
+      "analyticRule",
+      "customDetection"
+    ],
+    "mock": "C:\\tmp\\Azure-Sentinel\\Sample Data\\Solutions\\Mock\\DNS Essentials\\4ab8b09e-3c23-4974-afbe-7e653779eb2b\\mock.json",
+    "mockRecords": 201
+  },
+  "validation": {
+    "json": "passed",
+    "tableSchemaFieldNamesAndTypes": "passed",
+    "sentinelSeededQuery": "not-run",
+    "advancedHuntingSeededQuery": "not-run",
+    "liveIngestion": "not-run",
+    "alertParity": "not-run"
+  },
+  "limitations": [
+    "The payload was validated locally only and was not ingested.",
+    "The payload demonstrates query mechanics, not production threshold quality or SOC value."
+  ]
+}
