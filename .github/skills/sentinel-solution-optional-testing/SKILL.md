@@ -23,9 +23,21 @@ On first use or when authentication is incomplete, it must run
 Sentinel authentication, and Advanced Hunting authentication at the beginning
 of the migration without changing the original runtime-validation flow.
 
+After the Qualification target is locked and before Discovery, make one
+complete advance-consent request for the anticipated bounded qualification
+plan. If it has not happened yet, do so before fixture review or this skill's
+live preflight. Reuse persisted consent when target and plan identity remain
+unchanged; do not repeat the same broad question later.
+
 The target-specific DCR permission preflight in this skill runs at the
 beginning of the optional testing extension, before fixture generation or
-ingestion.
+ingestion. This preflight is required for the ingestion permission/resource
+checks, not as a separate gate to determine whether an AR or CD already
+exists. Its exact-ID Graph reads are currently bundled into the same CLI
+preflight and cannot be skipped independently; a denied/unknown result remains
+a backend limitation until that check is separated. Do not ignore a blocked
+preflight to proceed; making that bundled check optional requires a maintainer
+change to the backend.
 
 ## Workspace identity contract
 
@@ -55,6 +67,125 @@ present **Retry authentication**, **Select another workspace**, **Continue
 offline**, and **Cancel**; discover alternatives only after the user explicitly
 selects **Select another workspace**.
 
+## Advance scope planning and consent
+
+Use the single advance request made after target lock and before Discovery.
+Before fixture review or any environment-write step, expose and refresh the
+Qualification scope plan for the explicitly selected run; ask for renewed
+advance consent only if the target, plan identity, action/resource families,
+payload, caps, package flags, or cleanup ownership changed:
+
+```powershell
+sentinel-xdr-migration plan-deployment `
+  --solution "Solutions\<solution>" `
+  --run-id "<run-id>"
+```
+
+This deterministic local command does not authenticate or call Azure. Review
+the `deploymentPlanning` metadata from `preflight-deployment` or the persisted
+`deployment-scope-plan.json`: exact locked tenant/subscription/resource group/
+workspace/solution/version, recursive source inventory and eligible
+additional-CD upper bound, exclusions, package and content hashes, resource
+types, caps, ingestion details, and conditional component choices. The
+solution `.env` is only read through the target configuration resolver; it is
+not credentials or consent, cannot retarget a locked run, and is excluded
+from source/package fingerprints. Supply `--run-id` whenever multiple runs
+exist; never choose the latest run implicitly.
+
+When a component has sufficient exact evidence, persist explicit planning
+consent using `review-deployment-plan`, the current `--expected-plan-sha256`,
+an explicit `--actor`, and the complete selected component set. Planning
+consent is bound to the exact plan and target. It is not permission, technical
+readiness, deployment evidence, or write approval. Missing, declined,
+unknown, or stale consent remains unapproved; changed target/content/package
+hashes, payload, resource family, flags, or count caps require renewed consent.
+Do not hand-edit workflow state to simulate acceptance. Consent denial or
+absence does not block independent read-only checks or offline work.
+
+The early request must show all seven potential action groups, even when some
+are conditional or currently unsupported:
+
+1. disabled Sentinel AR and Graph CD creation/approved updates, with exact
+   source IDs, current drafts, pair counts, and caps;
+2. conditional fallback DCR/DCE creation, bound to the destination contract
+   and proven absence of a compatible solution DCR;
+3. conditional exact custom-log table creation only when its table is proven
+   absent;
+4. mock telemetry ingestion with payload, records/batches, stream, marker,
+   schema hashes, estimated bytes/cost, and retention impact;
+5. controlled parity with exact pairs, a bounded time window, enable/restore
+   counts, and completion/abort recovery;
+6. current full-package installation and selected XDR registration flags; and
+7. explicitly owned cleanup/deletion with exact ownership evidence, resource
+   list, cap, and exclusions.
+
+Present **Approve the broadest currently bounded and available scope** as the
+preselected suggested action, with **Select components**, **Revise the plan**,
+and **Decline advance consent** also available. The preselection is not
+approval. Before submission, show every selected component, cap, target,
+resource family, and package flag/value. Require affirmative submission or
+confirmation of that exact display; a preselected choice without submission,
+cancel/close, decline, or absent response must record no consent. Users may
+narrow, revise, or decline.
+
+Suggest only currently supported components whose complete scope is bound to
+the plan. If available, this may select the disabled Sentinel-AR/Graph-CD pair
+and the distinct later `fullPackageAcceptance` component. Show all package
+selection flags individually with their exact values; when a plan exposes five
+valid flags and the broad proposal sets them all true, display each named flag
+as `true`. Never infer or invent package flags. Unknown/provisional ingestion,
+DCR/DCE, table creation, parity, or cleanup remains excluded unless that
+component is itself fully bounded, supported, and explicitly displayed.
+Where the broadest set cannot be fully bound, suggest only the largest valid
+bounded subset and identify every unavailable/excluded action group and why.
+
+Only the exact affirmative submission may be persisted, after checking all
+components and flag values against the current plan. Prior DCR/DCE consent
+does not approve ingestion, parity enablement, package installation, or
+cleanup.
+
+Disabled Sentinel alert rules and Graph Custom Detections are an explicit
+pair-first component with an approved upper-bound cap. Full-package
+installation and any selected XDR installation/Content Hub registration are
+separate later component(s), requiring a current verified package and explicit
+values for all available package flags. Stored playbook, workbook, connector,
+API, or connection definitions do not approve their live instantiation or
+enablement.
+
+Mock-ingestion planning is a separate component. Do not approve it while the
+reviewed run-bound payload/route is incomplete or unknown. The complete scope
+identifies destination/table and stream, payload hash and record count,
+batching limits, cost and retention impact, contract/schema/transform hashes,
+marker and timestamp fields, and one shared payload ingested once per AR/CD
+pair; benign controls remain separate. DCR/DCE support ingestion of locally
+generated mock data, not mock generation. A DCR fallback is conditional on no
+compatible existing solution DCR being proven; the current resolver checks
+registered exact resource names only and does not discover arbitrary
+solution-owned DCRs. DCE consent is separate and requires explicit selection
+or evidence it is required by the route. Custom-table creation is conditional
+only when the exact contract proves a custom-log table absent and supplies its
+schema/path/column count. An incompatible existing table must not be altered.
+A compatible native destination such as `CommonSecurityLog` makes table
+creation not needed; never create a custom lookalike.
+
+The current planner can persist advance consent for disabled AR/CD pairs,
+package acceptance, mock-ingestion, fallback DCR/DCE, and custom-table
+creation only when exact evidence and conditions are satisfied.
+`controlledAlertParity` is provisional until a finite test window and complete
+batch fixture plan are bound; the current CLI cannot persist parity consent.
+`ownedResourceCleanup` is unsupported because there is no exact run-owned
+deletion inventory or deletion executor. Do not invent consent component
+names or claim those scopes are approved.
+
+Provisioning DCR/DCE resources, creating a table, ingesting data, deploying
+rules/packages, enablement, cleanup/deletion, retention changes, and role or
+identity changes remain distinct operation scopes. Obtain explicit final
+approval immediately before each bounded write operation or batch. Show all
+exact resources/actions and counts in that batch; one approval may cover its
+enumerated API requests and need not be repeated per HTTP call. Ask again if
+the batch expands. Unknown permission is not granted. Authentication, Entra
+admin consent, roles, and permissions are not resource-write approval.
+
 ## Safety contract
 
 - Never treat workspace discovery as write approval.
@@ -77,7 +208,7 @@ Run from the Azure-Sentinel repository root:
 
 ```powershell
 python Tools\SolutionMigration\ingest_to_dcr.py `
-  --target-context "Reports\<solution>\sentinel-xdr-migration\qualification-target.json" `
+  --target-context "Solutions\<solution>\Logs\sentinel-xdr-migration\<run-id>\qualification-target.json" `
   --stream "<Custom-StreamName_CL>" `
   --solution "<solution-name-or-folder>" `
   --discover-only `
@@ -135,7 +266,7 @@ package defines the exact table schema, add a fourth action:
 
    ```powershell
    python Tools\SolutionMigration\ingest_to_dcr.py `
-     --target-context "Reports\<solution>\sentinel-xdr-migration\qualification-target.json" `
+     --target-context "Solutions\<solution>\Logs\sentinel-xdr-migration\<run-id>\qualification-target.json" `
      --stream "<Custom-StreamName_CL>" `
      --solution "<solution-name-or-folder>" `
      --deploy-missing-table `
@@ -165,7 +296,7 @@ checks for a reviewed fixture, then invokes
 generation skill uses public neutral table structures under:
 
 ```text
-Tools\SolutionMigration\table_schemas\<TableName>\
+Sample Data\Tables\<TableName>\
     base-event.json
     metadata.json
 ```
@@ -244,6 +375,125 @@ extension. A user request such as “test this AR and CD” is sufficient. Do no
 ask the user to run commands or provide paths already present in the solution,
 scenario manifest, qualification target, or generated contract.
 
+Before fixture preparation, retain the complete recursive source-rule
+inventory for accounting and build a no-write plan for the current approved
+Qualification scope. For a partial package, the currently applied
+evidence-based package-selection plan is authoritative: plan fixtures and
+ingestion only for its selected, validated AR/CD pairs. Do not let excluded
+rule failures block selected-subset progress, but preserve their identities
+and reasons as excluded evidence and never claim full-inventory qualification.
+Use the exact plan hash reported by `workflow-status`:
+
+```powershell
+python Tools\SolutionMigration\resolve_ingestion_contracts.py `
+  --solution "Solutions\<solution>" `
+  --target-context "Solutions\<solution>\Logs\sentinel-xdr-migration\<run-id>\qualification-target.json" `
+  --selection-plan "Solutions\<solution>\Logs\sentinel-xdr-migration\<run-id>\package-selection-plan.json" `
+  --expected-selection-plan-sha256 "<current-applied-plan-sha256>" `
+  --output "Solutions\<solution>\Logs\sentinel-xdr-migration\<run-id>\<version>\ingestion-contract-plan.json"
+```
+
+The selected plan must be freshly applied, run-bound, and meet the canonical
+strictly-over-50% validated migrated-detection threshold. The planner still
+accounts for the full original inventory, marks unselected rules as
+not-selected, and records the exact selection-plan hash and scope. It groups
+only identical registered table schema/transform contracts and preserves each
+selected AR/CD source file and query hash. Unknown or multi-table lineage and
+complex scenarios remain blocked for review; the plan neither generates
+fixtures nor calls Azure. Before requesting any ingestion approval, rerun it
+with the reviewed inventory, target, and selection-plan hashes and a new
+`--output` filename so the reviewed plan is preserved. Stop if it returns
+`stale-plan`. Then use the
+no-write `azure-monitor-logs-ingestion resolve --check-existing` for each
+registered table group required by the selected fixtures in the same locked
+workspace, recording one report per table. Do not treat either plan as write
+approval. A complete package follows the existing full valid inventory path.
+
+### DCR preference and permission preflight
+
+The intended selection policy is solution-first: prefer a DCR explicitly
+listed or referenced by the solution only when its deployed identity in the
+locked workspace and its public input stream, fixture fields, transform,
+destination table/schema, endpoint, and permissions are proven compatible
+with the exact shared payload. A packaged ARM reference alone does not prove
+that the DCR is deployed. Do not confuse its internal identifier with the
+public `Custom-*` input stream or enumerate other workspaces.
+
+If no solution-listed DCR is suitable, a supported registered contract may
+produce a separate, isolated DCR configuration authored locally and
+provisioned only in the approved non-production target. For Logs Ingestion
+API fallback, structured input must use a customer-authored `Custom-*` stream
+and `transformKql` to map to a supported `Microsoft-*` output stream. Public
+table schema, including the anonymous
+[`/v1/metadata` endpoint](https://api.loganalytics.io/v1/metadata), does not
+reveal a connector's internal parser/enrichment or by itself prove ingestion
+capability; check the documented table feature/capability route and never
+assume reserved/service-managed columns are writable. A DCE is required for
+private-link ingestion or when the DCR has no ingestion endpoint. The current
+contract tool may use an isolated DCE/DCR pair by design, but that does not
+make DCE a universal API requirement. “Locally” means locally authored
+configuration, not a local ingestion service. Never modify an existing
+connector DCR or add a stream to force compatibility. A native table without
+a supported ingestion contract must use a documented native telemetry
+generator or remain blocked; never redirect its rule to a custom lookalike
+table.
+
+**Implementation status:** The current no-write resolver is contract-specific:
+it checks registered table contracts against resource candidates in the locked
+workspace, but does not discover or prefer DCRs referenced by the solution.
+Its `compatible-existing` result proves only the reported contract
+compatibility, not that a solution-listed DCR was selected. Treat the
+solution-first preference as planned until that integration is present, and
+report only resource identities and checks actually established.
+
+Before requesting fixture or ingestion approval, show separate results for
+telemetry-write, DCR creation, conditional DCE creation, and conditional
+destination-table creation permissions. Check DCE creation only when the
+selected route includes a DCE. This no-write diagnostic does not provision
+resources or authorize a write. An `unknown` or pending-review permission is
+not granted. A missing write permission blocks that write only; continue
+independent read-only workspace, DCR, schema, and query checks.
+
+The preflight requires no fixture. Pass `--run-id` when the solution has
+multiple runs; omit it only when the run is unique.
+
+```powershell
+sentinel-xdr-migration preflight-deployment `
+  --solution "Solutions\<solution>" `
+  --auth-method azure-cli `
+  --run-id "<run-id>"
+```
+
+It adds `dcrPermissionPreflight` to the top-level Graph report and writes
+`qualification-dcr-preflight.json` under the selected run's
+`Solutions\<solution>\Logs\sentinel-xdr-migration\<run-id>\` directory. The
+subreport includes `status`, `workspaceQueryPermission`, and per-contract
+`resourceReadAccess`, `tableSchemaCompatibility`, `ingestionAuthorization`,
+`resourceProvisioningAuthorization`, `tableCreationAuthorization`,
+`reportPath`, `targetFingerprint`, `schemaFingerprint`, and
+`transformFingerprint`, `contractFingerprint`, `resourceFingerprint`,
+`candidateProvenance`, and `candidateSelection`. `contractFingerprint` is the
+SHA-256 of the registered serialized contract. `resourceFingerprint` hashes
+the exact target workspace, candidate DCE/DCR/table IDs, returned resource
+configuration/schema, and current resource states. Provenance is
+`registered-contract-resolver`, and candidate selection is
+`exact-contract-resource-names-only`.
+`resourceProvisioningAuthorization` distinguishes
+`dcrWrite` and `dceWrite` at the exact resource-group scope; DCE write is
+checked only when the missing-pair plan includes DCE provisioning.
+
+Per-capability authorization statuses are `ready`, `denied`, `unknown`,
+`not-yet-verifiable`, or `not-needed`; table schema status is `compatible`,
+`blocked`, or `unknown`; workspace query permission is `ready`, `denied`,
+`unknown`, or `not-checked`; aggregate report status is `ready`,
+`action-required`, `blocked`, `unknown`, or `not-applicable`.
+`resourceReadAccess` is `ready`, `denied`, `unknown`, or `unavailable`
+(including HTTP 401); `targetVerification` is `blocked`, `unavailable`,
+`confirmed`, or `not-checked`. A `ready` permission only means the effective
+permission pattern was inspected, not upload acceptance, table visibility, or
+query matching. Keep each status distinct and do not convert unknown or
+pending review into permission.
+
 For each selected pair:
 
 1. Resolve the exact source AR and converted CD.
@@ -251,8 +501,13 @@ For each selected pair:
 3. Read `scenario.ingestion.contract` when present.
 4. Apply the locked workspace ARM ID with the ingestion tool's `--workspace`
    override. Never write the workspace into the checked-in contract.
-5. Provision or reuse the isolated contract-specific DCE/DCR, ingest once, and
-   verify visibility.
+5. Resolve the registered table using the no-write command above. Verify
+   whether the compatible resource is the solution-listed DCR; do not infer
+   that association from the contract resolver alone. If provisioning is
+   needed, after separate exact-scope approval provision or reuse the isolated
+   contract-specific DCE/DCR used by the current tool route, ingest once, and
+   verify visibility. Do not interpret this implementation choice as a
+   universal DCE requirement.
 6. Execute both exact queries and require non-zero semantic row parity scoped
    to the current fixture timestamps and unique values.
 7. Start alert parity only after row parity passes.
@@ -260,9 +515,32 @@ For each selected pair:
    intermediate files.
 
 Reviewed Standard-table contracts currently registered under
-`Tools\AzureMonitorLogsIngestion\contracts` are eligible for this automatic
-path. Tables without a registered contract remain offline or native-telemetry
-blocked.
+`Tools\AzureMonitorLogsIngestion\registry.yaml` are eligible for a
+no-write resolution plan. Tables without a registered contract remain offline
+or native-telemetry blocked. The registry requires a reviewed transform and
+documented Logs Ingestion API route; table presence in the public metadata
+catalog alone does not prove writable support.
+
+Before any standard-table provisioning or ingestion, resolve the exact
+registered table against the locked workspace and inspect only its
+contract-specific resource candidates:
+
+```powershell
+azure-monitor-logs-ingestion resolve `
+  --table "<scenario.sourceTable>" `
+  --workspace "<locked-workspace-arm-id>" `
+  --check-existing `
+  --report "Solutions\<solution>\Logs\sentinel-xdr-migration\<run-id>\<version>\ingestion-resolution.json"
+```
+
+This command is read-only. Continue only when its output is either
+`compatible-existing` or `provisioning-plan`, and review its schema and
+transform fingerprints, target workspace, and references alongside
+`scenario.ingestion.contractResolution`. Keep the report with the run
+artifacts. A mismatch, partial DCE/DCR pair, or missing/incompatible
+destination table blocks the live stage pending review. A provisioning plan is
+not write approval. Obtain the existing exact-scope approval before invoking
+`run`; the resolver never creates resources.
 
 Before requesting approval:
 
@@ -298,7 +576,7 @@ Only after approval, run:
 
 ```powershell
 python Tools\SolutionMigration\ingest_to_dcr.py `
-  --target-context "Reports\<solution>\sentinel-xdr-migration\qualification-target.json" `
+  --target-context "Solutions\<solution>\Logs\sentinel-xdr-migration\<run-id>\qualification-target.json" `
   --stream "<Custom-StreamName_CL>" `
   --solution "<solution-folder>" `
   --rule-id "<rule-id>" `
@@ -318,12 +596,15 @@ azure-monitor-logs-ingestion run `
 The `--workspace` value must come from `qualification-target.json`.
 
 Do not pass `--approve-write` before the user approves.
+Do not infer or request hidden service-side KQL transformations from the Log
+Analytics query SDK: it executes queries, while the DCR's customer-visible
+`transformKql` is validated as exact ARM resource configuration.
 
 When the default fixture is not present, use the folder supplied by the user:
 
 ```powershell
 python Tools\SolutionMigration\ingest_to_dcr.py `
-  --target-context "Reports\<solution>\sentinel-xdr-migration\qualification-target.json" `
+  --target-context "Solutions\<solution>\Logs\sentinel-xdr-migration\<run-id>\qualification-target.json" `
   --stream "<Custom-StreamName_CL>" `
   --solution "<solution-folder>" `
   --rule-id "<rule-id>" `
@@ -344,7 +625,7 @@ After Azure accepts the payload:
 5. If alert validation was approved, verify alert creation separately.
 6. Perform and verify the stated cleanup.
 
-Store evidence under the migration run's versioned `Reports` directory. Mark
+Store evidence under the solution's ignored migration `Logs` directory. Mark
 results as `accepted`, `visible`, `query-matched`, and `alert-created`
 independently; never collapse them into a single success status.
 
@@ -354,5 +635,5 @@ receipts, query results, parity captures, cleanup evidence, JSON, and HTML
 artifacts under:
 
 ```text
-Reports\<solution>\<version>\<run-id>\
+Solutions\<solution>\Logs\sentinel-xdr-migration\<run-id>\<version>\
 ```

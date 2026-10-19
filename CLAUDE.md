@@ -9,6 +9,6 @@ entry points directly. Do not replace deterministic conversion, validation,
 packaging, deployment, or parity logic with model-generated approximations.
 
 Default to `authoring`. Ask before optional lab `qualification`; it is not
-required for ISV publishing. Use V4 when packaging XDR Detections and V3 only
-for legacy Sentinel-only packages. Resume from `workflow-state.json`, preserve
-disabled detections, and request explicit approval before writes.
+required for ISV publishing. Use V3.1 through `package-v3-1` for Sentinel and
+XDR solution packages. Resume from `workflow-state.json`, preserve disabled
+detections, and request explicit approval before writes.

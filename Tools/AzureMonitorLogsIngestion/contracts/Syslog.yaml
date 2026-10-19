@@ -35,6 +35,20 @@ destination:
   kind: standard
   table: Syslog
   outputStream: Microsoft-Syslog
+  columns:
+    - { name: CollectorHostName, type: string }
+    - { name: Computer, type: string }
+    - { name: EventTime, type: datetime }
+    - { name: Facility, type: string }
+    - { name: HostIP, type: string }
+    - { name: HostName, type: string }
+    - { name: ProcessID, type: int }
+    - { name: ProcessName, type: string }
+    - { name: SeverityLevel, type: string }
+    - { name: SourceSystem, type: string }
+    - { name: SyslogMessage, type: string }
+    - { name: TimeGenerated, type: datetime }
+    - { name: Type, type: string }
 resources:
   dce: xdr-migration-syslog-mock-dce
   dcr: xdr-migration-syslog-mock-dcr

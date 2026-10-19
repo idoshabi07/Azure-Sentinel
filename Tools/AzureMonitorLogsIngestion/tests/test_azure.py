@@ -196,73 +196,95 @@ def test_provision_builds_custom_input_to_standard_output(tmp_path):
     assert properties["dataFlows"][0]["outputStream"] == "Microsoft-CommonSecurityLog"
 
 
-def test_merge_dcr_body_preserves_existing_streams():
-    existing = {
-        "id": "/dcr",
-        "name": "shared",
-        "type": "Microsoft.Insights/dataCollectionRules",
-        "etag": "etag",
-        "location": "eastus",
-        "kind": "Direct",
-        "tags": {"managed-by": "azure-monitor-logs-ingestion"},
+@pytest.mark.parametrize("compatible", [True, False])
+def test_provision_reuses_exact_existing_pair_without_updates(tmp_path, compatible):
+    contract_value = contract(tmp_path)
+    dce_id = (
+        "/subscriptions/sub/resourceGroups/rg/providers/Microsoft.Insights/"
+        "dataCollectionEndpoints/sample-dce"
+    )
+    dcr_id = (
+        "/subscriptions/sub/resourceGroups/rg/providers/Microsoft.Insights/"
+        "dataCollectionRules/sample-dcr"
+    )
+    dce = {
+        "id": dce_id,
+        "tags": {
+            "managed-by": "azure-monitor-logs-ingestion",
+            "ingestion-contract": contract_value.name,
+        },
         "properties": {
-            "dataCollectionEndpointId": "/dce",
+            "logsIngestion": {"endpoint": "https://example.ingest.monitor.azure.com"}
+        },
+    }
+    dcr = {
+        "id": dcr_id,
+        "kind": "Direct",
+        "tags": {
+            "managed-by": "azure-monitor-logs-ingestion",
+            "ingestion-contract": contract_value.name,
+        },
+        "properties": {
+            "immutableId": "immutable",
+            "dataCollectionEndpointId": dce_id,
             "streamDeclarations": {
-                "Custom-Existing": {
-                    "columns": [{"name": "Existing", "type": "string"}]
+                contract_value.input_stream: {
+                    "columns": [
+                        column.as_dict() for column in contract_value.input_columns
+                    ]
                 }
             },
             "destinations": {
                 "logAnalytics": [
-                    {"name": "shared", "workspaceResourceId": "/workspace"}
+                    {"name": "destination", "workspaceResourceId": workspace().id}
                 ]
             },
             "dataFlows": [
                 {
-                    "streams": ["Custom-Existing"],
-                    "destinations": ["shared"],
-                    "transformKql": "source",
-                    "outputStream": "Custom-Existing_CL",
-                }
-            ],
-        },
-    }
-    requested = {
-        "location": "eastus",
-        "kind": "Direct",
-        "tags": {"managed-by": "azure-monitor-logs-ingestion"},
-        "properties": {
-            "dataCollectionEndpointId": "/dce",
-            "streamDeclarations": {
-                "Custom-New": {
-                    "columns": [{"name": "New", "type": "string"}]
-                }
-            },
-            "dataFlows": [
-                {
-                    "streams": ["Custom-New"],
+                    "streams": [contract_value.input_stream],
                     "destinations": ["destination"],
-                    "transformKql": "source",
-                    "outputStream": "Custom-New_CL",
+                    "transformKql": (
+                        contract_value.transform_kql
+                        if compatible
+                        else "source"
+                    ),
+                    "outputStream": contract_value.destination.output_stream,
                 }
             ],
         },
     }
 
-    merged = AzureClient._merge_dcr_body(
-        existing, requested, "Custom-New", "/workspace"
-    )
+    class ExistingClient(AzureClient):
+        def __init__(self):
+            super().__init__(credential=Credential())
+            self.put_calls = []
 
-    assert set(merged["properties"]["streamDeclarations"]) == {
-        "Custom-Existing",
-        "Custom-New",
-    }
-    assert [flow["streams"][0] for flow in merged["properties"]["dataFlows"]] == [
-        "Custom-Existing",
-        "Custom-New",
-    ]
-    assert merged["properties"]["dataFlows"][1]["destinations"] == ["shared"]
-    assert "id" not in merged
+        def resolve_workspace(self, identifier):
+            return workspace()
+
+        def ensure_destination_table(self, workspace_value, contract_value):
+            return {}
+
+        def _resource_ids(self, workspace_value, contract_arg):
+            return dce_id, dcr_id
+
+        def request(self, method, url, **kwargs):
+            assert method == "GET"
+            return Response(200, dce if "dataCollectionEndpoints" in url else dcr)
+
+        def _put_resource(self, resource_id, api_version, body):
+            self.put_calls.append((resource_id, body))
+            return {}
+
+    client = ExistingClient()
+
+    if compatible:
+        result = client.provision(contract_value)
+        assert result.dcr_immutable_id == "immutable"
+    else:
+        with pytest.raises(RuntimeError, match="refusing to mutate"):
+            client.provision(contract_value)
+    assert client.put_calls == []
 
 
 def test_isolated_dcr_rejects_another_declared_stream():

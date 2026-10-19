@@ -1,3 +1,29 @@
-"""Microsoft Sentinel analytic rule to Defender XDR Custom Detection conversion."""
+"""Backwards-compatibility shim for `solution_manager`.
 
-__version__ = "0.1.0"
+All implementation modules live under `Tools/SentinelToXDRMigration/solution_manager/`
+organized by Solution Manager capability (`core/`, `authoring/`, `migration/`,
+`qualification/`, `packaging/`, `reporting/`, `research/`).
+"""
+from __future__ import annotations
+
+from types import ModuleType
+
+import solution_manager
+from solution_manager import (
+    MODULE_TO_SUBPACKAGE,
+    SUBPACKAGE_MODULES,
+    __version__,
+    resolve_module_attribute,
+)
+
+__all__ = [
+    "__version__",
+    "SUBPACKAGE_MODULES",
+    "MODULE_TO_SUBPACKAGE",
+    "resolve_module_attribute",
+]
+
+
+def __getattr__(name: str) -> ModuleType:
+    return resolve_module_attribute(name)
+

@@ -105,7 +105,7 @@ class ScenarioHandoffTests(unittest.TestCase):
         self,
         resource_graph_query: mock.Mock,
     ):
-        customer_id = "756386d8-e2d4-4f09-905a-74b24313721f"
+        customer_id = "33333333-4444-4555-8666-777777777777"
         workspace = {
             "id": "/subscriptions/s/resourceGroups/r/providers/"
             "Microsoft.OperationalInsights/workspaces/w",
@@ -681,7 +681,7 @@ class ScenarioHandoffTests(unittest.TestCase):
                 folder,
             )
 
-        self.assertEqual(mock_path, result)
+        self.assertEqual(mock_path.resolve(), result.resolve())
 
     def test_rejects_offline_only_scenario(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -2,13 +2,14 @@
 
 Only YAML files with a supported deployable detection shape remain. Reports,
 manifests, workflow state, deployment captures, validation evidence, and
-migration configuration are moved to the repository-root Reports directory.
+migration configuration are moved to the solution's ignored Logs directory.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import shutil
+import sys
 from pathlib import Path
 from typing import Iterable, List
 
@@ -16,7 +17,10 @@ import yaml
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_REPORTS_ROOT = REPOSITORY_ROOT / "Reports"
+sys.path.insert(0, str(REPOSITORY_ROOT / "Tools" / "SentinelToXDRMigration"))
+from sentinel_xdr_migration.artifacts import (
+    create_run, new_run_id, report_directory, reports_base, using_run,
+)
 DETECTION_DIRECTORY = "XDR Detections"
 REPORT_DIRECTORY = "sentinel-xdr-migration"
 
@@ -79,17 +83,27 @@ def plan_cleanup(repository_root: Path) -> List[dict]:
 
 def apply_cleanup(
     plan: List[dict],
-    reports_root: Path,
+    run_id: str | None = None,
 ) -> dict:
     moved: List[dict] = []
+    destinations: dict[Path, Path] = {}
+    for item in plan:
+        solution = Path(item["xdrDirectory"]).parent
+        if solution not in destinations:
+            with using_run(solution, run_id):
+                directory = report_directory(solution)
+            destinations[solution] = (
+                directory / new_run_id() if directory == reports_base(solution) else directory
+            )
+        destination = destinations[solution] / item["relativePath"]
+        if destination.exists():
+            raise CleanupError(f"Cleanup destination already exists: {destination}")
+    for solution, directory in destinations.items():
+        if not directory.exists():
+            create_run(solution, run_id=directory.name, migrating=True)
     for item in plan:
         source = item["source"]
-        destination = (
-            reports_root
-            / item["solution"]
-            / REPORT_DIRECTORY
-            / item["relativePath"]
-        )
+        destination = destinations[Path(item["xdrDirectory"]).parent] / item["relativePath"]
         if destination.exists():
             raise CleanupError(f"Cleanup destination already exists: {destination}")
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -116,7 +130,7 @@ def apply_cleanup(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repository-root", type=Path, default=REPOSITORY_ROOT)
-    parser.add_argument("--reports-root", type=Path, default=DEFAULT_REPORTS_ROOT)
+    parser.add_argument("--run-id", help="Select the existing run; required when a solution has multiple runs.")
     parser.add_argument(
         "--apply",
         action="store_true",
@@ -127,7 +141,7 @@ def main() -> int:
     try:
         plan = plan_cleanup(args.repository_root)
         if args.apply:
-            result = apply_cleanup(plan, args.reports_root)
+            result = apply_cleanup(plan, args.run_id)
         else:
             result = {
                 "mode": "dry-run",
@@ -141,7 +155,7 @@ def main() -> int:
                     for item in plan
                 ],
             }
-    except CleanupError as exc:
+    except (CleanupError, ValueError) as exc:
         raise SystemExit(str(exc))
 
     print(json.dumps(result, indent=2))

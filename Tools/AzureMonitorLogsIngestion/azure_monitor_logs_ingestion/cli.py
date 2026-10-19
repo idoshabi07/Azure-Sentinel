@@ -13,6 +13,12 @@ from azure.identity import DefaultAzureCredential
 
 from .azure import ARM_SCOPE, AzureClient, AzureRequestError
 from .contract import load_contract, load_records, validate_records
+from .registry import (
+    DEFAULT_REGISTRY,
+    destination_schema_blockers,
+    inspect_managed_resources,
+    resolve_contract,
+)
 
 
 def _write_report(path: str | None, report: dict[str, Any]) -> None:
@@ -41,6 +47,31 @@ def _parser() -> argparse.ArgumentParser:
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
     subparsers.add_parser("doctor", help="Check local authentication readiness.")
+    resolve = subparsers.add_parser(
+        "resolve",
+        help="Resolve a registered table capability and print a no-write plan.",
+    )
+    resolve.add_argument("--table", required=True)
+    resolve.add_argument(
+        "--required-field",
+        action="append",
+        default=[],
+        metavar="NAME[:TYPE]",
+        help="Required source field and optional expected type; repeat as needed.",
+    )
+    resolve.add_argument(
+        "--workspace",
+        help="Optional exact workspace ARM ID. Resource checks never discover alternatives.",
+    )
+    resolve.add_argument(
+        "--check-existing",
+        action="store_true",
+        help="Read only the exact table, DCE, and DCR candidates in --workspace.",
+    )
+    resolve.add_argument(
+        "--report",
+        help="Optional local JSON path to persist this dry-run resolution artifact.",
+    )
 
     for name in ("inspect", "provision", "ingest", "verify", "run"):
         command = subparsers.add_parser(name)
@@ -97,12 +128,124 @@ def doctor() -> dict[str, Any]:
     return result
 
 
+def _parse_required_fields(values: list[str]) -> dict[str, str | None]:
+    required: dict[str, str | None] = {}
+    for value in values:
+        name, separator, column_type = value.partition(":")
+        name = name.strip()
+        if not name:
+            raise ValueError("--required-field must include a field name")
+        normalized_type = column_type.strip().lower() if separator else None
+        previous = required.get(name)
+        if name in required and previous and normalized_type and previous != normalized_type:
+            raise ValueError(f"required field {name!r} has conflicting declared types")
+        required[name] = normalized_type
+    return required
+
+
+def _resolve(args: argparse.Namespace) -> dict[str, Any]:
+    required = _parse_required_fields(args.required_field)
+    resolution = resolve_contract(args.table, required)
+    if resolution["status"] == "blocked":
+        return resolution
+    contract = load_contract(
+        DEFAULT_REGISTRY.parent / resolution["contractPath"]
+    )
+    if args.workspace:
+        contract = replace(contract, workspace=args.workspace)
+        resolution["contract"] = contract.as_dict()
+
+    resolution["targetWorkspace"] = args.workspace
+    resolution["writesPerformed"] = False
+    if not args.check_existing:
+        if args.workspace and not args.workspace.lower().startswith("/subscriptions/"):
+            raise ValueError(
+                "--workspace for resolve must be an exact workspace ARM resource ID"
+            )
+        return resolution
+    if not args.workspace or not args.workspace.lower().startswith("/subscriptions/"):
+        raise ValueError("--check-existing requires an exact --workspace ARM resource ID")
+
+    client = AzureClient()
+    workspace = client.resolve_workspace(args.workspace)
+    if workspace.id.casefold() != args.workspace.casefold():
+        raise RuntimeError("resolved workspace ARM ID does not match the requested target")
+    table_id = f"{workspace.id}/tables/{contract.destination.table}"
+    table_response = client.request(
+        "GET",
+        client._resource_url(table_id, "2022-10-01"),
+        expected=(200, 404),
+    )
+    if table_response.status_code == 404:
+        resolution["status"] = "blocked"
+        resolution["blockers"].append(
+            f"Standard table {contract.destination.table!r} is not registered "
+            "in the locked workspace."
+        )
+        resolution["plan"] = None
+        resolution["candidateResources"] = {"tableExists": False}
+        return resolution
+    table_blockers = destination_schema_blockers(contract, table_response.json())
+    if table_blockers:
+        resolution["status"] = "blocked"
+        resolution["blockers"].extend(table_blockers)
+        resolution["plan"] = None
+        resolution["candidateResources"] = {"tableExists": True}
+        return resolution
+
+    dce_id, dcr_id = client._resource_ids(workspace, contract)
+    dce_response = client.request(
+        "GET", client._resource_url(dce_id, "2023-03-11"), expected=(200, 404)
+    )
+    dcr_response = client.request(
+        "GET", client._resource_url(dcr_id, "2023-03-11"), expected=(200, 404)
+    )
+    dce = dce_response.json() if dce_response.status_code == 200 else None
+    dcr = dcr_response.json() if dcr_response.status_code == 200 else None
+    candidate = inspect_managed_resources(
+        contract,
+        workspace.id,
+        dce,
+        dcr,
+        dce_resource_id=dce_id,
+        dcr_resource_id=dcr_id,
+    )
+    resolution["candidateResources"] = {
+        "tableExists": True,
+        "dceId": dce_id,
+        "dcrId": dcr_id,
+        "dceExists": dce is not None,
+        "dcrExists": dcr is not None,
+    }
+    resolution["resourceResolution"] = candidate
+    resolution["status"] = candidate["status"]
+    if candidate["status"] == "blocked":
+        resolution["blockers"].extend(candidate["blockers"])
+        resolution["plan"] = None
+    return resolution
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     if args.command == "doctor":
         result = doctor()
         print(json.dumps(result, indent=2))
         return 0 if result["ready"] else 1
+    if args.command == "resolve":
+        try:
+            result = _resolve(args)
+            if args.report:
+                if Path(args.report).exists():
+                    raise ValueError(
+                        f"resolution report already exists; choose a new path: {args.report}"
+                    )
+                result["reportPath"] = args.report
+                _write_report(args.report, result)
+            print(json.dumps(result, indent=2, default=str))
+            return 1 if result["status"] == "blocked" else 0
+        except (AzureRequestError, OSError, RuntimeError, ValueError) as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
 
     try:
         contract = load_contract(args.contract)

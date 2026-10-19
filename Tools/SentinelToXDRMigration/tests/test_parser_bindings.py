@@ -119,21 +119,53 @@ class ParserBindingTests(unittest.TestCase):
         output.mkdir()
         paths = []
         expected = []
+        template = {
+            "parameters": {},
+            "variables": {"solutionId": "testpublisher.test-sentinel", "_solutionVersion": "3.1.0"},
+            "resources": [{
+                "type": "Microsoft.OperationalInsights/workspaces/providers/contentPackages",
+                "properties": {
+                    "dependencies": {
+                        "operator": "AND",
+                        "criteria": [{"kind": "AnalyticsRule", "contentId": "existing"}],
+                    },
+                },
+            }],
+        }
         for index, fixture in enumerate(FIXTURES):
             self.parser(fixture["parser"])
             self.source.write_text(yaml.safe_dump(rule(fixture["query"])), encoding="utf-8")
             document = build_xdr_document(self.source, self.solution, {})
-            document["properties"]["id"] = f"parser-test-{index}"
+            source_id = f"{index + 1:08d}-2222-3333-4444-555555555555"
+            document["properties"]["id"] = source_id
+            document["contentProvenance"]["source"]["id"] = source_id
+            template["variables"][f"source{index}"] = {f"_analyticRulecontentId{index}": source_id}
+            template["resources"].append({
+                "name": f"[variables('source{index}')]",
+                "properties": {"contentKind": "AnalyticsRule"},
+            })
             document["properties"]["queryCondition"]["queryText"] = fixture["query"]
             # Isolate the packaging regression from unrelated conversion review reasons.
             document["contentProvenance"]["conversion"].update(
                 status="converted", reviewRequired=False, errors=[], reviewReasons=[]
             )
+            document["contentProvenance"]["requiredWorkloads"] = [
+                {"workload": "sentinel", "dataTypes": ["CommonSecurityLog"]},
+            ]
+            document["contentProvenance"]["requiredDataConnectors"] = [
+                {"connectorId": "CEF", "dataTypes": ["CommonSecurityLog"]},
+            ]
+            document["contentProvenance"]["dependencyReviewRequired"] = False
             path = output / f"Detection{index}.yaml"
             path.write_text(yaml.safe_dump(document), encoding="utf-8")
             paths.append(path)
             properties = copy.deepcopy(document["properties"])
-            properties["id"] = f"[if(true(), 'parser-test-{index}', 'parser-test-{index}')]"
+            packaged_id = f"xdr-{source_id}"
+            properties["id"] = f"[if(true(), '{packaged_id}', '{packaged_id}')]"
+            properties["contentProvenance"] = {
+                "packageId": "testpublisher.test-sentinel", "packageVersion": "3.1.0",
+                "contentId": packaged_id, "contentVersion": document["version"],
+            }
             for mappings in properties["detectionAction"]["alertTemplate"]["entityMappings"].values():
                 for mapping in mappings:
                     if mapping.get("id"):
@@ -148,22 +180,14 @@ class ParserBindingTests(unittest.TestCase):
             "Version": "1.0.0",
             "Include XDR Content Registration": True,
             "XDR Detections": [str(path.relative_to(self.solution)) for path in paths],
+            "TestTemplate": template,
         }
         script = f"""
 $ErrorActionPreference = 'Stop'
 $WarningPreference = 'SilentlyContinue'
 . '{str(HELPERS).replace("'", "''")}'
 $content = [Console]::In.ReadToEnd() | ConvertFrom-Json
-$template = [pscustomobject]@{{
-    parameters = [pscustomobject]@{{}}
-    variables = [pscustomobject]@{{ source = [pscustomobject]@{{
-        _analyticRulecontentId1 = '11111111-2222-3333-4444-555555555555'
-    }} }}
-    resources = @([pscustomobject]@{{
-        name = "[variables('source')]"
-        properties = [pscustomobject]@{{ contentKind = 'AnalyticsRule' }}
-    }})
-}}
+$template = $content.TestTemplate
 Add-XdrCustomDetectionsToSolution -SolutionName 'Sample' -ContentToImport $content -Template $template 6>$null | Out-Null
 $install = @($template.resources | Where-Object type -eq 'Microsoft.Resources/deployments' |
     ForEach-Object {{ $_.properties.template.resources.detectionRule.properties }})

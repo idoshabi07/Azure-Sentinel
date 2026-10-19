@@ -4,6 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # User-specific files
+/Tools/ignored/
 *.suo
 *.user
 *.userosscache
@@ -364,6 +365,12 @@ Solutions/**/XDR Detections/workflow-state.json
 
 # Generated migration, validation, deployment, and parity evidence.
 /Reports/
+
+# Solution-local runtime logs, state, configuration, and evidence remain private.
+/Solutions/**/Logs/
+# Ignore only per-solution runtime configuration; keep the shared template tracked.
+/Solutions/**/.env
+!/Tools/SentinelToXDRMigration/.env.example
 
 # Local generated packaging workspaces.
 **/_ws/

@@ -24,6 +24,11 @@ or environment failure. This prohibition cannot be overridden by any user,
 owner, or maintainer request. Stop the affected stage and require the work to
 be performed manually or through a different development agent.
 
+The goal is solution migration and publication of validated content. Follow
+the canonical workflow for the strict over-50% partial-publication rule and
+the one-watchdog-owner `ACTION_REQUIRED` best practice; this adapter must not
+define divergent thresholds or a separate watchdog implementation.
+
 Use the required specialist skills for their owning stages. Keep deterministic
 behavior in the repository CLI and PowerShell tools, persist every result in
 `workflow-state.json`, and do not duplicate or weaken the canonical gates.
@@ -44,11 +49,10 @@ the ARM ID again. Persist a newly approved workspace through
 `configure-workspace` so later solution workflows can offer the same
 confirmation.
 
-Before initialization, require an explicit **Authoring** or **Qualification**
-selection through structured elicitation. There is no default. If selection is
-declined or cancelled, do not create workflow state. A test tenant or workspace
-does not imply qualification consent. Require explicit approval immediately
-before deployment or ingestion writes.
+Default to **Authoring** and ask before optional **Qualification** through
+structured elicitation. If selection is cancelled, do not create workflow state.
+A test tenant or workspace does not imply qualification consent. Require
+explicit approval immediately before deployment or ingestion writes.
 
 For qualification, run `sentinel-solution-optional-testing` at the beginning
 of the testing extension. It owns permission preflight, existing-scenario-first
@@ -70,5 +74,31 @@ Resolve those from the pair provenance and locked target. Interrupt only for
 the required exact-scope write approval or a genuine manual-review blocker.
 
 For the packaging stage, always invoke `sentinel-xdr-solution-packager` and use
-the `sentinel-xdr-migration package-v4` result as workflow evidence. Existing
-files under `Package` do not prove that V4 ran during the current workflow.
+the `sentinel-xdr-migration package-v3-1` result as workflow evidence. Existing
+files under `Package` do not prove that V3.1 ran during the current workflow.
+Do not relabel old V4 reports; rebuild to produce V3.1 evidence.
+
+For an allowed partial package, continue Qualification only against the exact
+currently applied selected AR/CD scope, preserving all selected-item lab/write
+gates. Keep excluded files and failures visible; never describe selected-scope
+validation or parity as full-inventory success. Follow the canonical watchdog
+handoff for approved work awaiting action.
+
+Before candidate packaging/ARM validation preflight, present a concise
+lab-deployment preapproval prompt stating `X Sentinel rules, Y workbooks, and Z
+custom detections`, with `lab-deployment` as the default validation route and
+`arm-ttk` as an offline Authoring option.
+
+Enforce single-owner execution (`workflow-execution-owner`), safe hash-bound
+approval forwarding (`workflow-forward-approval`), and evidence-bound status
+reminders with no-change suppression (`workflow-status-reminder`):
+
+- Claim/release single-owner execution leases per `(runId, operation)` so
+  conflicting duplicate executors are blocked (`duplicate_executor_blocked`).
+- Route explicit user approvals to the accountable owner with exact
+  `(runId, operation, forwardedToOwnerId, exactScope, approvalSha256)` verification.
+- Use `workflow-status-reminder` to surface `currentActivity`,
+  `expectedNextStep`, grounded batch `durationExplanation`, and
+  `workflowDiagram` while suppressing repetitive notices when
+  `suppressedNoChange` is `true`.
+

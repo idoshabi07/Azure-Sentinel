@@ -11,6 +11,11 @@ Read and follow:
 
 Use `sentinel-xdr-migration` and the repository PowerShell packaging entry
 points for all deterministic actions. Default to `authoring`; ask before
-optional `qualification`. Use V4 for XDR Detection packaging, resume
-`workflow-state.json`, preserve disabled rules, and obtain explicit approval
-before environment writes.
+optional `qualification`. Use V3.1 through `package-v3-1` for Sentinel and XDR
+solution packaging, resume `workflow-state.json`, preserve disabled rules, and
+obtain explicit approval before environment writes.
+
+The goal is solution migration and validated publication. Follow the
+canonical workflow for the strict over-50% partial-publication policy,
+selected-scope Qualification, and the single-owner `ACTION_REQUIRED` watchdog
+best practice; do not create competing policy text or watchdog tooling here.

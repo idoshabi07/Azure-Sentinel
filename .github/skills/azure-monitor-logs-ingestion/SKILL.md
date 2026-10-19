@@ -16,8 +16,12 @@ mock JSON records into a Log Analytics table.
 - Require a declared `Custom-*` input stream for both custom and standard
   destinations.
 - Never POST directly to a reserved `Microsoft-*` stream.
-- Provision one contract-specific DCE/DCR pair for each standard-table input
-  contract. Do not add another input stream to an existing DCR.
+- The current contract tool may provision an isolated DCE/DCR pair as part of
+  its supported route. A DCE is generally needed for private-link ingestion or
+  when a DCR has no ingestion endpoint; it is not a universal Logs Ingestion
+  API requirement. Check DCE-creation permission only when the selected plan
+  includes a DCE.
+- Do not add another input stream to an existing connector DCR.
 - Do not claim that every standard table is supported. Preserve and report
   Azure `InvalidStream` and schema errors.
 - Do not alter or delete existing connector DCRs.
@@ -34,15 +38,33 @@ mock JSON records into a Log Analytics table.
 2. Create a version 1 contract from the examples under
    `Tools\AzureMonitorLogsIngestion\examples`.
 3. Define the raw input columns and a transform that explicitly casts and
-   projects the destination columns.
+   projects the destination columns. A public table schema does not reveal a
+   connector's internal parser or enrichment logic; the anonymous
+   [`/v1/metadata` endpoint](https://api.loganalytics.io/v1/metadata) is schema
+   metadata, not ingestion capability or parser evidence. See the
+   [Logs Ingestion API overview](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview)
+   and [table feature matrix](https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables-features).
 4. For a custom table, define the complete `_CL` destination schema.
 5. For a standard table, confirm the table exists and specify its documented
-   `Microsoft-*` output stream.
-   - Give the contract unique `resources.dce` and `resources.dcr` names.
+   `Microsoft-*` output stream and supported Logs Ingestion API route.
+   Structured records enter through the customer-authored `Custom-*` input
+   stream and `transformKql`; do not assume reserved or service-managed
+   destination columns are writable.
+   - During Sentinel solution Qualification, prefer a DCR listed or referenced
+     by the solution only when that DCR is already deployed in the locked
+     workspace and exactly matches the fixture contract, public `Custom-*`
+     input stream, schema/transform, destination, and endpoint. A package
+     reference alone does not prove that the DCR exists or is compatible.
+     Otherwise use a separate contract-specific DCR route; the current tool
+     may provision an isolated DCE/DCR pair as part of that route. Never
+     change an existing connector DCR or add an input stream to it.
+   - Keep resource names unique for any DCE/DCR pair provisioned by the
+     contract.
    - Reuse is allowed only when that DCR already contains exactly the same
      `Custom-*` input stream.
-   - If a shared DCR already contains other streams, create a separate pair.
-     Do not update the shared DCR and wait for propagation.
+   - If a shared DCR already contains other streams, use a separate
+     contract-specific route; do not update the shared DCR and wait for
+     propagation.
 6. Validate without Azure writes:
 
    ```powershell

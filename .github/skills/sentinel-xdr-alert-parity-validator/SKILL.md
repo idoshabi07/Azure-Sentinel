@@ -36,8 +36,13 @@ mapping. Align those settings or report an explicit platform limitation.
 
 ## Full qualification batch
 
-For internal solution qualification, deploy every reviewed AR/CD pair disabled,
-then prepare one fixture per detection:
+For internal solution qualification, deploy every reviewed AR/CD pair in the
+current approved package selection disabled, then prepare one fixture per
+selected detection. A partial package's selected list is authoritative; do not
+add excluded detections or let their failures block parity for selected pairs.
+Retain the plan hash and selected paths with parity evidence, and describe the
+result as selected-subset parity only. Full-inventory parity is not proven by a
+partial run.
 
 ```json
 {
@@ -53,8 +58,7 @@ then prepare one fixture per detection:
 }
 ```
 
-Paths are resolved relative to the batch-plan file. The plan must cover every
-converted detection exactly once.
+Paths are resolved relative to the batch-plan file. The plan must cover every selected converted detection exactly once.
 
 Start the batch:
 
@@ -90,7 +94,7 @@ detection. It:
 2. enables both through Azure Resource Manager and Microsoft Graph;
 3. ingests the payload through `azure-monitor-logs-ingestion`;
 4. writes
-   `Reports/<solution>/sentinel-xdr-migration/alert-parity-state.json`; and
+   `Solutions/<solution>/Logs/sentinel-xdr-migration/<run-id>/alert-parity-state.json`; and
 5. emits Sentinel and Advanced Hunting capture queries.
 
 ## Capture alerts

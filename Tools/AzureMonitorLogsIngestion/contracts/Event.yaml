@@ -45,6 +45,25 @@ destination:
   kind: standard
   table: Event
   outputStream: Microsoft-Event
+  columns:
+    - { name: AzureDeploymentID, type: string }
+    - { name: Computer, type: string }
+    - { name: EventCategory, type: int }
+    - { name: EventData, type: string }
+    - { name: EventID, type: int }
+    - { name: EventLevel, type: int }
+    - { name: EventLevelName, type: string }
+    - { name: EventLog, type: string }
+    - { name: ManagementGroupName, type: string }
+    - { name: Message, type: string }
+    - { name: ParameterXml, type: string }
+    - { name: RenderedDescription, type: string }
+    - { name: Role, type: string }
+    - { name: Source, type: string }
+    - { name: SourceSystem, type: string }
+    - { name: TimeGenerated, type: datetime }
+    - { name: Type, type: string }
+    - { name: UserName, type: string }
 resources:
   dce: xdr-migration-event-mock-dce
   dcr: xdr-migration-event-mock-dcr

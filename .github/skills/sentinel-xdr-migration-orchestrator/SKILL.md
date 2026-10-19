@@ -8,6 +8,11 @@ requiredSkills:
 
 # Migrate a Microsoft Sentinel solution to XDR Detection YAML
 
+The goal is to migrate the solution and support publishing validated content.
+Follow the canonical workflow's strict over-50% partial-publication policy and
+single-owner `ACTION_REQUIRED` watchdog best practice; do not reproduce those
+policies here.
+
 ## Scope
 
 This milestone creates and validates `XDR Detections/*.yaml`.

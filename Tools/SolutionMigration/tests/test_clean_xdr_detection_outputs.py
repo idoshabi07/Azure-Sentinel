@@ -37,7 +37,7 @@ properties:
 
 class XdrDetectionCleanupTests(unittest.TestCase):
     def test_preserves_detection_yaml_and_moves_reports_and_config(self):
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory(dir=Path.cwd()) as temp:
             root = Path(temp)
             xdr = root / "Solutions" / "Example" / "XDR Detections"
             xdr.mkdir(parents=True)
@@ -50,7 +50,7 @@ class XdrDetectionCleanupTests(unittest.TestCase):
             (xdr / "runtime-validation.html").write_text("<html></html>", encoding="utf-8")
 
             plan = cleanup.plan_cleanup(root)
-            result = cleanup.apply_cleanup(plan, root / "Reports")
+            result = cleanup.apply_cleanup(plan)
 
             self.assertEqual(3, result["movedCount"])
             self.assertTrue((xdr / "ExampleDetection.yaml").is_file())
@@ -58,18 +58,14 @@ class XdrDetectionCleanupTests(unittest.TestCase):
                 ["ExampleDetection.yaml", "RichDetection.yaml"],
                 sorted(path.name for path in xdr.iterdir()),
             )
-            report_root = (
-                root
-                / "Reports"
-                / "Example"
-                / "sentinel-xdr-migration"
-            )
+            report_root = cleanup.report_directory(xdr.parent)
+            self.assertEqual("sentinel-xdr-migration", report_root.parent.name)
             self.assertTrue((report_root / "migration-config.yaml").is_file())
             self.assertTrue((report_root / "migration-report.json").is_file())
             self.assertTrue((report_root / "runtime-validation.html").is_file())
 
     def test_dry_run_plan_does_not_modify_files(self):
-        with tempfile.TemporaryDirectory() as temp:
+        with tempfile.TemporaryDirectory(dir=Path.cwd()) as temp:
             root = Path(temp)
             xdr = root / "Solutions" / "Example" / "XDR Detections"
             xdr.mkdir(parents=True)

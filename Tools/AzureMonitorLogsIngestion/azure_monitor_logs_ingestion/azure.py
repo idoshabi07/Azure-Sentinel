@@ -11,6 +11,7 @@ import requests
 from azure.identity import DefaultAzureCredential
 
 from .contract import Contract
+from .registry import destination_schema_blockers, inspect_managed_resources
 
 ARM_SCOPE = "https://management.azure.com/.default"
 INGESTION_SCOPE = "https://monitor.azure.com/.default"
@@ -256,7 +257,11 @@ class AzureClient:
                     f"standard table {contract.destination.table!r} is not registered "
                     f"in workspace {workspace.name!r}"
                 )
-            return response.json()
+            table = response.json()
+            blockers = destination_schema_blockers(contract, table)
+            if blockers:
+                raise RuntimeError("; ".join(blockers))
+            return table
         requested_columns = [
             column.as_dict() for column in contract.destination.columns
         ]
@@ -309,75 +314,65 @@ class AzureClient:
                 "to the existing immutable DCR."
             )
 
-    @staticmethod
-    def _merge_dcr_body(
-        existing: dict[str, Any],
-        body: dict[str, Any],
-        input_stream: str,
-        workspace_id: str,
-    ) -> dict[str, Any]:
-        merged = json.loads(json.dumps(existing))
-        merged.pop("id", None)
-        merged.pop("name", None)
-        merged.pop("type", None)
-        merged.pop("etag", None)
-        merged["location"] = body["location"]
-        merged["kind"] = body["kind"]
-        merged["tags"] = {
-            **(existing.get("tags", {}) or {}),
-            **body["tags"],
-        }
-
-        properties = merged.setdefault("properties", {})
-        requested = body["properties"]
-        existing_endpoint = properties.get("dataCollectionEndpointId")
-        if existing_endpoint and existing_endpoint.lower() != requested[
-            "dataCollectionEndpointId"
-        ].lower():
-            raise RuntimeError(
-                "existing managed DCR uses a different data collection endpoint"
-            )
-        properties["dataCollectionEndpointId"] = requested[
-            "dataCollectionEndpointId"
-        ]
-
-        destinations = properties.setdefault("destinations", {})
-        log_analytics = destinations.setdefault("logAnalytics", [])
-        destination = next(
-            (
-                item
-                for item in log_analytics
-                if str(item.get("workspaceResourceId", "")).lower()
-                == workspace_id.lower()
-            ),
-            None,
-        )
-        if destination is None:
-            raise RuntimeError(
-                "existing managed DCR does not target the requested workspace"
-            )
-        destination_name = destination["name"]
-
-        stream_declarations = properties.setdefault("streamDeclarations", {})
-        stream_declarations[input_stream] = requested["streamDeclarations"][
-            input_stream
-        ]
-        data_flows = properties.setdefault("dataFlows", [])
-        properties["dataFlows"] = [
-            flow
-            for flow in data_flows
-            if input_stream not in (flow.get("streams", []) or [])
-        ]
-        new_flow = requested["dataFlows"][0]
-        new_flow["destinations"] = [destination_name]
-        properties["dataFlows"].append(new_flow)
-        return merged
-
     def provision(self, contract: Contract) -> ProvisionedResources:
         workspace = self.resolve_workspace(contract.workspace)
         location = contract.location or workspace.location
         self.ensure_destination_table(workspace, contract)
         dce_id, dcr_id = self._resource_ids(workspace, contract)
+        existing_dce_response = self.request(
+            "GET", self._resource_url(dce_id, DCE_API), expected=(200, 404)
+        )
+        existing_dcr_response = self.request(
+            "GET", self._resource_url(dcr_id, DCR_API), expected=(200, 404)
+        )
+        existing_dce = (
+            existing_dce_response.json()
+            if existing_dce_response.status_code == 200
+            else None
+        )
+        existing_dcr = (
+            existing_dcr_response.json()
+            if existing_dcr_response.status_code == 200
+            else None
+        )
+        if bool(existing_dce) != bool(existing_dcr):
+            raise RuntimeError(
+                "only one contract-specific DCE/DCR resource exists; refusing to "
+                "create or update a partial resource pair"
+            )
+        if existing_dce and existing_dcr:
+            compatibility = inspect_managed_resources(
+                contract,
+                workspace.id,
+                existing_dce,
+                existing_dcr,
+                dce_resource_id=dce_id,
+                dcr_resource_id=dcr_id,
+            )
+            if compatibility["status"] != "compatible-existing":
+                details = "; ".join(compatibility["blockers"])
+                raise RuntimeError(
+                    "existing contract-specific DCE/DCR is incompatible; refusing "
+                    f"to mutate it: {details}"
+                )
+            endpoint = (
+                existing_dce.get("properties", {})
+                .get("logsIngestion", {})
+                .get("endpoint")
+            )
+            immutable_id = existing_dcr.get("properties", {}).get("immutableId")
+            if not endpoint or not immutable_id:
+                raise RuntimeError(
+                    "existing DCE/DCR is missing its ingestion endpoint or immutable ID"
+                )
+            return ProvisionedResources(
+                workspace=workspace,
+                dce_id=dce_id,
+                dce_endpoint=endpoint,
+                dcr_id=dcr_id,
+                dcr_immutable_id=immutable_id,
+            )
+
         dce = self._put_managed_resource(
             dce_id,
             DCE_API,
@@ -426,32 +421,7 @@ class AzureClient:
                 "ingestion-contract": contract.name,
             },
         }
-        existing_dcr = self.request(
-            "GET",
-            self._resource_url(dcr_id, DCR_API),
-            expected=(200, 404),
-        )
-        if existing_dcr.status_code == 200:
-            existing_value = existing_dcr.json()
-            tags = existing_value.get("tags", {}) or {}
-            if tags.get("managed-by") != MANAGED_BY:
-                raise RuntimeError(
-                    f"resource {dcr_id!r} already exists but is not managed by "
-                    f"this tool; choose a different resource name"
-                )
-            self._assert_isolated_dcr(
-                existing_value,
-                contract.input_stream,
-            )
-            dcr_body = self._merge_dcr_body(
-                existing_value,
-                dcr_body,
-                contract.input_stream,
-                workspace.id,
-            )
-            dcr = self._put_resource(dcr_id, DCR_API, dcr_body)
-        else:
-            dcr = self._put_resource(dcr_id, DCR_API, dcr_body)
+        dcr = self._put_resource(dcr_id, DCR_API, dcr_body)
         endpoint = dce.get("properties", {}).get("logsIngestion", {}).get("endpoint")
         immutable_id = dcr.get("properties", {}).get("immutableId")
         if not endpoint or not immutable_id:
@@ -467,12 +437,40 @@ class AzureClient:
     def get_resources(self, contract: Contract) -> ProvisionedResources:
         workspace = self.resolve_workspace(contract.workspace)
         dce_id, dcr_id = self._resource_ids(workspace, contract)
+        table_id = f"{workspace.id}/tables/{contract.destination.table}"
+        table = self.request(
+            "GET",
+            self._resource_url(table_id, TABLE_API),
+            expected=(200, 404),
+        )
+        if table.status_code == 404:
+            raise RuntimeError(
+                f"destination table {contract.destination.table!r} is not registered "
+                f"in workspace {workspace.name!r}"
+            )
+        schema_blockers = destination_schema_blockers(contract, table.json())
+        if schema_blockers:
+            raise RuntimeError("; ".join(schema_blockers))
         dce = self.request(
             "GET", self._resource_url(dce_id, DCE_API), expected=(200,)
         ).json()
         dcr = self.request(
             "GET", self._resource_url(dcr_id, DCR_API), expected=(200,)
         ).json()
+        compatibility = inspect_managed_resources(
+            contract,
+            workspace.id,
+            dce,
+            dcr,
+            dce_resource_id=dce_id,
+            dcr_resource_id=dcr_id,
+        )
+        if compatibility["status"] != "compatible-existing":
+            details = "; ".join(compatibility["blockers"])
+            raise RuntimeError(
+                "existing contract-specific DCE/DCR is incompatible; refusing "
+                f"ingestion: {details}"
+            )
         endpoint = dce.get("properties", {}).get("logsIngestion", {}).get("endpoint")
         immutable_id = dcr.get("properties", {}).get("immutableId")
         if not endpoint or not immutable_id:

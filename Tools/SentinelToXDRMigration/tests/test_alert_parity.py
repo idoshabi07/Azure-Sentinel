@@ -8,6 +8,7 @@ from unittest import mock
 
 from sentinel_xdr_migration.alert_parity import (
     _capture_queries,
+    _qualification_scope,
     _set_pair_enabled,
     compare_alert_captures,
     complete_alert_parity,
@@ -17,13 +18,13 @@ from sentinel_xdr_migration.alert_parity import (
 from sentinel_xdr_migration.artifacts import artifact_path
 
 TARGET = {
-    "tenantId": "39768270-33ce-4b90-a1a6-e0caeb3ba0ab",
-    "subscriptionId": "42382e39-f157-46d1-a931-b8cfd779ece5",
+    "tenantId": "11111111-2222-4333-8444-555555555555",
+    "subscriptionId": "22222222-3333-4444-8555-666666666666",
     "workspaceResourceId": (
-        "/subscriptions/42382e39-f157-46d1-a931-b8cfd779ece5/"
+        "/subscriptions/22222222-3333-4444-8555-666666666666/"
         "resourceGroups/r/providers/Microsoft.OperationalInsights/workspaces/w"
     ),
-    "workspaceCustomerId": "756386d8-e2d4-4f09-905a-74b24313721f",
+    "workspaceCustomerId": "33333333-4444-4555-8666-777777777777",
 }
 
 
@@ -221,7 +222,7 @@ class AlertParityTests(unittest.TestCase):
                 "target": TARGET,
                 "rules": [{"detection": "Rule.yaml"}],
             }
-            (output / "alert-parity-state.json").write_text(
+            artifact_path(root, "alert-parity-state.json", create_parent=True).write_text(
                 json.dumps(state), encoding="utf-8"
             )
             results = root / "results.json"
@@ -231,6 +232,73 @@ class AlertParityTests(unittest.TestCase):
 
         disable.assert_called_once()
         self.assertEqual(report["status"], "failed")
+        self.assertTrue(report["cleanup"][0]["disabled"])
+
+    @mock.patch(
+        "sentinel_xdr_migration.packaging_selection.current_applied_package_selection",
+        return_value={
+            "plan": {
+                "planSha256": "new-plan",
+                "selection": {"xdrDetections": ["XDR Detections/Rule.yaml"]},
+                "summary": {"outcome": "partial"},
+            }
+        },
+    )
+    @mock.patch(
+        "sentinel_xdr_migration.alert_parity._disable_all",
+        return_value=[
+            {"detection": "Rule.yaml", "disabled": True, "errors": []}
+        ],
+    )
+    @mock.patch(
+        "sentinel_xdr_migration.alert_parity.require_locked_target",
+        return_value=TARGET,
+    )
+    def test_complete_rejects_changed_selection_and_still_cleans_up(
+        self,
+        _target: mock.Mock,
+        disable: mock.Mock,
+        _selection: mock.Mock,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            detection = root / "XDR Detections" / "Rule.yaml"
+            detection.parent.mkdir(parents=True)
+            detection.write_text("kind: CustomDetection\n", encoding="utf-8")
+            pair = {
+                "detection": "Rule.yaml",
+                "analyticRuleId": "source-id",
+                "customDetectionId": "detection-id",
+            }
+            original_selection = {
+                "plan": {
+                    "planSha256": "old-plan",
+                    "selection": {"xdrDetections": ["XDR Detections/Rule.yaml"]},
+                    "summary": {"outcome": "partial"},
+                }
+            }
+            state = {
+                "runId": "run-1",
+                "status": "awaiting-alerts",
+                "scenarioMarker": "scenario-1",
+                "target": TARGET,
+                "rules": [pair],
+                "qualificationScope": _qualification_scope(
+                    root, [pair], original_selection
+                ),
+            }
+            artifact_path(root, "alert-parity-state.json", create_parent=True).write_text(
+                json.dumps(state), encoding="utf-8"
+            )
+            results = root / "results.json"
+            results.write_text("{}", encoding="utf-8")
+
+            report = complete_alert_parity(root, results_path=results)
+
+        disable.assert_called_once()
+        self.assertEqual(report["status"], "failed")
+        self.assertFalse(report["qualificationScopeVerified"])
+        self.assertIn("no longer matches", report["scopeVerificationError"])
         self.assertTrue(report["cleanup"][0]["disabled"])
 
     @mock.patch(

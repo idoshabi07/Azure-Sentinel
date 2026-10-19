@@ -14,9 +14,11 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import random
 import re
+import sys
 import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -26,11 +28,19 @@ import yaml
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
-TABLE_ROOT = REPOSITORY_ROOT / "Tools" / "SolutionMigration" / "table_schemas"
+TABLE_ROOT = REPOSITORY_ROOT / "Sample Data" / "Tables"
 MOCK_ROOT = REPOSITORY_ROOT / "Sample Data" / "Solutions" / "Mock"
 STANDARD_CONTRACT_ROOT = (
     REPOSITORY_ROOT / "Tools" / "AzureMonitorLogsIngestion" / "contracts"
 )
+INGESTION_TOOL_ROOT = REPOSITORY_ROOT / "Tools" / "AzureMonitorLogsIngestion"
+if str(INGESTION_TOOL_ROOT) not in sys.path:
+    sys.path.insert(0, str(INGESTION_TOOL_ROOT))
+from azure_monitor_logs_ingestion.registry import (
+    find_capability,
+    resolve_contract as resolve_registered_contract,
+)
+
 SCENARIO_VERSION = 1
 SUPPORTED_TYPES = {"string", "datetime", "dynamic", "bool", "boolean", "int", "long", "real", "double"}
 
@@ -41,6 +51,71 @@ class ScenarioError(RuntimeError):
 
 def _safe_name(value: str) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", value).strip("_") or "unnamed"
+
+
+def _resolved_directory(path: Path, label: str, *, required: bool = False) -> Path:
+    path = Path(path).expanduser()
+    if path.is_symlink():
+        raise ScenarioError(f"{label} must not be a symlink: {path}")
+    resolved = path.resolve()
+    if required and not resolved.is_dir():
+        raise ScenarioError(f"{label} is not a directory: {resolved}")
+    if resolved.exists() and not resolved.is_dir():
+        raise ScenarioError(f"{label} is not a directory: {resolved}")
+    return resolved
+
+
+def _reject_symlink_path(path: Path, label: str) -> Path:
+    path = Path(path).expanduser()
+    if path.is_symlink():
+        raise ScenarioError(f"{label} must not be a symlink: {path}")
+    return path.resolve()
+
+
+def _assert_no_symlink_below(root: Path, path: Path, label: str) -> Path:
+    root = root.resolve()
+    absolute_path = path.absolute()
+    try:
+        relative = absolute_path.relative_to(root)
+    except ValueError:
+        relative = None
+    if relative is not None:
+        current = root
+        for part in relative.parts:
+            current = current / part
+            if current.is_symlink():
+                raise ScenarioError(f"Symlink {label} paths are not supported: {current}")
+    resolved_path = path.resolve()
+    if not resolved_path.is_relative_to(root):
+        raise ScenarioError(f"{label} escapes its root {root}: {path}")
+    return resolved_path
+
+
+def _solution_directory(source_root: Path, solution: str) -> Path:
+    if solution in {"", ".", ".."} or "/" in solution or "\\" in solution:
+        raise ScenarioError("Solution must be a single folder name.")
+    root = source_root / "Solutions"
+    if root.is_symlink():
+        raise ScenarioError(f"Symlink solution paths are not supported: {root}")
+    directory = root / solution
+    if directory.is_symlink():
+        raise ScenarioError(f"Symlink solution paths are not supported: {directory}")
+    _assert_no_symlink_below(root, directory, "solution")
+    if not directory.is_dir():
+        raise ScenarioError(f"Solution folder was not found: {directory}")
+    return directory
+
+
+def _source_file(selector: str, source_root: Path, label: str) -> Optional[Path]:
+    supplied = Path(selector).expanduser()
+    candidate = supplied if supplied.is_absolute() else source_root / supplied
+    if not candidate.is_file():
+        return None
+    solution_root = source_root.resolve()
+    resolved = _assert_no_symlink_below(solution_root, candidate, label)
+    if not resolved.is_file():
+        return None
+    return resolved
 
 
 def _load_yaml(path: Path) -> dict:
@@ -92,24 +167,47 @@ def _detection_source_id(document: dict) -> str:
     return str(source.get("id") or "")
 
 
-def find_analytic_rule(solution: str, selector: str) -> Tuple[Path, dict]:
-    solution_root = REPOSITORY_ROOT / "Solutions" / solution
-    supplied = Path(selector)
-    if supplied.is_file():
-        return supplied.resolve(), _load_yaml(supplied)
+def _content_yaml_files(folder: Path) -> List[Path]:
+    if folder.is_symlink():
+        raise ScenarioError(f"Symlink content paths are not supported: {folder}")
+    files = []
+    for path in folder.rglob("*"):
+        if any(part.lower() in {"logs", "reports"} for part in path.relative_to(folder).parts):
+            continue
+        if path.is_symlink():
+            raise ScenarioError(f"Symlink content paths are not supported: {path}")
+        if path.is_file() and path.suffix.lower() in {".yaml", ".yml"}:
+            if not path.resolve().is_relative_to(folder.resolve()):
+                raise ScenarioError(f"Content path escapes its root: {path}")
+            files.append(path)
+    return sorted(files, key=lambda path: path.relative_to(folder).as_posix())
+
+
+def find_analytic_rule(
+    solution: str,
+    selector: str,
+    source_root: Optional[Path] = None,
+) -> Tuple[Path, dict]:
+    source_root = Path(source_root or REPOSITORY_ROOT).resolve()
+    supplied = _source_file(selector, source_root, "Analytic Rule")
+    if supplied:
+        return supplied, _load_yaml(supplied)
 
     candidates: List[Tuple[Path, dict]] = []
+    solution_root = _solution_directory(source_root, solution)
     for folder_name in ("Analytic Rules", "Analytics Rules"):
         folder = solution_root / folder_name
         if not folder.is_dir():
             continue
-        for path in sorted(folder.glob("*.y*ml")):
+        for path in _content_yaml_files(folder):
             rule = _load_yaml(path)
             if (
                 selector == str(rule.get("id"))
                 or selector == str(rule.get("name"))
                 or selector == path.name
                 or selector == path.stem
+                or selector.replace("\\", "/") == path.relative_to(folder).as_posix()
+                or selector.replace("\\", "/") == path.relative_to(solution_root).as_posix()
             ):
                 candidates.append((path, rule))
     if not candidates:
@@ -125,12 +223,14 @@ def find_custom_detection(
     solution: str,
     selector: Optional[str],
     source_rule: dict,
+    source_root: Optional[Path] = None,
 ) -> Tuple[Path, dict]:
-    supplied = Path(selector) if selector else None
-    if supplied and supplied.is_file():
-        return supplied.resolve(), _load_yaml(supplied)
+    source_root = Path(source_root or REPOSITORY_ROOT).resolve()
+    supplied = _source_file(selector, source_root, "Custom Detection") if selector else None
+    if supplied:
+        return supplied, _load_yaml(supplied)
 
-    folder = REPOSITORY_ROOT / "Solutions" / solution / "XDR Detections"
+    folder = _solution_directory(source_root, solution) / "XDR Detections"
     if not folder.is_dir():
         raise ScenarioError(
             f"Converted Custom Detection folder does not exist: {folder}. "
@@ -140,7 +240,9 @@ def find_custom_detection(
     source_id = str(source_rule.get("id") or "")
     source_name = str(source_rule.get("name") or "")
     matches: List[Tuple[Path, dict]] = []
-    for path in sorted(folder.glob("*.yaml")):
+    for path in _content_yaml_files(folder):
+        if path.name.lower() in {"migration-config.yaml", "migration-config.yml"}:
+            continue
         detection = _load_yaml(path)
         identifiers = {
             _detection_source_id(detection),
@@ -148,9 +250,11 @@ def find_custom_detection(
             str(_detection_property(detection, "name") or ""),
             path.name,
             path.stem,
+            path.relative_to(folder).as_posix(),
+            path.relative_to(folder.parent).as_posix(),
         }
-        wanted = selector or source_id or source_name
-        if wanted in identifiers or source_id in identifiers or source_name in identifiers:
+        wanted = selector.replace("\\", "/") if selector else source_id or source_name
+        if wanted in identifiers:
             matches.append((path, detection))
     if not matches:
         raise ScenarioError(
@@ -164,12 +268,34 @@ def find_custom_detection(
     return matches[0]
 
 
-def scenario_directory(solution: str, rule: dict) -> Path:
+def scenario_directory(
+    solution: str,
+    rule: dict,
+    output_root: Optional[Path] = None,
+) -> Path:
+    if solution in {"", ".", ".."} or "/" in solution or "\\" in solution:
+        raise ScenarioError("Solution must be a single folder name.")
     rule_id = _safe_name(str(rule.get("id") or rule.get("name") or "rule"))
-    return MOCK_ROOT / solution / rule_id
+    root = _resolved_directory(output_root or MOCK_ROOT, "Output root")
+    return root / solution / rule_id
 
 
-def validate_existing_scenario(path: Path, solution: str, rule: dict) -> dict:
+def _sha256_bytes(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def validate_existing_scenario(
+    path: Path,
+    solution: str,
+    rule: dict,
+    rule_path: Path,
+    detection: dict,
+    detection_path: Path,
+    registry_path: Optional[Path] = None,
+    scenario_input: Optional[Path] = None,
+    scenario_input_kind: Optional[str] = None,
+    scenario_input_hash: Optional[str] = None,
+) -> dict:
     scenario_path = path / "scenario.json"
     mock_path = path / "mock.json"
     if not all(candidate.is_file() for candidate in (scenario_path, mock_path)):
@@ -182,6 +308,56 @@ def validate_existing_scenario(path: Path, solution: str, rule: dict) -> dict:
         raise ScenarioError(f"Scenario solution does not match {solution!r}: {scenario_path}")
     if str(scenario.get("ruleId")) != str(rule.get("id")):
         raise ScenarioError(f"Scenario rule ID does not match the selected rule: {scenario_path}")
+    expected_hashes = {
+        "analyticRuleFileSha256": _sha256_bytes(rule_path.read_bytes()),
+        "analyticRuleQuerySha256": _sha256_bytes(_query(rule).encode("utf-8")),
+        "customDetectionFileSha256": _sha256_bytes(detection_path.read_bytes()),
+        "customDetectionQuerySha256": _sha256_bytes(
+            _query(detection).encode("utf-8")
+        ),
+    }
+    if scenario.get("sourceHashes") != expected_hashes:
+        raise ScenarioError(
+            "Existing scenario source hashes are stale or absent; review and "
+            "regenerate it before reuse."
+        )
+    stored_scenario_review = scenario.get("scenarioReview") or {}
+    if scenario_input:
+        if (
+            stored_scenario_review.get("inputKind") != scenario_input_kind
+            or stored_scenario_review.get("inputSha256") != scenario_input_hash
+        ):
+            raise ScenarioError(
+                "Existing scenario input hash or review state does not match the "
+                "supplied scenario input; regenerate only after reviewing the prior fixture."
+            )
+        expected_review_status = (
+            "review-pending" if scenario_input_kind == "candidate" else "reviewed"
+        )
+        if stored_scenario_review.get("status") != expected_review_status:
+            raise ScenarioError(
+                "Existing scenario review status does not match the supplied input."
+            )
+    stored_resolution = (scenario.get("ingestion") or {}).get("contractResolution") or {}
+    if stored_resolution.get("schemaFingerprint"):
+        if not registry_path or not Path(registry_path).is_file():
+            raise ScenarioError(
+                "The toolkit registry required to verify this scenario is missing."
+            )
+        current_resolution = resolve_registered_contract(
+            str(scenario.get("sourceTable") or ""),
+            registry_path=registry_path or STANDARD_CONTRACT_ROOT.parent / "registry.yaml",
+        )
+        if (
+            stored_resolution.get("schemaFingerprint")
+            != current_resolution.get("schemaFingerprint")
+            or stored_resolution.get("transformFingerprint")
+            != current_resolution.get("transformFingerprint")
+        ):
+            raise ScenarioError(
+                "Existing scenario contract fingerprints are stale; review and "
+                "regenerate it before reuse."
+            )
     if not isinstance(mock_records, list) or not mock_records:
         raise ScenarioError(f"Mock payload must be a non-empty array: {mock_path}")
     validation = scenario.get("validation") or {}
@@ -210,9 +386,11 @@ def _walk_resources(resources: Sequence[dict]) -> Iterable[dict]:
                 yield from _walk_resources(template.get("resources") or [])
 
 
-def load_solution_contract(solution: str) -> dict:
-    solution_root = REPOSITORY_ROOT / "Solutions" / solution
+def load_solution_contract(solution: str, source_root: Optional[Path] = None) -> dict:
+    source_root = Path(source_root or REPOSITORY_ROOT).resolve()
+    solution_root = _solution_directory(source_root, solution)
     package = solution_root / "Package" / "mainTemplate.json"
+    _assert_no_symlink_below(solution_root, package, "solution package")
     if not package.is_file():
         raise ScenarioError(f"Solution package was not found: {package}")
     template = _load_json(package)
@@ -236,7 +414,7 @@ def load_solution_contract(solution: str) -> dict:
     parsers: Dict[str, str] = {}
     parser_root = solution_root / "Parsers"
     if parser_root.is_dir():
-        for path in parser_root.rglob("*.y*ml"):
+        for path in _content_yaml_files(parser_root):
             document = _load_yaml(path)
             alias = document.get("FunctionAlias") or document.get("FunctionName")
             query = document.get("FunctionQuery")
@@ -461,14 +639,23 @@ def _table_from_stream(stream: str) -> str:
     return value
 
 
-def _load_table_base(table: str) -> Tuple[dict, Dict[str, str]]:
-    folder = TABLE_ROOT / table
+def _load_table_base(
+    table: str,
+    table_root: Optional[Path] = None,
+) -> Tuple[dict, Dict[str, str]]:
+    if table in {"", ".", ".."} or "/" in table or "\\" in table:
+        raise ScenarioError(f"Invalid source table name: {table!r}")
+    table_root = Path(table_root or TABLE_ROOT).resolve()
+    folder = table_root / table
+    _assert_no_symlink_below(table_root, folder, "table sample")
     base_path = folder / "base-event.json"
     metadata_path = folder / "metadata.json"
     if not base_path.is_file() or not metadata_path.is_file():
         raise ScenarioError(
-            f"Neutral base event was not found for table {table!r} under {TABLE_ROOT}."
+            f"Neutral base event was not found for table {table!r} under {table_root}."
         )
+    _assert_no_symlink_below(table_root, base_path, "table sample")
+    _assert_no_symlink_below(table_root, metadata_path, "table sample")
     base = _load_json(base_path)
     metadata = _load_json(metadata_path)
     columns = metadata.get("columns") if isinstance(metadata, dict) else None
@@ -477,31 +664,71 @@ def _load_table_base(table: str) -> Tuple[dict, Dict[str, str]]:
     return base, {str(name): str(kind) for name, kind in columns.items()}
 
 
-def _load_standard_ingestion_contract(table: str) -> Optional[dict]:
-    for suffix in (".yaml", ".yml", ".json"):
-        path = STANDARD_CONTRACT_ROOT / f"{table}{suffix}"
-        if not path.is_file():
-            continue
-        value = (
-            _load_json(path)
-            if path.suffix.lower() == ".json"
-            else yaml.safe_load(path.read_text(encoding="utf-8-sig"))
+def _load_standard_ingestion_contract(
+    table: str,
+    registry_path: Optional[Path] = None,
+) -> Optional[dict]:
+    registry_path = registry_path or STANDARD_CONTRACT_ROOT.parent / "registry.yaml"
+    if not Path(registry_path).is_file():
+        return None
+    capability = find_capability(table, registry_path)
+    if capability is None:
+        return None
+    value = _load_yaml(capability.contract_path)
+    destination = value.get("destination") or {}
+    if (
+        value.get("version") != 1
+        or destination.get("kind") != "standard"
+        or destination.get("table") != capability.table
+        or destination.get("outputStream") != capability.output_stream
+        or not str(value.get("inputStream") or "").startswith("Custom-")
+    ):
+        raise ScenarioError(
+            f"Registered standard-table contract does not match {table!r}: "
+            f"{capability.contract_path}"
         )
-        if not isinstance(value, dict):
-            raise ScenarioError(f"Invalid standard-table ingestion contract: {path}")
-        destination = value.get("destination") or {}
-        if (
-            value.get("version") != 1
-            or destination.get("kind") != "standard"
-            or destination.get("table") != table
-            or not str(value.get("inputStream") or "").startswith("Custom-")
-            or not str(destination.get("outputStream") or "").startswith("Microsoft-")
-        ):
-            raise ScenarioError(
-                f"Standard-table ingestion contract does not match {table!r}: {path}"
-            )
-        return value
-    return None
+    return value
+
+
+def _query_fields_from_schema(query: str, schema: Dict[str, str]) -> Dict[str, str]:
+    """Extract only exact schema identifiers; this is not a general KQL parser."""
+    required: Dict[str, str] = {}
+    aliases = _query_output_aliases(query)
+    for name, kind in schema.items():
+        if name.casefold() in aliases:
+            continue
+        if re.search(r"(?<![A-Za-z0-9_])" + re.escape(name) + r"(?![A-Za-z0-9_])", query, re.I):
+            required[name] = kind
+    return required
+
+
+def _query_output_aliases(query: str) -> set[str]:
+    project, extend = _assignments(query)
+    aliases = set()
+    for name, expression in {**project, **extend}.items():
+        if expression.strip().casefold() != name.casefold():
+            aliases.add(name.casefold())
+    return aliases
+
+
+def _query_predicate_fields(
+    query: str,
+    schema: Dict[str, str],
+) -> Tuple[Dict[str, Optional[str]], List[str]]:
+    """Resolve simple predicate identifiers without treating query aliases as source fields."""
+    aliases = _query_output_aliases(query)
+    schema_names = {name.casefold(): name for name in schema}
+    required: Dict[str, Optional[str]] = {}
+    unresolved_aliases: List[str] = []
+    for predicate in extract_predicates(query):
+        field = str(predicate["column"])
+        if field.casefold() in aliases:
+            if field not in unresolved_aliases:
+                unresolved_aliases.append(field)
+            continue
+        canonical_name = schema_names.get(field.casefold(), field)
+        required[canonical_name] = schema.get(canonical_name)
+    return required, unresolved_aliases
 
 
 def _default_value(kind: str) -> Any:
@@ -560,14 +787,24 @@ def _find_custom_stream(
     contract: dict,
     source_name: Optional[str],
     predicates: Sequence[dict],
+    *,
+    allow_unmapped: bool = False,
 ) -> Optional[dict]:
     parser_query = (contract.get("parsers") or {}).get(source_name or "")
+    parser_table = _first_query_source(parser_query) if parser_query else None
+    matches = []
     for dcr in contract.get("dcrs") or []:
         declarations = dcr.get("streamDeclarations") or {}
         for flow in dcr.get("dataFlows") or []:
             transform = str(flow.get("transformKql") or "")
             for stream in flow.get("streams") or []:
                 if stream not in declarations or not stream.startswith("Custom-"):
+                    continue
+                if not predicates and (
+                    not allow_unmapped
+                    or not parser_table
+                    or _table_from_stream(stream) != parser_table
+                ):
                     continue
                 mappings = []
                 success = True
@@ -590,25 +827,38 @@ def _find_custom_stream(
                         success = False
                         break
                     mappings.append((predicate, raw_path, raw_value))
-                if success and mappings:
-                    return {
+                if success and (mappings or not predicates):
+                    matches.append({
                         "dcr": dcr.get("name"),
                         "stream": stream,
                         "outputStream": flow.get("outputStream") or stream,
                         "transformKql": transform,
                         "columns": declarations[stream].get("columns") or [],
                         "mappings": mappings,
-                    }
+                    })
+    if len(matches) > 1:
+        raise ScenarioError(
+            f"Multiple custom DCR input streams match parser {source_name!r}; "
+            "the reviewed fixture route is ambiguous."
+        )
+    if matches:
+        return matches[0]
     return None
 
 
-def _find_standard_table(query: str, custom_detection_query: str, source_name: Optional[str]) -> str:
+def _find_standard_table(
+    query: str,
+    custom_detection_query: str,
+    source_name: Optional[str],
+    table_root: Optional[Path] = None,
+) -> str:
+    table_root = Path(table_root or TABLE_ROOT).resolve()
     candidates = [source_name, _first_query_source(custom_detection_query)]
     for candidate in candidates:
-        if candidate and (TABLE_ROOT / candidate / "base-event.json").is_file():
+        if candidate and (table_root / candidate / "base-event.json").is_file():
             return candidate
     tokens = set(re.findall(r"\b[A-Za-z_][A-Za-z0-9_]*\b", f"{query}\n{custom_detection_query}"))
-    for path in sorted(TABLE_ROOT.iterdir()):
+    for path in sorted(table_root.iterdir()):
         if path.name in tokens and (path / "base-event.json").is_file():
             return path.name
     raise ScenarioError("No checked-in Standard-table base event matched the AR/CD queries.")
@@ -759,16 +1009,16 @@ def randomized_copies(
 def load_reviewed_scenario(path: Path) -> dict:
     scenario = _load_json(path)
     if not isinstance(scenario, dict):
-        raise ScenarioError("Reviewed attack scenario must be a JSON object.")
+        raise ScenarioError("Scenario input must be a JSON object.")
     for field in ("name", "hypothesis"):
         if not isinstance(scenario.get(field), str) or not scenario[field].strip():
-            raise ScenarioError(f"Reviewed attack scenario requires {field}.")
+            raise ScenarioError(f"Scenario input requires {field}.")
     for field in ("maliciousRecords", "benignRecords"):
         records = scenario.get(field)
         if not isinstance(records, list) or not records or not all(
             isinstance(record, dict) for record in records
         ):
-            raise ScenarioError(f"Reviewed attack scenario requires non-empty {field}.")
+            raise ScenarioError(f"Scenario input requires non-empty {field}.")
     locks = scenario.get("lockedPaths") or []
     if not isinstance(locks, list) or not all(isinstance(item, str) for item in locks):
         raise ScenarioError("lockedPaths must be an array of strings.")
@@ -782,41 +1032,142 @@ def generate_scenario(
     custom_detection_selector: Optional[str] = None,
     force: bool = False,
     reviewed_scenario: Optional[Path] = None,
+    candidate_scenario: Optional[Path] = None,
     randomize: bool = False,
     copies: int = 1,
     seed: int = 20260917,
     locks: Sequence[Tuple[str, Any]] = (),
     benign_assignments: Sequence[Tuple[str, Any]] = (),
+    source_root: Optional[Path] = None,
+    toolkit_root: Optional[Path] = None,
+    sample_data_root: Optional[Path] = None,
+    output_root: Optional[Path] = None,
 ) -> dict:
-    rule_path, rule = find_analytic_rule(solution, rule_selector)
-    output_dir = scenario_directory(solution, rule)
-    if output_dir.exists() and not force:
-        return validate_existing_scenario(output_dir, solution, rule)
+    if reviewed_scenario and candidate_scenario:
+        raise ScenarioError(
+            "Pass either --reviewed-scenario or --candidate-scenario, not both."
+        )
+    scenario_input = reviewed_scenario or candidate_scenario
+    scenario_input_kind = (
+        "candidate" if candidate_scenario else "reviewed" if reviewed_scenario else None
+    )
+    if scenario_input:
+        scenario_input = _reject_symlink_path(
+            Path(scenario_input),
+            "Scenario input",
+        )
+        if not scenario_input.is_file():
+            raise ScenarioError(f"Scenario input was not found: {scenario_input}")
+    scenario_input_hash = (
+        _sha256_bytes(Path(scenario_input).read_bytes()) if scenario_input else None
+    )
+    source_root = _resolved_directory(
+        source_root or REPOSITORY_ROOT,
+        "Source repository root",
+        required=True,
+    )
+    if toolkit_root is not None:
+        toolkit_root = _resolved_directory(
+            toolkit_root,
+            "Toolkit root",
+            required=True,
+        )
+        registry_path = toolkit_root / "Tools" / "AzureMonitorLogsIngestion" / "registry.yaml"
+        default_sample_data_root = toolkit_root / "Sample Data"
+    else:
+        toolkit_root = REPOSITORY_ROOT.resolve()
+        registry_path = STANDARD_CONTRACT_ROOT.parent / "registry.yaml"
+        default_sample_data_root = toolkit_root / "Sample Data"
+    sample_data_root_explicit = sample_data_root is not None
+    if sample_data_root_explicit:
+        sample_data_root = _resolved_directory(
+            sample_data_root,
+            "Sample data root",
+            required=True,
+        )
+    else:
+        sample_data_root = _resolved_directory(
+            default_sample_data_root,
+            "Sample data root",
+        )
+    table_root = sample_data_root / "Tables"
+    output_root = _resolved_directory(output_root or MOCK_ROOT, "Output root")
 
+    rule_path, rule = find_analytic_rule(solution, rule_selector, source_root)
+    output_dir = scenario_directory(solution, rule, output_root)
+    _assert_no_symlink_below(output_root, output_dir, "output")
     detection_path, detection = find_custom_detection(
         solution,
         custom_detection_selector,
         rule,
+        source_root,
     )
+    if output_dir.exists() and force and candidate_scenario:
+        prior_manifest = output_dir / "scenario.json"
+        prior_scenario = _load_json(prior_manifest) if prior_manifest.is_file() else {}
+        prior_review = (
+            (prior_scenario.get("scenarioReview") or {}).get("status")
+            if isinstance(prior_scenario, dict)
+            else None
+        )
+        if prior_review != "reviewed":
+            raise ScenarioError(
+                "A review-pending or unreviewed scenario cannot be overwritten with "
+                "--force; review the existing fixture first."
+            )
+    if output_dir.exists() and not force:
+        result = validate_existing_scenario(
+            output_dir,
+            solution,
+            rule,
+            rule_path,
+            detection,
+            detection_path,
+            registry_path,
+            scenario_input=scenario_input,
+            scenario_input_kind=scenario_input_kind,
+            scenario_input_hash=scenario_input_hash,
+        )
+        if (
+            (result.get("scenario") or {}).get("scenarioReview", {}).get("status")
+            == "review-pending"
+        ):
+            result["status"] = "existing-candidate"
+        result["paths"] = {
+            "sourceRoot": str(source_root),
+            "toolkitRoot": str(toolkit_root),
+            "sampleDataRoot": str(sample_data_root),
+            "outputRoot": str(output_root),
+        }
+        return result
+
     source_query = _query(rule)
     destination_query = _query(detection)
     assessment = assess_query(source_query, rule)
     predicates = extract_predicates(source_query)
-    if not predicates and not reviewed_scenario:
+    if not predicates and not scenario_input:
         raise ScenarioError(
-            "No decisive simple predicate could be inferred. Supply --reviewed-scenario."
+            "No decisive simple predicate could be inferred. Supply a reviewed or candidate scenario input."
         )
-    if assessment["status"] != "simple" and not reviewed_scenario:
+    if assessment["status"] != "simple" and not scenario_input:
         raise ScenarioError(
             f"Automatic generation is unsafe ({'; '.join(assessment['reasons'])}). "
-            "Supply --reviewed-scenario with malicious and benign records."
+            "Supply --reviewed-scenario or --candidate-scenario with malicious and benign records."
         )
 
-    contract = load_solution_contract(solution)
+    contract = load_solution_contract(solution, source_root)
     source_name = _first_query_source(source_query)
     custom_stream = _find_custom_stream(contract, source_name, predicates)
+    if not custom_stream and scenario_input:
+        custom_stream = _find_custom_stream(
+            contract,
+            source_name,
+            [],
+            allow_unmapped=True,
+        )
     mappings: List[dict] = []
     generated_contract: Optional[dict] = None
+    contract_resolution: Optional[dict] = None
 
     if custom_stream:
         columns = {
@@ -837,9 +1188,17 @@ def generate_scenario(
         stream = custom_stream["stream"]
         output_stream = custom_stream["outputStream"]
     else:
-        source_table = _find_standard_table(source_query, destination_query, source_name)
-        base_record, columns = _load_table_base(source_table)
-        generated_contract = _load_standard_ingestion_contract(source_table)
+        source_table = _find_standard_table(
+            source_query,
+            destination_query,
+            source_name,
+            table_root,
+        )
+        base_record, columns = _load_table_base(source_table, table_root)
+        generated_contract = _load_standard_ingestion_contract(
+            source_table,
+            registry_path,
+        )
         if generated_contract:
             contract_columns = {
                 str(item["name"]): str(item["type"])
@@ -850,12 +1209,47 @@ def generate_scenario(
                 raise ScenarioError(
                     f"The registered {source_table} ingestion contract has no input columns."
                 )
-            base_record = {
-                name: copy.deepcopy(base_record[name])
-                for name in contract_columns
-                if name in base_record
-            }
-            columns = contract_columns
+            output_columns = {
+                str(item["name"]): str(item["type"])
+                for item in (generated_contract.get("destination") or {}).get("columns") or []
+                if isinstance(item, dict) and item.get("name") and item.get("type")
+            } or contract_columns
+            combined_query = source_query + "\n" + destination_query
+            required_fields = _query_fields_from_schema(combined_query, output_columns)
+            predicate_fields, unresolved_aliases = _query_predicate_fields(
+                combined_query,
+                columns,
+            )
+            for name, kind in predicate_fields.items():
+                if name.casefold() not in {
+                    field.casefold() for field in required_fields
+                }:
+                    required_fields[name] = kind
+            contract_resolution = resolve_registered_contract(
+                source_table,
+                required_fields,
+                registry_path=registry_path,
+            )
+            if unresolved_aliases:
+                alias_blockers = [
+                    f"Decisive predicate field {name!r} is a query alias and cannot be "
+                    "mapped to a source field safely."
+                    for name in unresolved_aliases
+                ]
+                contract_resolution["blockers"] = list(
+                    contract_resolution.get("blockers") or []
+                ) + alias_blockers
+                contract_resolution["status"] = "blocked"
+            if contract_resolution["status"] == "blocked":
+                generated_contract = None
+            else:
+                base_record = {
+                    name: copy.deepcopy(
+                        base_record.get(name, _default_value(kind))
+                    )
+                    for name, kind in contract_columns.items()
+                }
+                columns = contract_columns
         for predicate in predicates:
             if predicate["column"] in columns:
                 base_record[predicate["column"]] = predicate["value"]
@@ -865,7 +1259,7 @@ def generate_scenario(
                     "rawPath": predicate["column"],
                     "value": predicate["value"],
                 })
-        if predicates and not mappings and not reviewed_scenario:
+        if predicates and not mappings and not scenario_input:
             raise ScenarioError(
                 "The decisive AR predicates could not be mapped to the Standard-table base event."
             )
@@ -878,13 +1272,13 @@ def generate_scenario(
             stream = None
             output_stream = f"Microsoft-{source_table}"
 
-    reviewed = load_reviewed_scenario(reviewed_scenario) if reviewed_scenario else None
-    if reviewed:
-        malicious = copy.deepcopy(reviewed["maliciousRecords"])
-        benign = copy.deepcopy(reviewed["benignRecords"])
-        locked_paths = list(reviewed.get("lockedPaths") or [])
-        hypothesis = reviewed["hypothesis"]
-        scenario_name = reviewed["name"]
+    scenario_fixture = load_reviewed_scenario(scenario_input) if scenario_input else None
+    if scenario_fixture:
+        malicious = copy.deepcopy(scenario_fixture["maliciousRecords"])
+        benign = copy.deepcopy(scenario_fixture["benignRecords"])
+        locked_paths = list(scenario_fixture.get("lockedPaths") or [])
+        hypothesis = scenario_fixture["hypothesis"]
+        scenario_name = scenario_fixture["name"]
     else:
         malicious = [copy.deepcopy(base_record)]
         benign_record = copy.deepcopy(base_record)
@@ -917,7 +1311,9 @@ def generate_scenario(
     validate_records(malicious, columns)
     validate_records(benign, columns)
 
+    _assert_no_symlink_below(output_root, output_dir, "output")
     output_dir.mkdir(parents=True, exist_ok=True)
+    _assert_no_symlink_below(output_root, output_dir, "output")
     mock_path = output_dir / "mock.json"
     mock_path.write_text(json.dumps(malicious, indent=2) + "\n", encoding="utf-8")
     contract_path: Optional[Path] = None
@@ -928,10 +1324,31 @@ def generate_scenario(
             encoding="utf-8",
         )
 
+    remaining_predicates = list(predicates)
+    for mapping in mappings:
+        mapping_key = (
+            str(mapping["ruleColumn"]).casefold(),
+            str(mapping["operator"]).casefold(),
+        )
+        for index, predicate in enumerate(remaining_predicates):
+            predicate_key = (
+                str(predicate["column"]).casefold(),
+                str(predicate["operator"]).casefold(),
+            )
+            if predicate_key == mapping_key:
+                remaining_predicates.pop(index)
+                break
+    unmapped_predicate_limitations = [
+        f"Decisive predicate {item['column']!r} ({item['operator']}) is not represented "
+        "by an ingestion mapping."
+        for item in remaining_predicates
+    ]
     status = (
         "qualification-ready"
         if ingestion_mode in {"custom-dcr", "standard-dcr"}
         and assessment["status"] == "simple"
+        and scenario_input_kind != "candidate"
+        and not unmapped_predicate_limitations
         else "generated-offline-only"
     )
     manifest = {
@@ -941,12 +1358,47 @@ def generate_scenario(
         "ruleId": rule.get("id"),
         "ruleName": rule.get("name"),
         "analyticRule": str(rule_path),
+        "sourceRoot": str(source_root),
+        "toolkitRoot": str(toolkit_root),
+        "sampleDataRoot": str(sample_data_root),
         "customDetectionId": _detection_property(detection, "id"),
         "customDetectionName": (
             _detection_property(detection, "displayName")
             or _detection_property(detection, "name")
         ),
         "customDetection": str(detection_path),
+        "reviewedScenario": (
+            str(scenario_input) if scenario_input_kind == "reviewed" else None
+        ),
+        "candidateScenario": (
+            str(scenario_input) if scenario_input_kind == "candidate" else None
+        ),
+        "scenarioReview": {
+            "status": (
+                "review-pending"
+                if scenario_input_kind == "candidate"
+                else "reviewed"
+                if scenario_input_kind == "reviewed"
+                else "not-required"
+            ),
+            "inputKind": scenario_input_kind,
+            "inputPath": str(scenario_input) if scenario_input else None,
+            "inputSha256": scenario_input_hash,
+            "semanticValidation": "not-run",
+        },
+        "outputRoot": str(output_root),
+        "sourceHashes": {
+            "analyticRuleFileSha256": _sha256_bytes(rule_path.read_bytes()),
+            "analyticRuleQuerySha256": _sha256_bytes(
+                source_query.encode("utf-8")
+            ),
+            "customDetectionFileSha256": _sha256_bytes(
+                detection_path.read_bytes()
+            ),
+            "customDetectionQuerySha256": _sha256_bytes(
+                destination_query.encode("utf-8")
+            ),
+        },
         "scenarioName": scenario_name,
         "hypothesis": hypothesis,
         "generationStatus": status,
@@ -965,6 +1417,18 @@ def generate_scenario(
             "stream": stream,
             "outputStream": output_stream,
             "contract": str(contract_path) if contract_path else None,
+            "contractResolution": (
+                {
+                    "status": contract_resolution.get("status"),
+                    "schemaFingerprint": contract_resolution.get("schemaFingerprint"),
+                    "transformFingerprint": contract_resolution.get("transformFingerprint"),
+                    "liveValidated": contract_resolution.get("liveValidated"),
+                    "references": contract_resolution.get("references"),
+                    "blockers": contract_resolution.get("blockers"),
+                }
+                if contract_resolution
+                else None
+            ),
             "directLogsIngestionSupported": ingestion_mode
             in {"custom-dcr", "standard-dcr"},
         },
@@ -979,6 +1443,14 @@ def generate_scenario(
         },
         "validation": {
             "schemaValidation": "passed",
+            "semanticReview": (
+                "pending"
+                if scenario_input_kind == "candidate"
+                else "reviewed"
+                if scenario_input_kind == "reviewed"
+                else "not-required"
+            ),
+            "semanticMatch": "not-run",
             "sentinelSeededQuery": "not-run",
             "advancedHuntingSeededQuery": "not-run",
             "liveIngestion": "not-run",
@@ -988,21 +1460,37 @@ def generate_scenario(
             "cleanup": "not-run",
         },
         "limitations": (
-            []
+            list((contract_resolution or {}).get("blockers") or [])
             if status == "qualification-ready"
-            else [
+            else (
+                [
+                    "Candidate fixture input is review-pending; it is schema-checked only and cannot proceed to direct ingestion."
+                ]
+                if scenario_input_kind == "candidate"
+                else [
+                    "The query requires semantic review; generation does not establish that fixture records match it."
+                ]
+                if ingestion_mode in {"custom-dcr", "standard-dcr"}
+                else [
                 "The selected table does not expose a declared Custom-* input stream "
                 "or a reviewed standard-table ingestion contract for direct Logs "
                 "Ingestion API testing."
-            ]
-        ),
+                ]
+            ) + list((contract_resolution or {}).get("blockers") or [])
+        ) + unmapped_predicate_limitations,
     }
     scenario_path = output_dir / "scenario.json"
     scenario_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return {
-        "status": "generated",
+        "status": "generated-candidate" if scenario_input_kind == "candidate" else "generated",
         "scenarioPath": str(scenario_path),
         "mockPath": str(mock_path),
+        "paths": {
+            "sourceRoot": str(source_root),
+            "toolkitRoot": str(toolkit_root),
+            "sampleDataRoot": str(sample_data_root),
+            "outputRoot": str(output_root),
+        },
         "scenario": manifest,
     }
 
@@ -1012,8 +1500,38 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--solution", required=True)
     parser.add_argument("--rule", required=True, help="Rule ID, exact name, filename, or YAML path.")
     parser.add_argument("--custom-detection", help="Exact converted Custom Detection YAML path or selector.")
+    parser.add_argument(
+        "--source-root",
+        type=Path,
+        help="Azure-Sentinel repository containing Solutions/<solution> (defaults to this toolkit repository).",
+    )
+    parser.add_argument(
+        "--toolkit-root",
+        type=Path,
+        help="Toolkit repository containing the standard-table registry (defaults to this repository).",
+    )
+    parser.add_argument(
+        "--sample-data-root",
+        type=Path,
+        help="Root containing Tables/ base events (defaults to the toolkit Sample Data folder).",
+    )
+    parser.add_argument(
+        "--output-root",
+        type=Path,
+        help="Exact mock output root; solution and rule-ID folders are created beneath it.",
+    )
     parser.add_argument("--force", action="store_true", help="Regenerate an existing scenario.")
-    parser.add_argument("--reviewed-scenario", type=Path)
+    scenario_inputs = parser.add_mutually_exclusive_group()
+    scenario_inputs.add_argument(
+        "--reviewed-scenario",
+        type=Path,
+        help="Reviewed complex scenario JSON; only use after human review.",
+    )
+    scenario_inputs.add_argument(
+        "--candidate-scenario",
+        type=Path,
+        help="Provisional scenario JSON; generation remains review-pending and offline-only.",
+    )
     parser.add_argument("--randomize", action="store_true")
     parser.add_argument("--copies", type=int, default=1)
     parser.add_argument("--seed", type=int, default=20260917)
@@ -1028,11 +1546,16 @@ def main(argv: Optional[List[str]] = None) -> int:
             custom_detection_selector=args.custom_detection,
             force=args.force,
             reviewed_scenario=args.reviewed_scenario,
+            candidate_scenario=args.candidate_scenario,
             randomize=args.randomize,
             copies=args.copies,
             seed=args.seed,
             locks=[_parse_assignment(item) for item in args.lock],
             benign_assignments=[_parse_assignment(item) for item in args.benign_set],
+            source_root=args.source_root,
+            toolkit_root=args.toolkit_root,
+            sample_data_root=args.sample_data_root,
+            output_root=args.output_root,
         )
     except ScenarioError as exc:
         print(json.dumps({"status": "blocked", "error": str(exc)}, indent=2))

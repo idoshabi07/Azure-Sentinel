@@ -17,16 +17,16 @@ from sentinel_xdr_migration.target_context import (
 from sentinel_xdr_migration.workflow import initialize_workflow, workflow_status
 
 
-TENANT_ID = "39768270-33ce-4b90-a1a6-e0caeb3ba0ab"
-SUBSCRIPTION_ID = "42382e39-f157-46d1-a931-b8cfd779ece5"
-CUSTOMER_ID = "756386d8-e2d4-4f09-905a-74b24313721f"
+TENANT_ID = "11111111-2222-4333-8444-555555555555"
+SUBSCRIPTION_ID = "22222222-3333-4444-8555-666666666666"
+CUSTOMER_ID = "33333333-4444-4555-8666-777777777777"
 OLD_WORKSPACE = (
-    f"/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/DefaultResourceGroup-EUS/"
-    "providers/Microsoft.OperationalInsights/workspaces/OptimizeSentinelWorkspace"
+    f"/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/rg-test/"
+    "providers/Microsoft.OperationalInsights/workspaces/ws-test"
 )
 NEW_WORKSPACE = (
     f"/subscriptions/{SUBSCRIPTION_ID}/resourceGroups/OptimizeSentinelResourceGroup/"
-    "providers/Microsoft.OperationalInsights/workspaces/OptimizeSentinelWorkspace"
+    "providers/Microsoft.OperationalInsights/workspaces/ws-test"
 )
 
 
@@ -76,6 +76,26 @@ class TargetContextTests(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "does not match workflow state"):
             require_locked_target(self.solution)
+
+    def test_locked_target_rejects_unlocked_artifact(self) -> None:
+        self._initialize()
+        target_path = artifact_path(self.solution, "qualification-target.json")
+        target = json.loads(target_path.read_text(encoding="utf-8"))
+        target["locked"] = False
+        target_path.write_text(json.dumps(target), encoding="utf-8")
+
+        with self.assertRaisesRegex(ValueError, "locked-target identity"):
+            require_locked_target(self.solution)
+
+    def test_locked_target_can_be_read_without_materializing_missing_artifact(self) -> None:
+        self._initialize()
+        target_path = artifact_path(self.solution, "qualification-target.json")
+        target_path.unlink()
+
+        target = require_locked_target(self.solution, materialize_missing=False)
+
+        self.assertEqual(OLD_WORKSPACE, target["workspaceResourceId"])
+        self.assertFalse(target_path.exists())
 
     @mock.patch(
         "sentinel_xdr_migration.target_context.shutil.which",

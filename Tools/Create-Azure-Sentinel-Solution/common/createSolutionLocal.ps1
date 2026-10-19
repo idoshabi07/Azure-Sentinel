@@ -5,9 +5,15 @@ param(
     [string]$VersionMode = "catalog",
     [ValidateSet("none", "patch", "minor", "major")]
     [string]$VersionBump = "patch",
+    [string]$TargetVersion = $null,
     [string]$EntryPointName = "Local",
     [string]$DefaultInputPath = $null,
-    [bool]$IncludeXdrDetections = $false
+    [string]$ToolkitRootPath = $null,
+    [bool]$IncludeXdrDetections = $false,
+    [bool]$EnforceV31Versions = $false,
+    [switch]$SkipAttributionLookup,
+    [ValidateSet("arm-ttk", "lab-deployment")]
+    [string]$ArmValidationMethod = "arm-ttk"
 )
 
 Write-Host "=======Starting Package Creation using $EntryPointName tool========="
@@ -94,17 +100,72 @@ $solutionBasePath = $path.Substring(0, $indexOfSolutions + 10)
 $repositoryBasePath = $path.Substring(0, $indexOfSolutions)
 Write-Host "SolutionBasePath is $solutionBasePath, Solution Name $solutionName" 
 
+$toolkitRoot = $repositoryBasePath
+if (-not [string]::IsNullOrWhiteSpace($ToolkitRootPath)) {
+    $resolvedToolkitRoot = Resolve-Path -LiteralPath $ToolkitRootPath -ErrorAction SilentlyContinue
+    if ($null -eq $resolvedToolkitRoot) {
+        Write-Error "V3.1 toolkit root does not exist: $ToolkitRootPath"
+        exit 1
+    }
+    $toolkitRoot = $resolvedToolkitRoot.Path
+}
+if ($EntryPointName -eq "V3.1" -or $EnforceV31Versions) {
+    $toolkitPaths = @(
+        "Tools/Create-Azure-Sentinel-Solution/V3/createSolutionV3_1.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/createSolutionLocal.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/commonFunctions.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/get-ccp-details.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/summaryRules.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/contentDeploymentParameters.json",
+        "Tools/Create-Azure-Sentinel-Solution/common/contentDeploymentParameters.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/templating/baseMainTemplate.json",
+        "Tools/Create-Azure-Sentinel-Solution/common/templating/baseCreateUiDefinition.json",
+        "Tools/Create-Azure-Sentinel-Solution/common/customDetections.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/customerUsageAttribution.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/AttributionMetadata.cs",
+        "Tools/Create-Azure-Sentinel-Solution/common/versionPolicy.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/standardLogStreams.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/createCCPConnector.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/storageAccountDeploymentTemplate.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/common/eventGridManagedIdentityDeploymentTemplate.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/arm-ttk/download-arm-ttk.ps1",
+        "Tools/Create-Azure-Sentinel-Solution/arm-ttk/run-arm-ttk-in-automation.ps1",
+        "Tools/SentinelToXDRMigration/kql/rename-parser-bindings.cjs"
+    )
+    $missingToolkitPaths = @(
+        $toolkitPaths | Where-Object {
+            -not (Test-Path -LiteralPath (Join-Path $toolkitRoot $_) -PathType Leaf)
+        }
+    )
+    if ($missingToolkitPaths.Count -gt 0) {
+        Write-Error "V3.1 toolkit root is incomplete: $toolkitRoot; missing $($missingToolkitPaths -join ', ')"
+        exit 1
+    }
+}
+
 $isPipelineRun = $false
 
-$commonFunctionsFilePath = $repositoryBasePath + "Tools/Create-Azure-Sentinel-Solution/common/commonFunctions.ps1"
-$getccpDetailsFilePath = $repositoryBasePath + "Tools/Create-Azure-Sentinel-Solution/common/get-ccp-details.ps1"
+$commonFunctionsFilePath = Join-Path $toolkitRoot "Tools/Create-Azure-Sentinel-Solution/common/commonFunctions.ps1"
+$getccpDetailsFilePath = Join-Path $toolkitRoot "Tools/Create-Azure-Sentinel-Solution/common/get-ccp-details.ps1"
 
 . $commonFunctionsFilePath # load common functions
 . $getccpDetailsFilePath # load ccp functions
+if ($EnforceV31Versions) {
+    $v31VersionPolicy = @{ Errors = [System.Collections.Generic.List[string]]::new() }
+}
+if (-not [string]::IsNullOrWhiteSpace($TargetVersion)) {
+    if (-not $EnforceV31Versions -or $VersionMode -ne "local") {
+        throw "TargetVersion is supported only by local V3.1 packaging."
+    }
+    if ($VersionBump -ne "none") {
+        throw "TargetVersion cannot be combined with a version bump."
+    }
+    Assert-V31TargetVersion -Version $TargetVersion
+}
 
 # Load catalog API functions only if using catalog mode
 if ($VersionMode -eq "catalog") {
-    $catalogAPIFilePath = $repositoryBasePath + ".script/package-automation/catalogAPI.ps1"
+    $catalogAPIFilePath = Join-Path $toolkitRoot ".script/package-automation/catalogAPI.ps1"
     . $catalogAPIFilePath # load catalog api functions
 }
 
@@ -176,7 +237,7 @@ function GetIncrementedVersion($version, $bumpType = "patch") {
 }
 
 # Function to get package version from local solution data file instead of Microsoft catalog
-function GetLocalPackageVersion($defaultPackageVersion, $userInputPackageVersion, $packageVersionAttribute, $versionBumpType, $dataFilePath) {
+function GetLocalPackageVersion($defaultPackageVersion, $userInputPackageVersion, $packageVersionAttribute, $versionBumpType, $dataFilePath, $targetVersion) {
     Write-Host "Using local version from solution data file instead of Microsoft catalog (Bump type: $versionBumpType)"
     
     if ($packageVersionAttribute -and $null -ne $userInputPackageVersion -and $userInputPackageVersion -ne '') {
@@ -204,17 +265,23 @@ function GetLocalPackageVersion($defaultPackageVersion, $userInputPackageVersion
             return $defaultPackageVersion
         }
 
-        # Increment only when a release bump was requested.
-        $incrementedVersion = GetIncrementedVersion $userInputPackageVersion $versionBumpType
-        if ($versionBumpType -eq "none") {
-            Write-Host "Package version remains $incrementedVersion for local validation"
+        if (-not [string]::IsNullOrWhiteSpace($targetVersion)) {
+            $incrementedVersion = $targetVersion
+            Write-Host "Using explicitly selected V3.1 target version $incrementedVersion"
         }
         else {
-            Write-Host "Package version incremented to $incrementedVersion (from local solution data: $userInputPackageVersion)"
+            # Increment only when a release bump was requested.
+            $incrementedVersion = GetIncrementedVersion $userInputPackageVersion $versionBumpType
+            if ($versionBumpType -eq "none") {
+                Write-Host "Package version remains $incrementedVersion for local validation"
+            }
+            else {
+                Write-Host "Package version incremented to $incrementedVersion (from local solution data: $userInputPackageVersion)"
+            }
         }
         
         # Persist the release version only when an increment was requested.
-        if ($versionBumpType -ne "none" -and $null -ne $dataFilePath -and $dataFilePath -ne '') {
+        if (-not $EnforceV31Versions -and $versionBumpType -ne "none" -and $null -ne $dataFilePath -and $dataFilePath -ne '') {
             try {
                 Write-Host "Updating version in data file: $dataFilePath"
                 $dataFileContent = Get-Content -Raw $dataFilePath | Out-String | ConvertFrom-Json
@@ -262,9 +329,40 @@ try {
     $ccpTablesFilePaths = @();
     $ccpTablesCounter = 1; 
     $isCCPConnector = $false;
+    Assert-NoSolutionContentSymlinks -SolutionRoot $solutionFolderBasePath
     foreach ($inputFile in $(Get-ChildItem -Path "$solutionFolderBasePath\$dataFolderName\$dataFileName")) {
-        #$inputJsonPath = Join-Path -Path $path -ChildPath "$($inputFile.Name)"
-        $contentToImport = Get-Content -Raw $inputFile | Out-String | ConvertFrom-Json
+        $inputFileRelativePath = $inputFile.FullName.Substring($solutionFolderBasePath.Length).TrimStart('\', '/')
+        $resolvedInputFile = Resolve-SolutionContentPath `
+            -SolutionRoot $solutionFolderBasePath `
+            -SolutionName $solutionName `
+            -ContentPath $inputFileRelativePath `
+            -RequireFile
+        $contentToImport = Get-Content -LiteralPath $resolvedInputFile.FullPath -Raw -ErrorAction Stop | Out-String | ConvertFrom-Json
+        Assert-NoOperationalContent -Content $contentToImport
+        Assert-SolutionName `
+            -SolutionName ([string]$contentToImport.Name) `
+            -SelectedSolutionName $solutionName
+        $metadataReference = Resolve-SolutionContentPath `
+            -SolutionRoot $solutionFolderBasePath `
+            -SolutionName $solutionName `
+            -ContentPath ([string]$contentToImport.Metadata) `
+            -RequireFile
+        $metadataPath = $metadataReference.FullPath
+        foreach ($property in $contentToImport.PSObject.Properties) {
+            if ($property.Value -is [System.Array] -and
+                $property.Name.ToLowerInvariant() -notin @(
+                    'dependentdomainsolutionids', 'staticdataconnectorids',
+                    'xdr detections', 'custom detections'
+                )) {
+                foreach ($reference in $property.Value) {
+                    $null = Resolve-SolutionContentPath `
+                        -SolutionRoot $solutionFolderBasePath `
+                        -SolutionName $solutionName `
+                        -ContentPath ([string]$reference) `
+                        -RequireFile
+                }
+            }
+        }
 
         $has1PConnectorProperty = [bool]($contentToImport.PSobject.Properties.Name -match "Is1PConnector")
         if ($has1PConnectorProperty) {
@@ -284,10 +382,8 @@ try {
         }
 
         $solutionName = $contentToImport.Name
-        #$metadataPath = "$PSScriptRoot/../../../Solutions/$($contentToImport.Name)/$($contentToImport.Metadata)"
-        $metadataPath = $solutionBasePath + "$($contentToImport.Name)/$($contentToImport.Metadata)"
 
-        $baseMetadata = Get-Content -Raw $metadataPath | Out-String | ConvertFrom-Json
+        $baseMetadata = Get-Content -LiteralPath $metadataPath -Raw -ErrorAction Stop | Out-String | ConvertFrom-Json
         if ($null -eq $baseMetadata) {
             Write-Host "Please verify if the given path is correct and/or Solution folder name and Data file Name attribute value is correct!"
             exit 1
@@ -299,7 +395,7 @@ try {
         
         if ($VersionMode -eq "local") {
             # Use local version bumping
-            $packageVersion = GetLocalPackageVersion $defaultPackageVersion $userInputPackageVersion $packageVersionAttribute $VersionBump $inputFile.FullName
+            $packageVersion = GetLocalPackageVersion $defaultPackageVersion $userInputPackageVersion $packageVersionAttribute $VersionBump $inputFile.FullName $TargetVersion
         }
         else {
             # Use catalog API for version management
@@ -309,6 +405,7 @@ try {
             $packageVersion = GetPackageVersion $defaultPackageVersion $offerId $offerDetails $packageVersionAttribute $userInputPackageVersion
         }
         
+        Assert-V31SolutionVersion -SolutionName $solutionName -Version $packageVersion
         if ($packageVersion -ne $contentToImport.version) {
             $contentToImport.PSObject.Properties.Remove('version')
             $contentToImport | Add-Member -MemberType NoteProperty -Name 'version' -Value $packageVersion 
@@ -372,16 +469,19 @@ try {
             }
             if ($objectProperties.Value -is [System.Array] -and $objectProperties.Name.ToLower() -ne 'dependentdomainsolutionids' -and $objectProperties.Name.ToLower() -ne 'staticdataconnectorids') {
                 foreach ($file in $objectProperties.Value) {
-                    $file = $file.Replace("$basePath/", "").Replace("Solutions/", "").Replace("$solutionName/", "") 
-                    $finalPath = ($basePath + $solutionName + "/" + $file).Replace("//", "/")
+                    $resolvedContent = Resolve-SolutionContentPath `
+                        -SolutionRoot $solutionFolderBasePath `
+                        -SolutionName $solutionName `
+                        -ContentPath ([string]$file) `
+                        -RequireFile
+                    $file = $resolvedContent.RelativePath
+                    $finalPath = $resolvedContent.FullPath
                     $rawData = $null
                     try {
-                        Write-Host "Downloading $finalPath"
-                        $rawData = (New-Object System.Net.WebClient).DownloadString($finalPath)
+                        $rawData = Get-Content -LiteralPath $finalPath -Raw -ErrorAction Stop
                     }
                     catch {
-                        Write-Host "Failed to download $finalPath -- Please ensure that it exists in $([System.Uri]::EscapeUriString($basePath))" -ForegroundColor Red
-                        break;
+                        throw "Failed to read contained solution content $finalPath`: $($_.Exception.Message)"
                     }
 
                     try {
@@ -449,7 +549,7 @@ try {
                                 GetHuntingDataMetadata -file $file -rawData $rawData -contentResourceDetails $contentResourceDetails
                             }
                             elseif ($objectKeyLowercase -eq "summary rules" -or $objectKeyLowercase -eq "summaryrules") {
-                                $summaryRuleFilePath = $repositoryBasePath + "Tools/Create-Azure-Sentinel-Solution/common/summaryRules.ps1"
+                                $summaryRuleFilePath = Join-Path $toolkitRoot "Tools/Create-Azure-Sentinel-Solution/common/summaryRules.ps1"
                                 . $summaryRuleFilePath
                                 GenerateSummaryRules -solutionName $solutionName -file $file -rawData $rawData -contentResourceDetails $contentResourceDetails
                             }
@@ -464,36 +564,20 @@ try {
                 }
             }
             elseif ($objectProperties.Name.ToLower() -eq "metadata") {
+                $finalPath = $metadataPath
+                $rawData = Get-Content -LiteralPath $finalPath -Raw -ErrorAction Stop
                 try {
-                    $finalPath = $metadataPath
-                    $rawData = $null
-                    try {
-                        Write-Host "Downloading $finalPath"
-                        $rawData = (New-Object System.Net.WebClient).DownloadString($finalPath)
-                    }
-                    catch {
-                        Write-Host "Failed to download $finalPath -- Please ensure that it exists in $([System.Uri]::EscapeUriString($basePath))" -ForegroundColor Red
-                        break;
-                    }
-                        
-                    try {
-                        $json = ConvertFrom-Json $rawData -ErrorAction Stop; # Determine whether content is JSON or YAML
-                        $validJson = $true;
-                    }
-                    catch {
-                        $validJson = $false;
-                    }
-                    
-                    if ($validJson -and $json) {
-                        PrepareSolutionMetadata -solutionMetadataRawContent $json -contentResourceDetails $contentResourceDetails -defaultPackageVersion $defaultPackageVersion
-                    }
-                    else {
-                        Write-Host "Failed to load Metadata file $file -- Please ensure that it exists in $([System.Uri]::EscapeUriString($basePath))" -ForegroundColor Red
-                    }
+                    $json = ConvertFrom-Json $rawData -ErrorAction Stop
+                    $validJson = $true
                 }
                 catch {
-                    Write-Host "Failed to load Metadata file $file -- Please ensure that the SolutionMetadata file exists in $([System.Uri]::EscapeUriString($basePath))" -ForegroundColor Red
-                    break;
+                    $validJson = $false
+                }
+                if ($validJson -and $json) {
+                    PrepareSolutionMetadata -solutionMetadataRawContent $json -contentResourceDetails $contentResourceDetails -defaultPackageVersion $defaultPackageVersion
+                }
+                else {
+                    throw "Failed to load contained solution metadata $finalPath as JSON."
                 }
             }
         }
@@ -521,13 +605,24 @@ try {
         updateDescriptionCount $global:functionAppList.Count                           "**Function Apps:** "                       "{{FunctionAppsCount}}"             $(checkResourceCounts @($global:playbookCounter))
         updateDescriptionCount ($global:playbookCounter - $global:customConnectorsList.Count - $global:functionAppList.Count)  "**Playbooks:** "   "{{PlaybookCount}}"       $false
 
-        GeneratePackage -solutionName $solutionName -contentToImport $contentToImport -calculatedBuildPipelinePackageVersion $contentToImport.Version -IncludeXdrDetections $IncludeXdrDetections;
-        RunArmTtkOnPackage -solutionName $solutionName -isPipelineRun $false;
+        GeneratePackage -solutionName $solutionName -contentToImport $contentToImport -calculatedBuildPipelinePackageVersion $contentToImport.Version -IncludeXdrDetections $IncludeXdrDetections -SolutionMetadataPath (Join-Path $solutionFolderBasePath 'SolutionMetadata.json') -SkipAttributionLookup:$SkipAttributionLookup;
+        if ($EnforceV31Versions -and $VersionMode -eq 'local' -and ($VersionBump -ne 'none' -or -not [string]::IsNullOrWhiteSpace($TargetVersion))) {
+            Save-V31LocalPackageVersion -DataFilePath $inputFile.FullName -Version $contentToImport.Version
+        }
+        if ($ArmValidationMethod -eq "arm-ttk") {
+            RunArmTtkOnPackage -solutionName $solutionName -isPipelineRun $false;
+        }
+        else {
+            Write-Host "ARM-VALIDATION: Method=lab-deployment Status=pending CandidateGenerated=true Accepted=false"
+        }
 
         # check if mainTemplate and createUiDefinition json files are valid or not
         CheckJsonIsValid($solutionFolderBasePath)
     }
 }
 catch {
+    if ($IncludeXdrDetections) {
+        throw
+    }
     Write-Host "Error occurred in $EntryPointName local package creation. Error details are $_" -ForegroundColor Red
 }
