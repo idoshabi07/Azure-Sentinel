@@ -1,7 +1,7 @@
 Parser:
   DisplayName: Salesforce Service Cloud Authentication ASIM ingestion-time parser
   Version: '0.2.1'
-  LastUpdated: 'Sep 15, 2026'
+  LastUpdated: '2026-09-15'
 Product:
   Name: Salesforce Service Cloud
 Normalization:
@@ -661,7 +661,7 @@ ParserQuery: |
       EventProduct = 'Service Cloud',
       EventCount = int(1),
       EventSchema = 'Authentication',
-      EventSchemaVersion = '0.1.4',
+      EventSchemaVersion = '1.0.0',
       TargetAppName = "Salesforce Dot Com(SFDC)",
       TargetAppType = "SaaS application",
       EventUid = EventOriginalUid,
@@ -764,5 +764,5 @@ ParserQuery: |
       , Src
       , Application
 Change:
-  Date: '2026-09-16'
-  Description: Initial ingestion-time parser publication for _ASim_Authentication_SalesforceSC; targets ASimAuthenticationEventLogs.
+  Date: '2026-09-15'
+  Description: Initial ingestion-time parser publication for ASimAuthenticationSalesforceServiceCloud; targets ASimAuthenticationEventLogs.
