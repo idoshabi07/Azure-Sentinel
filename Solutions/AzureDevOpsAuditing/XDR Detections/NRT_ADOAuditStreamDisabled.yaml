@@ -1,0 +1,96 @@
+schemaVersion: 1.0.0
+version: 3.1.0
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors: []
+contentProvenance:
+  requiredWorkloads: []
+  requiredDataConnectors: []
+  dependencyReviewRequired: true
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: 74ed028d-e392-40b7-baef-e69627bf89d1
+    path: Analytic Rules/NRT_ADOAuditStreamDisabled.yaml
+    version: 1.0.4
+    querySha256: c8653d05bc6e814c5922c88f24ba85aba897b79a20cd73ca4a516fa1c93377e0
+    schedule:
+      queryFrequency: ''
+      queryPeriod: ''
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: needsReview
+    reviewRequired: true
+    reviewReasons:
+    - source NRT rule is not eligible for Continuous (NRT) execution in Defender XDR (table ADOAuditLogs is not supported
+      for Continuous (NRT) frequency in Defender XDR); review schedule or configure a scheduled frequency override
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - source NRT rule is not eligible for Continuous (NRT) execution in Defender XDR (table ADOAuditLogs is not supported
+      for Continuous (NRT) frequency in Defender XDR); review schedule or configure a scheduled frequency override
+    - 'Schedule assessment: source kind=NRT; target frequency=PT0S (Continuous); query is not eligible for Continuous (NRT)
+      execution (table ADOAuditLogs is not supported for Continuous (NRT) frequency in Defender XDR). See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    - Account.FullName value is retained as customDetails.AccountFullName from query column `ActorUPN`, but its target output
+      binding requires runtime-schema verification; custom details do not restore entity identity or correlation
+    - Supplemental customDetails.AccountFullName column `ActorUPN` requires runtime output-schema binding verification
+    - Custom-detail values must remain within the documented combined 4 KB per-alert limit; runtime values are unverified
+      and the service drops all custom details if exceeded
+    informational: []
+    errors: []
+    originalTactics:
+    - DefenseEvasion
+    originalTechniques:
+    - T1562.008
+    reviewScope:
+      sourceDocumentSha256: 7197e8cfd23ff24a05a401774a38830f1ac763d1a4d54330f5f45f6486da852b
+      targetQuerySha256: 7a1c89d8eb38efded2b36b2d256535a8b49d7339ae0bac6801e735f8b83198ab
+    supplementalEntityDetails:
+    - entityType: Account
+      entityIndex: 1
+      identifier: FullName
+      sourceColumn: ActorUPN
+      column: ActorUPN
+      status: runtime-binding-pending
+      customDetailKey: AccountFullName
+properties:
+  id: xdr-74ed028d-e392-40b7-baef-e69627bf89d1
+  displayName: NRT Azure DevOps Audit Stream Disabled
+  status: disabled
+  queryCondition:
+    queryText: |-
+      ADOAuditLogs
+      | where OperationName =~ "AuditLog.StreamDisabledByUser"
+      | extend StreamType = tostring(Data.ConsumerType)
+      | project-reorder TimeGenerated, Details, ActorUPN, IpAddress, UserAgent, StreamType
+      | extend timestamp = TimeGenerated
+      | extend AccountName = tostring(split(ActorUPN, "@")[0]), AccountUPNSuffix = tostring(split(ActorUPN, "@")[1])
+  schedule:
+    frequency: PT0S
+  detectionAction:
+    alertTemplate:
+      title: NRT Azure DevOps Audit Stream Disabled
+      description: '''Azure DevOps allow for audit logs to be streamed to external storage solutions such as SIEM solutions.
+        An attacker looking to hide malicious Azure DevOps activity from defenders may look to disable data streams before
+        conducting activity and then re-enabling the stream after (so as not to raise data threshold-based alarms). Looking
+        for disabled audit streams can identify this activity, and due to the nature of the action its unlikely to have a
+        high false positive rate.'''
+      severity: high
+      entityMappings:
+        accounts:
+        - id: account1
+          nameColumn: AccountName
+          upnSuffixColumn: AccountUPNSuffix
+        ips:
+        - id: ip1
+          addressColumn: IpAddress
+      tactics:
+      - tactic: DefenseEvasion
+        techniques:
+        - technique: T1562
+          subTechniques:
+          - T1562.008
+      customDetails:
+        AccountFullName: ActorUPN

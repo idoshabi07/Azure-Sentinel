@@ -1,0 +1,139 @@
+schemaVersion: 1.0.0
+version: 3.1.0
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors: []
+contentProvenance:
+  requiredWorkloads: []
+  requiredDataConnectors: []
+  dependencyReviewRequired: true
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: cd8d946d-10a4-40a9-bac1-6d0a6c847d65
+    path: Analytic Rules/SuspiciousAccessOfBECRelatedDocuments.yaml
+    version: 1.0.5
+    querySha256: 1e866d69f9240d700f32b6e740152d750894d34cdff1e46e2a44cd0ea4c49b63
+    schedule:
+      queryFrequency: 1d
+      queryPeriod: 14d
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=1d, lookback=14d; target frequency=P1D, native lookback=unknown/unconfigured;
+      mixed, Sentinel-only, or unknown query surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    - customDetails 'Type' column `EventType` requires runtime output-schema binding verification
+    - customDetails 'Result' column `EventResult` requires runtime output-schema binding verification
+    - customDetails 'Product' column `EventProduct` requires runtime output-schema binding verification
+    - customDetails 'UserAgent' column `HttpUserAgent` requires runtime output-schema binding verification
+    - Account.FullName value is retained as customDetails.AccountFullName from query column `User`, but its target output
+      binding requires runtime-schema verification; custom details do not restore entity identity or correlation
+    - Supplemental customDetails.AccountFullName column `User` requires runtime output-schema binding verification
+    - Account.FullName value is retained as customDetails.AccountFullName from query column `User`, but its target output
+      binding requires runtime-schema verification; custom details do not restore entity identity or correlation
+    - Supplemental customDetails.AccountFullName column `User` requires runtime output-schema binding verification
+    - Custom-detail values must remain within the documented combined 4 KB per-alert limit; runtime values are unverified
+      and the service drops all custom details if exceeded
+    informational: []
+    errors: []
+    originalTactics:
+    - Collection
+    originalTechniques:
+    - T1530
+    reviewScope:
+      sourceDocumentSha256: 0fa72b2a0a905d1b1d2efba5a05de9810bf7efd36447eb3cec8565f875c11398
+      targetQuerySha256: 82e6382c07e305ea00e973ae8802c8ab6e73f32205df7af0af46dc088efd20a5
+    supplementalEntityDetails:
+    - entityType: Account
+      entityIndex: 1
+      identifier: FullName
+      sourceColumn: User
+      column: User
+      status: runtime-binding-pending
+      customDetailKey: AccountFullName
+    - entityType: Account
+      entityIndex: 2
+      identifier: FullName
+      sourceColumn: User
+      column: User
+      status: runtime-binding-pending
+      customDetailKey: AccountFullName
+properties:
+  id: xdr-cd8d946d-10a4-40a9-bac1-6d0a6c847d65
+  displayName: Suspicious access of BEC related documents
+  status: disabled
+  queryCondition:
+    queryText: |-
+      let BEC_Keywords = dynamic([ 'invoice','payment','paycheck','transfer','bank statement','bank details','closing','funds','bank account','account details','remittance','purchase','deposit',"PO#","Zahlung","Rechnung","Paiement", "virement bancaire","Bankuberweisung",'hacked','phishing']);
+      // Adjust this threshold based on your environment
+      let sensitivity = 2.5;
+      let Events = materialize(imFileEvent
+      | where TimeGenerated between(startofday(ago(14d))..endofday(ago(0d)))
+      | where User !~ "app@sharepoint"
+      | where EventType =~ "FileAccessed"
+      | extend OriginalEvent = column_ifexists("EventOriginalType","Unknown")
+      | where OriginalEvent !~ "FileSyncDownloadedFull"
+      | where EventProduct in ("SharePoint 365", "Azure File Storage", "OneDrive" , "SharePoint")
+      | where FilePath has_any(BEC_Keywords)
+      | extend _AuthDetails = column_ifexists("AuthorizationDetails", "None")
+      | extend SPuser = case(gettype(_AuthDetails) == "array", tostring(todynamic(_AuthDetails)[0].principals[0].id), "Unknown")
+      | extend User = case(isnotempty(User), User, SPuser)
+      | where isnotempty(User));
+      Events
+      | summarize dcount(FileName) by User, bin(startofday(TimeGenerated), 1d)
+      | summarize CountOfDocs = make_list(dcount_FileName, 10000), TimeStamp = make_list(TimeGenerated, 10000) by User
+      | extend (Anomalies, Score, Baseline) = series_decompose_anomalies(CountOfDocs, sensitivity, -1, 'linefit')
+      | mv-expand CountOfDocs to typeof(double), TimeStamp to typeof(datetime), Anomalies to typeof(double), Score to typeof(double), Baseline to typeof(long)
+      | where Anomalies > 0
+      | project TimeStamp, CountOfDocs, Baseline, Score, Anomalies, User
+      | join kind=inner(Events | extend TimeStamp = startofday(TimeGenerated)) on TimeStamp, User
+      | extend IpAddr = column_ifexists("IpAddr", SrcIpAddr)
+      | extend Name = iif(User contains "@", split(User, "@")[0], split(User, "\\")[1])
+      | extend UPNSuffix = iif(User contains "@", split(User, "@")[1], "")
+      | extend NTDomain = iif(User contains "@", split(User, "\\")[0], "")
+      | project-reorder TimeGenerated, User, EventType, EventResult, EventProduct, FilePath, HttpUserAgent, IpAddr, CountOfDocs, Baseline, Score
+  schedule:
+    frequency: P1D
+  detectionAction:
+    alertTemplate:
+      title: Suspicious access of BEC related documents
+      description: "'This query looks for users with suspicious spikes in the number of files accessed that relate to topics\
+        \ commonly accessed as part of Business Email Compromise (BEC) attacks.\nThe query looks for access to files in storage\
+        \ that relate to topics such as invoices or payments, and then looks for users accessing these files in significantly\
+        \ higher numbers than in the previous 14 days. Incidents raised by this analytic should be investigated to see if\
+        \ the user accessing these files should be accessing them, and if the volume they accessed them at was related to\
+        \ a legitimate business need. \nThis quer"
+      severity: medium
+      entityMappings:
+        accounts:
+        - id: account1
+          nameColumn: Name
+          upnSuffixColumn: UPNSuffix
+        - id: account2
+          nameColumn: Name
+          ntDomainColumn: NTDomain
+        - id: account3
+          aadUserIdColumn: User
+        ips:
+        - id: ip1
+          addressColumn: IpAddr
+        files:
+        - id: file1
+          nameColumn: FilePath
+      tactics:
+      - tactic: Collection
+        techniques:
+        - technique: T1530
+      customDetails:
+        Type: EventType
+        Result: EventResult
+        Product: EventProduct
+        UserAgent: HttpUserAgent
+        AccountFullName: User

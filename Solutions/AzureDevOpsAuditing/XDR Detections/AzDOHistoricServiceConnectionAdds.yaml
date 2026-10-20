@@ -1,0 +1,124 @@
+schemaVersion: 1.0.0
+version: 3.1.0
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors: []
+contentProvenance:
+  requiredWorkloads: []
+  requiredDataConnectors: []
+  dependencyReviewRequired: true
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: 5efb0cfd-063d-417a-803b-562eae5b0301
+    path: Analytic Rules/AzDOHistoricServiceConnectionAdds.yaml
+    version: 1.0.6
+    querySha256: fa6e683b0b4c3f14fa2970ecae8f0f89d326ff1f50f2868782ed61b4f7af72c2
+    schedule:
+      queryFrequency: 6h
+      queryPeriod: 14d
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=6h, lookback=14d; target frequency=PT6H, native lookback=unknown/unconfigured;
+      mixed, Sentinel-only, or unknown query surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    - Account.FullName value is retained as customDetails.AccountFullName from query column `ActorUPN`, but its target output
+      binding requires runtime-schema verification; custom details do not restore entity identity or correlation
+    - Supplemental customDetails.AccountFullName column `ActorUPN` requires runtime output-schema binding verification
+    - Custom-detail values must remain within the documented combined 4 KB per-alert limit; runtime values are unverified
+      and the service drops all custom details if exceeded
+    informational:
+    - All source MITRE tactics are preserved in source order in authored YAML. V3.1 ARM packaging carries only the first tactic
+      and its compatible techniques; this classification loss is not validated parity. Direct Graph deployment requires a
+      single tactic.
+    errors: []
+    originalTactics:
+    - Persistence
+    - Impact
+    originalTechniques:
+    - T1098
+    - T1496
+    reviewScope:
+      sourceDocumentSha256: 6592a6dc9503aaa0ab7f93f63bc182e5c7ad44bd31560af9a9a4b79718ccd3e6
+      targetQuerySha256: f3a46ed1b9575eacd8e42cc197c0a591b9de10fa3234d595c9c6a957453f8767
+    supplementalEntityDetails:
+    - entityType: Account
+      entityIndex: 1
+      identifier: FullName
+      sourceColumn: ActorUPN
+      column: ActorUPN
+      status: runtime-binding-pending
+      customDetailKey: AccountFullName
+properties:
+  id: xdr-5efb0cfd-063d-417a-803b-562eae5b0301
+  displayName: Azure DevOps Service Connection Addition/Abuse - Historic allow list
+  status: disabled
+  queryCondition:
+    queryText: |-
+      let starttime = 14d;
+      let endtime = 6h;
+      // Ignore Build/Releases with less/equal this number
+      let ServiceConnectionThreshold = 3;
+      // New Connections need to exhibit execution of more "new" connections than this number.
+      let NewConnectionThreshold = 1;
+      // List of Builds/Releases to ignore in your space
+      let BypassDefIds = datatable(DefId:string, Type:string, ProjectName:string)
+      [
+      //"103", "Release", "ProjectA",
+      //"42", "Release", "ProjectB",
+      //"122", "Build", "ProjectB"
+      ];
+      let HistoricDefs = ADOAuditLogs
+      | where TimeGenerated between (ago(starttime) .. ago(endtime))
+      | where OperationName == "Library.ServiceConnectionExecuted"
+      | extend DefId = tostring(Data.DefinitionId), Type = tostring(Data.PlanType), ConnectionId = tostring(Data.ConnectionId)
+      | summarize HistoricCount = dcount(tostring(ConnectionId)), ConnectionNames = make_set(tostring(Data.ConnectionName))
+        by DefId = tostring(DefId), Type = tostring(Type), ProjectId, ProjectName, ActorUPN;
+      ADOAuditLogs
+      | where TimeGenerated >= ago(endtime)
+      | where OperationName == "Library.ServiceConnectionExecuted"
+      | extend DefId = tostring(Data.DefinitionId), Type = tostring(Data.PlanType), ConnectionId = tostring(Data.ConnectionId)
+      | parse ScopeDisplayName with OrganizationName ' (Organization)'
+      | summarize CurrentCount = dcount(tostring(ConnectionId)), ConnectionNames = make_set(tostring(Data.ConnectionName)), StartTime = min(TimeGenerated), EndTime = max(TimeGenerated)
+        by OrganizationName, DefId = tostring(DefId), Type = tostring(Type), ProjectId, ProjectName, ActorUPN
+      | where CurrentCount > ServiceConnectionThreshold
+      | join (HistoricDefs) on ProjectId, DefId, Type, ActorUPN
+      | join kind=anti BypassDefIds on $left.DefId==$right.DefId and $left.Type == $right.Type and $left.ProjectName == $right.ProjectName
+      | extend link = iff(
+      Type == "Build", strcat('https://dev.azure.com/', OrganizationName, '/', ProjectName, '/_build?definitionId=', DefId),
+      strcat('https://dev.azure.com/', OrganizationName, '/', ProjectName, '/_release?_a=releases&view=mine&definitionId=', DefId))
+      | where CurrentCount >= HistoricCount + NewConnectionThreshold
+      | project StartTime, OrganizationName, ProjectName, DefId, link, RecentDistinctServiceConnections = CurrentCount, HistoricDistinctServiceConnections = HistoricCount,
+        RecentConnections = ConnectionNames, HistoricConnections = ConnectionNames1, ActorUPN
+      | extend timestamp = StartTime
+      | extend AccountName = tostring(split(ActorUPN, "@")[0]), AccountUPNSuffix = tostring(split(ActorUPN, "@")[1])
+  schedule:
+    frequency: PT6H
+  detectionAction:
+    alertTemplate:
+      title: Azure DevOps Service Connection Addition/Abuse - Historic allow list
+      description: |-
+        'This detection builds an allow list of historic service connection use by Builds and Releases and compares to recent history, flagging growth of service connection use which are not manually included in the allow list and not historically included in the allow list Build/Release runs.
+        This is to determine if someone is hijacking a build/release and adding many service connections in order to abuse or dump credentials from service connections.'
+      severity: medium
+      entityMappings:
+        accounts:
+        - id: account1
+          nameColumn: AccountName
+          upnSuffixColumn: AccountUPNSuffix
+      tactics:
+      - tactic: Persistence
+        techniques:
+        - technique: T1098
+      - tactic: Impact
+        techniques:
+        - technique: T1496
+      customDetails:
+        AccountFullName: ActorUPN

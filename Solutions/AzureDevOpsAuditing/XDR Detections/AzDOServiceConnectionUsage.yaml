@@ -1,0 +1,111 @@
+schemaVersion: 1.0.0
+version: 3.1.0
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors: []
+contentProvenance:
+  requiredWorkloads: []
+  requiredDataConnectors: []
+  dependencyReviewRequired: true
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: d564ff12-8f53-41b8-8649-44f76b37b99f
+    path: Analytic Rules/AzDOServiceConnectionUsage.yaml
+    version: 1.0.6
+    querySha256: dbfd19b933761ec7862120191410241042bf67808f1ce10cb66a91fed0f8575a
+    schedule:
+      queryFrequency: 1d
+      queryPeriod: 14d
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=1d, lookback=14d; target frequency=P1D, native lookback=unknown/unconfigured;
+      mixed, Sentinel-only, or unknown query surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    - Account.FullName value is retained as customDetails.AccountFullName from query column `ActorUPN`, but its target output
+      binding requires runtime-schema verification; custom details do not restore entity identity or correlation
+    - Supplemental customDetails.AccountFullName column `ActorUPN` requires runtime output-schema binding verification
+    - Custom-detail values must remain within the documented combined 4 KB per-alert limit; runtime values are unverified
+      and the service drops all custom details if exceeded
+    informational:
+    - All source MITRE tactics are preserved in source order in authored YAML. V3.1 ARM packaging carries only the first tactic
+      and its compatible techniques; this classification loss is not validated parity. Direct Graph deployment requires a
+      single tactic.
+    errors: []
+    originalTactics:
+    - Persistence
+    - Impact
+    originalTechniques:
+    - T1098
+    - T1496
+    reviewScope:
+      sourceDocumentSha256: d4acff2456579224f6b8a3893bc7a178b00451ee901fa03b8c81aa93817d4a09
+      targetQuerySha256: c7b9f0753cc74063e2d46c03600185f5c818b2908347e2039ccf186a5ef85076
+    supplementalEntityDetails:
+    - entityType: Account
+      entityIndex: 1
+      identifier: FullName
+      sourceColumn: ActorUPN
+      column: ActorUPN
+      status: runtime-binding-pending
+      customDetailKey: AccountFullName
+properties:
+  id: xdr-d564ff12-8f53-41b8-8649-44f76b37b99f
+  displayName: Azure DevOps Service Connection Abuse
+  status: disabled
+  queryCondition:
+    queryText: |-
+      // How many greater than Service Connections you want to view per build/release
+      let ServiceConnectionThreshold = 4;
+      let BypassDefIds = datatable(DefId:string, Type:string, ProjectName:string)
+      [
+      //"103", "Release", "ProjectA",
+      //"42", "Release", "ProjectB",
+      //"122", "Build", "ProjectB"
+      ];
+      ADOAuditLogs
+      | where OperationName == "Library.ServiceConnectionExecuted"
+      | extend DefId = tostring(Data.DefinitionId), Type = tostring(Data.PlanType), ConnectionId = tostring(Data.ConnectionId)
+      | parse ScopeDisplayName with OrganizationName ' (Organization)'
+      | summarize CurrentCount = dcount(tostring(ConnectionId)), ConnectionNames = make_set(tostring(Data.ConnectionName)), StartTime = min(TimeGenerated), EndTime = max(TimeGenerated)
+        by OrganizationName, tostring(DefId), tostring(Type), ProjectId, ProjectName, ActorUPN, IpAddress
+      | where CurrentCount > ServiceConnectionThreshold
+      | join kind=anti BypassDefIds on $left.DefId==$right.DefId and $left.Type == $right.Type and $left.ProjectName == $right.ProjectName
+      | extend link = iif(
+        Type == "Build", strcat('https://dev.azure.com/', OrganizationName, '/', ProjectName, '/_build?definitionId=', DefId),
+        strcat('https://dev.azure.com/', OrganizationName, '/', ProjectName, '/_release?_a=releases&view=mine&definitionId=', DefId))
+      | extend timestamp = StartTime
+      | extend AccountName = tostring(split(ActorUPN, "@")[0]), AccountUPNSuffix = tostring(split(ActorUPN, "@")[1])
+  schedule:
+    frequency: P1D
+  detectionAction:
+    alertTemplate:
+      title: Azure DevOps Service Connection Abuse
+      description: |-
+        'Flags builds/releases that use a large number of service connections if they aren't manually in the allow list.
+        This is to determine if someone is hijacking a build/release and adding many service connections in order to abuse or dump credentials from service connections.'
+      severity: medium
+      entityMappings:
+        accounts:
+        - id: account1
+          nameColumn: AccountName
+          upnSuffixColumn: AccountUPNSuffix
+        ips:
+        - id: ip1
+          addressColumn: IpAddress
+      tactics:
+      - tactic: Persistence
+        techniques:
+        - technique: T1098
+      - tactic: Impact
+        techniques:
+        - technique: T1496
+      customDetails:
+        AccountFullName: ActorUPN
