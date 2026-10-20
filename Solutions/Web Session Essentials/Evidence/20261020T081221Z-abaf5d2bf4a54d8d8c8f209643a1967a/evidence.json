@@ -1,0 +1,612 @@
+{
+  "baselineDecision": {
+    "availability": "unsupported"
+  },
+  "exportedAt": "2026-10-20T08:18:07.349486+00:00",
+  "exporter": {
+    "command": [
+      "sentinel-xdr-migration",
+      "export-evidence",
+      "--solution",
+      ".",
+      "--run-id",
+      "20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a"
+    ],
+    "name": "sentinel-xdr-migration",
+    "pythonVersion": "3.12.10",
+    "version": "0.1.0"
+  },
+  "historicalCommands": {
+    "availability": "unsupported"
+  },
+  "historicalToolVersions": {
+    "availability": "unsupported"
+  },
+  "profile": "authoring",
+  "recordedWorkflowStatus": "blocked",
+  "reports": {
+    "alertParity": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/alert-parity-report.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "conversion": {
+      "availability": "available",
+      "counts": {
+        "conflicts": 0,
+        "converted": 8,
+        "deploymentReady": 2,
+        "excluded": 0,
+        "needsReview": 7,
+        "reviewRequired": 7,
+        "total": 15
+      },
+      "items": [
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 0,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/CommandInURL.yaml",
+            "sha256": "2c2e737372b8c676dcf798b59212e129e6f893d1efe3f34a9c001459276127f3"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.1"
+          },
+          "recordedStatus": "needsReview",
+          "reviewRequired": true,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/CommandInURL.yaml",
+            "sha256": "58d39f03a0b6215297c8c6c7f117d8cd5f6c53a53d38d36f20f4d5eaf3b7c4b9"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 1,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/DataExfiltrationTimeSeriesAnomaly.yaml",
+            "sha256": "019af77ec91568b6d7ce2a222cb386f4d0823dd759428b25ef6822536d0496d7"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.2"
+          },
+          "recordedStatus": "needsReview",
+          "reviewRequired": true,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/DataExfiltrationTimeSeriesAnomaly.yaml",
+            "sha256": "f9ce6fd728b88f63b2b5e2fff35318f3348aa95f3637fc8826277117d11797fa"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 2,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/DiscordCDNRiskyFileDownload.yaml",
+            "sha256": "34eca115556edf446cba7ab6e9b58e92f5ce121c071a2bd7623a58855e44de78"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.0"
+          },
+          "recordedStatus": "needsReview",
+          "reviewRequired": true,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/DiscordCDNRiskyFileDownload.yaml",
+            "sha256": "77e65f556892cb9874ca90f230a9d3bfa1e0a45437a80232c7b2fc2a10e799de"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 3,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/KnownMaliciousUserAgents.yaml",
+            "sha256": "e71bad4e06ccc20c459d650ef0b08152d9db1ba262fd8de29ce94aa5289a0658"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.0"
+          },
+          "recordedStatus": "needsReview",
+          "reviewRequired": true,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/KnownMaliciousUserAgents.yaml",
+            "sha256": "bcb19b2976aa32eb3078dd63e54eca333ed4af8ac6fd3d92dd433f25667e66b6"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 4,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/LocalFileInclusion-LFI.yaml",
+            "sha256": "1c6c7c32e2629a419be82a8ddff8eed915546b006ba5a29ffd4d3333ae68cc97"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.0"
+          },
+          "recordedStatus": "needsReview",
+          "reviewRequired": true,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/LocalFileInclusion-LFI.yaml",
+            "sha256": "874220cbd3f21072b4de1096cbe8b0149a31d0c6822e49c975640621eab4495d"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 5,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/MultipleClientErrorsWithinShortTime.yaml",
+            "sha256": "d085eaa1381437ad98ed2f379d226f42ad667dcf86de149a9071692178d5e5bf"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.0"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/MultipleClientErrorsWithinShortTime.yaml",
+            "sha256": "6aa9999e0e8bc28c3312cb765d88018a69e7ca6f785f3d9c5d956bb62d8ea3f6"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 6,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/MultipleServerErrorsWithinShortTime.yaml",
+            "sha256": "02af4307a72b672e24ac2d90d70ff0c382211ff82dbe9174278fec9f9baeaa05"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.0"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/MultipleServerErrorsWithinShortTime.yaml",
+            "sha256": "3010e7f8472b9407d18a992a564ede8fe8139a068b33a5e763a4820738139687"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 7,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/MultipleUAsFromSingleIP.yaml",
+            "sha256": "b40b3bd3a02b9c446b1dca0b71a0c164d8625e0416afb74a057dcf4cba057371"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.1"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/MultipleUAsFromSingleIP.yaml",
+            "sha256": "0a0ed62e9a3a3c91676bc7ecbb53463ae0bfbd3f02badf7bd5a391b0e530c9d7"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 8,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/PossibleMaliciousDoubleExtension.yaml",
+            "sha256": "c562eb358b4b7d98916639b8b295b758e993f5ac994e4041b744d4641dafcd5a"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.1"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/PossibleMaliciousDoubleExtension.yaml",
+            "sha256": "f99533af3686cb47d58f53dbcffd766e798db7ec8ac71d0c214c14177157431a"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 9,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/PotentionalFileEnumeration.yaml",
+            "sha256": "749db0175b3811f51fdc77059a1200904ebfa385d35d5a7f9d8e6ba8016219c8"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.0"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/PotentionalFileEnumeration.yaml",
+            "sha256": "a68b7de7adb561db34551be9fb7b1feaaa11eca898d8b3bde0221a300c3dbc1c"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 10,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/PrivateIPInURL.yaml",
+            "sha256": "643c2d1d8f0d4a4a752b1ca70848b1eb2954dcb90827d58022ad62967c1fda5c"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.1"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/PrivateIPInURL.yaml",
+            "sha256": "a2b8fe329760c86626e9399f39c18544700dc779fe18da13296d7f1d3a8f8ebe"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 11,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/RareUserAgentDetected.yaml",
+            "sha256": "dd57f1ad1da2485d1af3cbe458a255e7b3a78d1b4dfee108aeb6fdb418639394"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.2"
+          },
+          "recordedStatus": "needsReview",
+          "reviewRequired": true,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/RareUserAgentDetected.yaml",
+            "sha256": "1c0dff5f8332f701fd67f872fe9dd719f99461b2ce340ebe7b940647deefa7a1"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 12,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/RarelyRequestedResources.yaml",
+            "sha256": "39c1358f4c428effa823f7bd0ae706cad83297243b4c121e9808284e3bda5990"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.2"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/RarelyRequestedResources.yaml",
+            "sha256": "1bd4eaab7f49bb45d4020995a4eb705480c9e97ca452e53a66a36bb7b94aeb7b"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 13,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/RequestToPotentiallyHarmfulFileTypes.yaml",
+            "sha256": "872a212ba5b542e047676926e221227473d4d1a6a9e232f33c127019f4038093"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.0"
+          },
+          "recordedStatus": "needsReview",
+          "reviewRequired": true,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/RequestToPotentiallyHarmfulFileTypes.yaml",
+            "sha256": "1cd8fef400bbfa16d986e1f3777a49e1928cf8af1bdf6e76e98f2ceb2a076d58"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 14,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/ThreatInfoFoundInWebRequests.yaml",
+            "sha256": "033e01ceffb128eeae10a94556995db967db342f93a1a335922ce68fbcc241a2"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.0"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/ThreatInfoFoundInWebRequests.yaml",
+            "sha256": "0d143c7ee49128894fc29e39d02bd0f40dafd7762160ffdb54adebb61e34a5c0"
+          }
+        }
+      ],
+      "itemsAvailability": "available",
+      "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/manifest.json",
+      "recordedStatus": "unknown",
+      "sha256": "af47eeb1219f00e21951aa0457bda8d20a9273ba489038f440662300eb36b772",
+      "verification": "recorded-only-not-attested"
+    },
+    "packaging": {
+      "artifacts": {
+        "createUiDefinition": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "mainTemplate": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "solutionData": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "testParameters": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "zip": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        }
+      },
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "packager": "unknown",
+      "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/packaging.v3_1.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested",
+      "version": null,
+      "versionBump": "unknown",
+      "warningCount": null
+    },
+    "queryParity": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/mock-query-parity.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeAzureMonitorSdk": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/runtime-validation.azure-monitor-sdk.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeGraph": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/runtime-validation.graph.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeLogAnalytics": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/runtime-validation.log-analytics-cli.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeTriage": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/runtime-validation.triage-mcp.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "solutionReport": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/migration-report.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "structural": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/structural-validation.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    }
+  },
+  "runId": "20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a",
+  "schemaVersion": "1.0.0",
+  "solution": {
+    "currentVersion": "3.0.5",
+    "name": "Web Session Essentials",
+    "nameAvailability": "available",
+    "nameSource": "solution-folder",
+    "requestedTargetVersion": null,
+    "requestedTargetVersionAvailability": "unsupported",
+    "versionAvailability": "available",
+    "versionObservation": "export",
+    "versionSources": [
+      {
+        "availability": "not-recorded",
+        "kind": "solution-metadata",
+        "sha256": "c8151a984f34f10ff3cd635bdd71ada3ac849611335e5093f48b70d18e5723c3",
+        "version": null
+      },
+      {
+        "availability": "available",
+        "kind": "solution-data",
+        "sha256": "dca031ff815b91bb64abf6c19f584ed2ce50dacefb434c34872e79a616f148f6",
+        "version": "3.0.5"
+      }
+    ]
+  },
+  "stages": {
+    "alertParity": {
+      "attempts": 0,
+      "details": "withheld",
+      "recordedStatus": "notRequired",
+      "runtimeStatus": "unknown"
+    },
+    "conversion": {
+      "attempts": 1,
+      "details": "withheld",
+      "recordedStatus": "blocked",
+      "runtimeStatus": "unknown"
+    },
+    "deployment": {
+      "attempts": 0,
+      "details": "withheld",
+      "recordedStatus": "notRequired",
+      "runtimeStatus": "unknown"
+    },
+    "discovery": {
+      "attempts": 1,
+      "details": "withheld",
+      "recordedStatus": "passed",
+      "runtimeStatus": "unknown"
+    },
+    "mockIngestion": {
+      "attempts": 0,
+      "details": "withheld",
+      "recordedStatus": "notRequired",
+      "runtimeStatus": "unknown"
+    },
+    "packaging": {
+      "attempts": 0,
+      "details": "not-recorded",
+      "recordedStatus": "pending",
+      "runtimeStatus": "unknown"
+    },
+    "report": {
+      "attempts": 0,
+      "details": "not-recorded",
+      "recordedStatus": "pending",
+      "runtimeStatus": "unknown"
+    },
+    "validation": {
+      "attempts": 0,
+      "details": "not-recorded",
+      "recordedStatus": "pending",
+      "runtimeStatus": "unknown"
+    }
+  },
+  "verification": "recorded-only-not-attested",
+  "versionDecision": "none",
+  "workflowEvidence": {
+    "availability": "available",
+    "path": "Logs/sentinel-xdr-migration/20261020T081221Z-abaf5d2bf4a54d8d8c8f209643a1967a/workflow-state.json",
+    "sha256": "a3b60a027297c9974ad8d98dcc78dcacab605d288c412261267bc77de08dc8fb"
+  }
+}

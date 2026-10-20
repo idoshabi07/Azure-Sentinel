@@ -1,0 +1,705 @@
+{
+  "baselineDecision": {
+    "availability": "unsupported"
+  },
+  "exportedAt": "2026-10-20T08:18:02.584570+00:00",
+  "exporter": {
+    "command": [
+      "sentinel-xdr-migration",
+      "export-evidence",
+      "--solution",
+      ".",
+      "--run-id",
+      "20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110"
+    ],
+    "name": "sentinel-xdr-migration",
+    "pythonVersion": "3.12.10",
+    "version": "0.1.0"
+  },
+  "historicalCommands": {
+    "availability": "unsupported"
+  },
+  "historicalToolVersions": {
+    "availability": "unsupported"
+  },
+  "profile": "authoring",
+  "recordedWorkflowStatus": "blocked",
+  "reports": {
+    "alertParity": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/alert-parity-report.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "conversion": {
+      "availability": "available",
+      "counts": {
+        "conflicts": 0,
+        "converted": 18,
+        "deploymentReady": 14,
+        "excluded": 0,
+        "needsReview": 1,
+        "reviewRequired": 1,
+        "total": 19
+      },
+      "items": [
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 0,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/ADOAgentPoolCreatedDeleted.yaml",
+            "sha256": "492d6b3fea8bec565500bd172f12bad55172956e3dedb956533f5e4d814d8b7a"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.5"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/ADOAgentPoolCreatedDeleted.yaml",
+            "sha256": "de2efbcd34c63702846f67a4da027542819157eb5641b4bb1b0ebab04dbc5310"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 1,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/ADOAuditStreamDisabled.yaml",
+            "sha256": "8848002075ae6672d818cf4b7d2e8e417ef91c14f759e36cbbaa417e8c1ef8a5"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.5"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/ADOAuditStreamDisabled.yaml",
+            "sha256": "815048b85762b679c2d778d2fb602acebd3cf0d7b60c4f814a7d1215304ad1ca"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 2,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/ADOMaliciousToolingDetections1.yaml",
+            "sha256": "4ad3a8daf5cad6da761beb932effb24f7e69a466d09d60540fe28cbbbb7de3f4"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.4"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/ADOMaliciousToolingDetections1.yaml",
+            "sha256": "88cb1df120e6dba5820120b75d3f295df93e9a64a532d2d21c44e85676ad6480"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 3,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/ADONewExtensionAdded.yaml",
+            "sha256": "9e43d1dd7c4bc586270dcba5be750c4aeb0b878f54c5031307db7426164665ea"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.4"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/ADONewExtensionAdded.yaml",
+            "sha256": "272dcfd62646b195ef1cdeea6f943a82fb53232a0e6486817428b1df62933e41"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 4,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/ADOPATUsedWithBrowser.yaml",
+            "sha256": "294e5aa536786f42c980c52efbf2294772514dda682f0a61ba1c436f2c48a14a"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.6"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/ADOPATUsedWithBrowser.yaml",
+            "sha256": "de0878513d92a23ceb9058e7b2b4879c11a3446fad6a592a59b421fe39d18c01"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 5,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/ADOPipelineModifiedbyNewUser.yaml",
+            "sha256": "d092135915a0dcdddcbb3e4dadbff927fd4f9f2f30d3a625a99fea4f2962cfeb"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.8"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/ADOPipelineModifiedbyNewUser.yaml",
+            "sha256": "0af31fa1235ad6c144d74a866866219f6bc6411cbedf93345b23137d0d9c5109"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 6,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/ADORetentionReduced.yaml",
+            "sha256": "5b6a02e08646f1b093b648bfdeea77fb25c12435969b9711f0b2592443219111"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.5"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/ADORetentionReduced.yaml",
+            "sha256": "c1b5ac4fd28e0a92d1d2da7f5a2a48b38a0d329bdc5a2ae34d06e2ec64eab3d0"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 7,
+          "output": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          },
+          "provenance": {
+            "historicalValidationBinding": "unsupported",
+            "sourceQuery": "unavailable"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 8,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/ADOVariableModifiedByNewUser.yaml",
+            "sha256": "f619846340621d2d649b554d1df91b3c4bc2cb4991bd6167f3271bcb83bab6cb"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.6"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/ADOVariableModifiedByNewUser.yaml",
+            "sha256": "3ebda49f20da89cbf04324f02627603e8e73770c86be42c4b8f9a32091ce79d0"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 9,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/AzDOAdminGroupAdditions.yaml",
+            "sha256": "7d2d02cddfa779ca9271d1c86a49e4b8a84480d1adc79778c5f30640aa5ad41c"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.5"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/AzDOAdminGroupAdditions.yaml",
+            "sha256": "da44de7f5c833b49b7f1ce56dd5c67a70bdb6c654bd3cde8ca8c17e9d5074404"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 10,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/AzDOHistoricPrPolicyBypassing.yaml",
+            "sha256": "80633b78f7c8ddd22b165079a1f304200e5cf1ad3a309211b06367f1443270ac"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.6"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/AzDOHistoricPrPolicyBypassing.yaml",
+            "sha256": "7d1731cc70056b7da65e56a712189ae82a74e906dd2533de5d836c26af8e7c7d"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 11,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/AzDOHistoricServiceConnectionAdds.yaml",
+            "sha256": "d0c8fab65f77cf806a41a6ccdcbb8ffbdda2d2494b49e9df29d6f240771c4a93"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.6"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/AzDOHistoricServiceConnectionAdds.yaml",
+            "sha256": "8e28eae9657ede6df25ce1134f5b7d04241abc091e86d5db6b7aa975cd5269c6"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 12,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/AzDOPatSessionMisuse.yaml",
+            "sha256": "59fe298f205a86c1c242f71bebf78796e9f9d9bcb9c0c90a11cd4cd2b218e019"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.6"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/AzDOPatSessionMisuse.yaml",
+            "sha256": "4fe1617d9b7447f75f0671105bca55858d662c97ca08ca1a236cf94fdd3a8742"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 13,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/AzDOPipelineCreatedDeletedOneDay.yaml",
+            "sha256": "f6d2f858d9a3a16dc2c258eb8cf8f6771200383e87c5f37aac2b5a615172ae11"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.4"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/AzDOPipelineCreatedDeletedOneDay.yaml",
+            "sha256": "3afd4e2d5565429f83d9937688ca2f1855f6224daf79950f8d07d574e94c8ed6"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 14,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/AzDOServiceConnectionUsage.yaml",
+            "sha256": "0605c9672505cde1386cb931e35286a7a00ea5701892eef55b28b2b991cbcd8d"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.6"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/AzDOServiceConnectionUsage.yaml",
+            "sha256": "ed26a6f4d156fa76918fd402695bb062b096390ea9d3fc70b2d993712bbdda14"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 15,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/ExternalUpstreamSourceAddedtoAzureDevOpsFeed.yaml",
+            "sha256": "a9e923fa72c0b1891d83a303d3e16f191c5813cba11eb73681ce4b2862550a37"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.4"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/ExternalUpstreamSourceAddedtoAzureDevOpsFeed.yaml",
+            "sha256": "9f167e39371cfff9d6959a4f90f4ff668f6f41697fe1605b6131e12fb95808b1"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 16,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/NRT_ADOAuditStreamDisabled.yaml",
+            "sha256": "25806afc7e15fa0eeffe039eac3ab177f06d470bf65dfc7362881b67c0d07242"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.4"
+          },
+          "recordedStatus": "needsReview",
+          "reviewRequired": true,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/NRT_ADOAuditStreamDisabled.yaml",
+            "sha256": "c207c103316855db2dfe650c2ab248b1f8da6db3018bdbfa12912de44ef4c191"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 17,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/NewAgentAddedToPoolbyNewUserorofNewOS.yaml",
+            "sha256": "7e4c5ac294eed0c7e19080e81f43afb18280f473b0d6f6425fd4d29e7bbf4f55"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.6"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/NewAgentAddedToPoolbyNewUserorofNewOS.yaml",
+            "sha256": "32fc997306ebb5b14b121fa5f6b11ece88001c755b801b9bf69786eaf2b99e79"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 18,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/NewPAPCAPCASaddedtoADO.yaml",
+            "sha256": "42bb3d8eb11e3dede1dad25b000fbae8c6dbe6a5d002cab4f3db380632b33a13"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.0.6"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/NewPAPCAPCASaddedtoADO.yaml",
+            "sha256": "e48566ef4a508e50adb29aa397968f5b92c8b4ddc5675c1c8e0df418b14a36f3"
+          }
+        }
+      ],
+      "itemsAvailability": "available",
+      "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/manifest.json",
+      "recordedStatus": "unknown",
+      "sha256": "29acf3f2d89a7fb3991c6b295a9489acdd6afb1d34786d5e1236ddf78770e45c",
+      "verification": "recorded-only-not-attested"
+    },
+    "packaging": {
+      "artifacts": {
+        "createUiDefinition": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "mainTemplate": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "solutionData": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "testParameters": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "zip": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        }
+      },
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "packager": "unknown",
+      "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/packaging.v3_1.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested",
+      "version": null,
+      "versionBump": "unknown",
+      "warningCount": null
+    },
+    "queryParity": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/mock-query-parity.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeAzureMonitorSdk": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/runtime-validation.azure-monitor-sdk.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeGraph": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/runtime-validation.graph.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeLogAnalytics": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/runtime-validation.log-analytics-cli.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeTriage": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/runtime-validation.triage-mcp.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "solutionReport": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/migration-report.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "structural": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/structural-validation.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    }
+  },
+  "runId": "20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110",
+  "schemaVersion": "1.0.0",
+  "solution": {
+    "currentVersion": "3.0.9",
+    "name": "AzureDevOpsAuditing",
+    "nameAvailability": "available",
+    "nameSource": "solution-folder",
+    "requestedTargetVersion": null,
+    "requestedTargetVersionAvailability": "unsupported",
+    "versionAvailability": "available",
+    "versionObservation": "export",
+    "versionSources": [
+      {
+        "availability": "not-recorded",
+        "kind": "solution-metadata",
+        "sha256": "68735342845879975c427188235d8feb58f43afea36685bfd1b973a36dd48022",
+        "version": null
+      },
+      {
+        "availability": "available",
+        "kind": "solution-data",
+        "sha256": "e8cb129b2f5e15ee72b888916f639317b729c682a28d16629dbe678a7c8a9e11",
+        "version": "3.0.9"
+      }
+    ]
+  },
+  "stages": {
+    "alertParity": {
+      "attempts": 0,
+      "details": "withheld",
+      "recordedStatus": "notRequired",
+      "runtimeStatus": "unknown"
+    },
+    "conversion": {
+      "attempts": 1,
+      "details": "withheld",
+      "recordedStatus": "blocked",
+      "runtimeStatus": "unknown"
+    },
+    "deployment": {
+      "attempts": 0,
+      "details": "withheld",
+      "recordedStatus": "notRequired",
+      "runtimeStatus": "unknown"
+    },
+    "discovery": {
+      "attempts": 1,
+      "details": "withheld",
+      "recordedStatus": "passed",
+      "runtimeStatus": "unknown"
+    },
+    "mockIngestion": {
+      "attempts": 0,
+      "details": "withheld",
+      "recordedStatus": "notRequired",
+      "runtimeStatus": "unknown"
+    },
+    "packaging": {
+      "attempts": 0,
+      "details": "not-recorded",
+      "recordedStatus": "pending",
+      "runtimeStatus": "unknown"
+    },
+    "report": {
+      "attempts": 0,
+      "details": "not-recorded",
+      "recordedStatus": "pending",
+      "runtimeStatus": "unknown"
+    },
+    "validation": {
+      "attempts": 0,
+      "details": "not-recorded",
+      "recordedStatus": "pending",
+      "runtimeStatus": "unknown"
+    }
+  },
+  "verification": "recorded-only-not-attested",
+  "versionDecision": "none",
+  "workflowEvidence": {
+    "availability": "available",
+    "path": "Logs/sentinel-xdr-migration/20261020T081215Z-cb1ff5199ba84c12a3d98d4aba424110/workflow-state.json",
+    "sha256": "ebdbac9afaff620fcbcc731a3c493cf5b435cd639e0b134fa66d5b663c659c34"
+  }
+}

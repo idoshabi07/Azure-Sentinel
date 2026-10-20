@@ -1,0 +1,468 @@
+{
+  "baselineDecision": {
+    "availability": "unsupported"
+  },
+  "exportedAt": "2026-10-20T08:17:59.469724+00:00",
+  "exporter": {
+    "command": [
+      "sentinel-xdr-migration",
+      "export-evidence",
+      "--solution",
+      ".",
+      "--run-id",
+      "20261020T081212Z-250a38d3c4b9420d9c41502254e7485b"
+    ],
+    "name": "sentinel-xdr-migration",
+    "pythonVersion": "3.12.10",
+    "version": "0.1.0"
+  },
+  "historicalCommands": {
+    "availability": "unsupported"
+  },
+  "historicalToolVersions": {
+    "availability": "unsupported"
+  },
+  "profile": "authoring",
+  "recordedWorkflowStatus": "blocked",
+  "reports": {
+    "alertParity": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/alert-parity-report.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "conversion": {
+      "availability": "available",
+      "counts": {
+        "conflicts": 0,
+        "converted": 10,
+        "deploymentReady": 8,
+        "excluded": 0,
+        "needsReview": 0,
+        "reviewRequired": 0,
+        "total": 10
+      },
+      "items": [
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 0,
+          "output": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          },
+          "provenance": {
+            "historicalValidationBinding": "unsupported",
+            "sourceQuery": "unavailable"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 1,
+          "output": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          },
+          "provenance": {
+            "historicalValidationBinding": "unsupported",
+            "sourceQuery": "unavailable"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 2,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/Detection-ErrorsSyntaxStatefulAnomalyOnDatabase.yaml",
+            "sha256": "2b2420646c0be7ed2f46a3be9393b3dc7710e52786bafe7fdf10822a885a0a0d"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.1.2"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/Detection-ErrorsSyntaxStatefulAnomalyOnDatabase.yaml",
+            "sha256": "b4ff2e7c32602e64e9c835f9d2b2c018ec594b30fe824bbe3dedad791d18e2ce"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 3,
+          "output": {
+            "availability": "available",
+            "path": "XDR Detections/Detection-HotwordsDropStatefulAnomalyOnDatabase.yaml",
+            "sha256": "3aab5c3aaa4871f2998974479b723d92778452c07a3ef3f149b9ec2ad945a9ba"
+          },
+          "provenance": {
+            "converterVersion": "0.1.0",
+            "historicalValidationBinding": "unsupported",
+            "outputVersion": "3.1.0",
+            "sourceQuery": "matches",
+            "sourceVersion": "1.1.2"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "available",
+            "path": "Analytic Rules/Detection-HotwordsDropStatefulAnomalyOnDatabase.yaml",
+            "sha256": "5cc6203cb1691ab5f741dda6cc95512f89caf99b39a54960c69e6753ee9cf620"
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 4,
+          "output": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          },
+          "provenance": {
+            "historicalValidationBinding": "unsupported",
+            "sourceQuery": "unavailable"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 5,
+          "output": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          },
+          "provenance": {
+            "historicalValidationBinding": "unsupported",
+            "sourceQuery": "unavailable"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 6,
+          "output": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          },
+          "provenance": {
+            "historicalValidationBinding": "unsupported",
+            "sourceQuery": "unavailable"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 7,
+          "output": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          },
+          "provenance": {
+            "historicalValidationBinding": "unsupported",
+            "sourceQuery": "unavailable"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 8,
+          "output": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          },
+          "provenance": {
+            "historicalValidationBinding": "unsupported",
+            "sourceQuery": "unavailable"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          }
+        },
+        {
+          "errorCount": 0,
+          "errorDetails": "not-recorded",
+          "index": 9,
+          "output": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          },
+          "provenance": {
+            "historicalValidationBinding": "unsupported",
+            "sourceQuery": "unavailable"
+          },
+          "recordedStatus": "converted",
+          "reviewRequired": false,
+          "source": {
+            "availability": "withheld",
+            "path": null,
+            "sha256": null
+          }
+        }
+      ],
+      "itemsAvailability": "available",
+      "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/manifest.json",
+      "recordedStatus": "unknown",
+      "sha256": "212fdb6264f96aa6b83ee666cda68702ef76683d924607fc82febbd39e16a020",
+      "verification": "recorded-only-not-attested"
+    },
+    "packaging": {
+      "artifacts": {
+        "createUiDefinition": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "mainTemplate": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "solutionData": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "testParameters": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        },
+        "zip": {
+          "availability": "missing",
+          "path": null,
+          "sha256": null
+        }
+      },
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "packager": "unknown",
+      "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/packaging.v3_1.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested",
+      "version": null,
+      "versionBump": "unknown",
+      "warningCount": null
+    },
+    "queryParity": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/mock-query-parity.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeAzureMonitorSdk": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/runtime-validation.azure-monitor-sdk.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeGraph": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/runtime-validation.graph.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeLogAnalytics": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/runtime-validation.log-analytics-cli.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "runtimeTriage": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/runtime-validation.triage-mcp.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "solutionReport": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/migration-report.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    },
+    "structural": {
+      "availability": "missing",
+      "counts": {},
+      "items": [],
+      "itemsAvailability": "missing-or-unsupported",
+      "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/structural-validation.json",
+      "recordedStatus": "unknown",
+      "sha256": null,
+      "verification": "recorded-only-not-attested"
+    }
+  },
+  "runId": "20261020T081212Z-250a38d3c4b9420d9c41502254e7485b",
+  "schemaVersion": "1.0.0",
+  "solution": {
+    "currentVersion": "3.0.0",
+    "name": "Azure SQL Database solution for sentinel",
+    "nameAvailability": "available",
+    "nameSource": "solution-folder",
+    "requestedTargetVersion": null,
+    "requestedTargetVersionAvailability": "unsupported",
+    "versionAvailability": "available",
+    "versionObservation": "export",
+    "versionSources": [
+      {
+        "availability": "not-recorded",
+        "kind": "solution-metadata",
+        "sha256": "fd5683c92c969ca6c59a7e220ba5efbfcc910534e937c99006deb8a9d6a6d60f",
+        "version": null
+      },
+      {
+        "availability": "available",
+        "kind": "solution-data",
+        "sha256": "acb2508b66c53f5969dcfcca7d44dc5bb8059b590444fa4dc5967888e975504b",
+        "version": "3.0.0"
+      }
+    ]
+  },
+  "stages": {
+    "alertParity": {
+      "attempts": 0,
+      "details": "withheld",
+      "recordedStatus": "notRequired",
+      "runtimeStatus": "unknown"
+    },
+    "conversion": {
+      "attempts": 1,
+      "details": "withheld",
+      "recordedStatus": "blocked",
+      "runtimeStatus": "unknown"
+    },
+    "deployment": {
+      "attempts": 0,
+      "details": "withheld",
+      "recordedStatus": "notRequired",
+      "runtimeStatus": "unknown"
+    },
+    "discovery": {
+      "attempts": 1,
+      "details": "withheld",
+      "recordedStatus": "passed",
+      "runtimeStatus": "unknown"
+    },
+    "mockIngestion": {
+      "attempts": 0,
+      "details": "withheld",
+      "recordedStatus": "notRequired",
+      "runtimeStatus": "unknown"
+    },
+    "packaging": {
+      "attempts": 0,
+      "details": "not-recorded",
+      "recordedStatus": "pending",
+      "runtimeStatus": "unknown"
+    },
+    "report": {
+      "attempts": 0,
+      "details": "not-recorded",
+      "recordedStatus": "pending",
+      "runtimeStatus": "unknown"
+    },
+    "validation": {
+      "attempts": 0,
+      "details": "not-recorded",
+      "recordedStatus": "pending",
+      "runtimeStatus": "unknown"
+    }
+  },
+  "verification": "recorded-only-not-attested",
+  "versionDecision": "none",
+  "workflowEvidence": {
+    "availability": "available",
+    "path": "Logs/sentinel-xdr-migration/20261020T081212Z-250a38d3c4b9420d9c41502254e7485b/workflow-state.json",
+    "sha256": "5391f70b0b567cd9e6b6f89e723a466557b642f2d70ad000020ff673b5423493"
+  }
+}
