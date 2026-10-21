@@ -1,0 +1,105 @@
+schemaVersion: 1.0.0
+version: 3.1.0
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors:
+- connectorId: CloudflareDataConnector
+  dataTypes:
+  - Cloudflare
+contentProvenance:
+  requiredWorkloads:
+  - workload: sentinel
+    dataTypes:
+    - Cloudflare
+    - CloudflareV2_CL
+    - Cloudflare_CL
+    - Event
+  requiredDataConnectors:
+  - connectorId: CloudflareDataConnector
+    dataTypes:
+    - Cloudflare
+    - CloudflareV2_CL
+    - Cloudflare_CL
+  - connectorId: CloudflareLog_CCF
+    dataTypes:
+    - CloudflareV2_CL
+  dependencyReviewRequired: false
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: 729c6d21-fad9-4a6a-9c7f-482393c95958
+    path: Analytic Rules/CloudflareCCFEmptyUA.yaml
+    version: 1.0.1
+    querySha256: 9ceb2e49d7651adfd61a95b2576a5ff00d0cbd0c3cfbcc5c2440c91c6a4ae2bb
+    schedule:
+      queryFrequency: 1h
+      queryPeriod: 1h
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=1h, lookback=1h; target frequency=PT1H,
+      native lookback=unknown/unconfigured; mixed, Sentinel-only, or unknown query
+      surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    informational: []
+    errors: []
+    originalTactics:
+    - InitialAccess
+    originalTechniques:
+    - T1190
+    - T1133
+    reviewScope:
+      sourceDocumentSha256: 0de7e6da7e9aa24b5dd5c1a4a172b35e6cf7464f198b296370d3f7498ac328ed
+      targetQuerySha256: b2a0bf35c6ca9f91e775e234a6e938181539c49aa2a2ce6d5533366639b9fc1b
+    eventTimeWindow:
+      status: default-native-lookback
+      appliedDefault: hourly-1h-to-native-4h-lookback
+      queryFrequency: 1h
+      queryPeriod: 1h
+      targetFrequency: PT1H
+      effectiveLookback: PT4H
+      originalSentinelLookbackSeconds: 3600
+      effectiveEventWindowSeconds: 14400
+      xdrServiceWindowSeconds: 14400
+      filterInjected: false
+      parityClaimed: false
+      hasAggregation: false
+      aggregationWindowDifference: false
+      timingDifference: Four hours (PT4H / 14400s) is the native XDR ingestion-based
+        lookback window for PT1H execution frequency, not the execution frequency;
+        original Sentinel queryPeriod was 1h (3600s).
+      aggregationDifference: No summarize/make-series aggregation detected in query;
+        native 4-hour XDR lookback relies on Defender XDR alert deduplication across
+        hourly runs.
+      sourceDocumentSha256: 0de7e6da7e9aa24b5dd5c1a4a172b35e6cf7464f198b296370d3f7498ac328ed
+      targetQuerySha256: b2a0bf35c6ca9f91e775e234a6e938181539c49aa2a2ce6d5533366639b9fc1b
+properties:
+  id: xdr-729c6d21-fad9-4a6a-9c7f-482393c95958
+  displayName: Cloudflare - Empty user agent
+  status: disabled
+  queryCondition:
+    queryText: 'Cloudflare
+
+      | where isempty(HttpUserAgentOriginal)'
+  schedule:
+    frequency: PT1H
+  detectionAction:
+    alertTemplate:
+      title: Cloudflare - Empty user agent
+      description: '''Detects requests where user agent is empty.'''
+      severity: medium
+      entityMappings:
+        ips:
+        - id: ip1
+          addressColumn: SrcIpAddr
+      tactics:
+      - tactic: InitialAccess
+        techniques:
+        - technique: T1190
+        - technique: T1133

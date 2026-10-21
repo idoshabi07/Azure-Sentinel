@@ -1,0 +1,2033 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "**NOTE**: This workbook depends on a parser based on a Kusto Function to work as expected [**Cloudflare CCF**](https://aka.ms/sentinel-CloudflareDefinition-parser) which is deployed with the Microsoft Sentinel Solution."
+      },
+      "name": "text - 0"
+    },
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "id": "2088f290-65ee-4357-badb-55ce732a5004",
+            "cellValue": "tab",
+            "linkTarget": "parameter",
+            "linkLabel": "Cloudflare Web Traffic Overview",
+            "subTarget": "cloudflare_web_traffic_overview",
+            "style": "link"
+          },
+          {
+            "id": "25df6ee6-dcf7-4aa2-b90e-50f8a4b6548d",
+            "cellValue": "tab",
+            "linkTarget": "parameter",
+            "linkLabel": "Cloudflare Security Overview",
+            "subTarget": "cloudflare_security_overview",
+            "style": "link"
+          },
+          {
+            "id": "a2108bc6-5769-4c86-a5c0-201f531ed929",
+            "cellValue": "tab",
+            "linkTarget": "parameter",
+            "linkLabel": "Cloudflare Reliability Summary",
+            "subTarget": "cloudflare_reliability_summary",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "links - 1"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "c64d5d3d-90c6-484a-ab88-c70652b75b6e",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeRange",
+            "type": 4,
+            "isRequired": true,
+            "value": {
+              "durationMs": 172800000
+            },
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 300000
+                },
+                {
+                  "durationMs": 900000
+                },
+                {
+                  "durationMs": 1800000
+                },
+                {
+                  "durationMs": 3600000
+                },
+                {
+                  "durationMs": 14400000
+                },
+                {
+                  "durationMs": 43200000
+                },
+                {
+                  "durationMs": 86400000
+                },
+                {
+                  "durationMs": 172800000
+                },
+                {
+                  "durationMs": 259200000
+                },
+                {
+                  "durationMs": 604800000
+                },
+                {
+                  "durationMs": 1209600000
+                },
+                {
+                  "durationMs": 2419200000
+                },
+                {
+                  "durationMs": 2592000000
+                },
+                {
+                  "durationMs": 5184000000
+                },
+                {
+                  "durationMs": 7776000000
+                }
+              ],
+              "allowCustom": true
+            },
+            "timeContext": {
+              "durationMs": 86400000
+            }
+          }
+        ],
+        "style": "pills"
+      },
+      "name": "parameters - 1"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| summarize count() by ClientDeviceType",
+        "size": 0,
+        "title": "Traffic Type",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "piechart"
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_web_traffic_overview"
+      },
+      "customWidth": "25",
+      "name": "Traffic Type"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| summarize count() by ClientRequestProtocol",
+        "size": 0,
+        "title": "HTTP Protocols",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "piechart"
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_web_traffic_overview"
+      },
+      "customWidth": "25",
+      "name": "HTTP Protocols"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| summarize count() by HttpRequestMethod",
+        "size": 0,
+        "title": "Request Methods",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "piechart"
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_web_traffic_overview"
+      },
+      "customWidth": "25",
+      "name": "Request Methods"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend EdgeResponseContentType = iif(isempty(HttpContentType),\"empty\",HttpContentType )\n| summarize count() by EdgeResponseContentType",
+        "size": 0,
+        "title": "Content Types",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "piechart"
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_web_traffic_overview"
+      },
+      "customWidth": "25",
+      "name": "Content Types"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| summarize Count=count() by ClientRequestURI\n| sort by Count | project-rename ClientRequestURI=ClientRequestURI | take 50",
+        "size": 0,
+        "title": "Top Requested URIs",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table"
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_web_traffic_overview"
+      },
+      "customWidth": "25",
+      "name": "Top Requested URIs"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| summarize Count=count() by SrcIpAddr\n| sort by Count | take 50 | project-rename ClientIP=SrcIpAddr",
+        "size": 0,
+        "title": "Top Traffic IPs",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table"
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_web_traffic_overview"
+      },
+      "customWidth": "25",
+      "name": "Top Traffic IPs"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend ClientRequestReferer = iif(isempty(HttpReferrerOriginal),\"empty\",HttpReferrerOriginal )\n| summarize Count=count() by ClientRequestReferer\n| sort by Count | take 50\n",
+        "size": 0,
+        "title": "Top Referer",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table"
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_web_traffic_overview"
+      },
+      "customWidth": "25",
+      "name": "Top Referer"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| summarize Count=count() by ClientIPClass | project-rename ClientIPClass=ClientIPClass\n| sort by Count | take 50\n",
+        "size": 0,
+        "title": "Top Traffic Types",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "piechart"
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_web_traffic_overview"
+      },
+      "customWidth": "25",
+      "name": "Top Traffic Types"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| summarize Count=count() by HttpUserAgentOriginal | project-rename ClientRequestUserAgent=HttpUserAgentOriginal\n| sort by Count | take 50",
+        "size": 0,
+        "title": "Top User Agents",
+        "timeContext": {
+          "durationMs": 86400000
+        },
+        "queryType": "advancedHunting",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "ClientRequestUserAgent",
+              "formatter": 0,
+              "formatOptions": {
+                "customColumnWidthSetting": "75%"
+              }
+            }
+          ]
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_web_traffic_overview"
+      },
+      "name": "Top User Agents"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "let total_number_of_requests =\nCloudflare\n| summarize Count=count()\n| extend title=\"Total Number Of Requests\";\n\nlet threats_stopped =\nCloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat) | summarize Count=count()\n| extend title=\"Stopped Threats\";\n\nlet result_table = union total_number_of_requests, threats_stopped; \nresult_table \n| sort by Count\n\n",
+        "size": 0,
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "tiles",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Count",
+          "sortOrderField": 2,
+          "size": "auto"
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_security_overview"
+      },
+      "customWidth": "33",
+      "name": "Req_Threats_title"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by threat",
+        "size": 0,
+        "title": "Top Threats",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "categoricalbar",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Count",
+          "sortOrderField": 2,
+          "size": "auto"
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_security_overview"
+      },
+      "customWidth": "33",
+      "name": "Top Threats"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "let total_number_of_requests =\nCloudflare\n| summarize Count=count()\n| extend title=\"Total Number Of Requests\";\n\nlet threats_stopped =\nCloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat) | summarize Count=count()\n| extend title=\"Stopped Threats\";\n\nlet result_table = union total_number_of_requests, threats_stopped; \nresult_table \n| sort by Count\n\n",
+        "size": 0,
+        "title": "Requests vs Threats",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "piechart",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Count",
+          "sortOrderField": 2,
+          "size": "auto"
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_security_overview"
+      },
+      "customWidth": "33",
+      "name": "Requests vs Threats"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| make-series Trend = count() on TimeGenerated from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain};",
+        "size": 0,
+        "title": "Threats Over Time",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "timechart",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Count",
+          "sortOrderField": 2,
+          "size": "auto"
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_security_overview"
+      },
+      "customWidth": "33",
+      "name": "Threats Over Time"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize count() by SrcGeoCountry | project-rename Country=SrcGeoCountry | take 20",
+        "size": 0,
+        "title": "Top Threat Countries",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Count",
+          "sortOrderField": 2,
+          "size": "auto"
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_security_overview"
+      },
+      "customWidth": "33",
+      "name": "Top Threat Countries"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize count() by SrcIpAddr | project-rename ClientIP=SrcIpAddr",
+        "size": 0,
+        "title": "Top Threat Client IPs",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Count",
+          "sortOrderField": 2,
+          "size": "auto"
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_security_overview"
+      },
+      "customWidth": "33",
+      "name": "Top Threat Client IPs"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by ClientRequestURI | project-rename ClientRequestURI=ClientRequestURI",
+        "size": 0,
+        "title": "Top Threat URIs",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Count",
+          "sortOrderField": 2,
+          "size": "auto"
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_security_overview"
+      },
+      "customWidth": "33",
+      "name": "Top Threat URIs"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by HttpUserAgentOriginal | project-rename ClientRequestUserAgent=HttpUserAgentOriginal",
+        "size": 0,
+        "title": "Top Threat User Agents",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Count",
+          "sortOrderField": 2,
+          "size": "auto"
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_security_overview"
+      },
+      "customWidth": "33",
+      "name": "Top Threat User Agents"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by EdgePathingStatus | project-rename EdgePathingStatus=EdgePathingStatus",
+        "size": 0,
+        "title": "Top Threat User Agents",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table",
+        "tileSettings": {
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          },
+          "showBorder": false,
+          "sortCriteriaField": "Count",
+          "sortOrderField": 2,
+          "size": "auto"
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_security_overview"
+      },
+      "customWidth": "33",
+      "name": "Top Threat User Agents - Copy"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "let 5xx = Cloudflare\n| where tostring(EdgeResponseStatus) startswith \"5\"\n| summarize Count=count()\n| extend title=\"5xx Errors (Edge)\";\n\nlet 4xx = Cloudflare\n| where tostring(EdgeResponseStatus) startswith \"4\"\n| summarize Count=count()\n| extend title=\"4xx Errors (Edge)\";\n\nlet 3xx = Cloudflare\n| where tostring(EdgeResponseStatus) startswith \"3\"\n| summarize Count=count()\n| extend title=\"3xx Errors (Edge)\";\n\nlet result_table = union 5xx, 4xx, 3xx; \nresult_table \n| sort by Count\n\n",
+        "size": 0,
+        "title": "ERRORS Counts (Edge)",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "tiles",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_reliability_summary"
+      },
+      "customWidth": "33",
+      "name": "Errors (Edge)"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend response_error_type= case(tostring(EdgeResponseStatus) startswith \"2\" , \"2xx\", tostring(EdgeResponseStatus) startswith \"3\" , \"3xx\", tostring(EdgeResponseStatus) startswith \"4\" , \"4xx\", tostring(EdgeResponseStatus) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| summarize Count=count() by response_error_type",
+        "size": 0,
+        "title": "Edge Response Error Ratio",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "piechart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_reliability_summary"
+      },
+      "customWidth": "33",
+      "name": "Edge Response Error Ratio"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend response_error_type= case(tostring(HttpStatusCode) startswith \"2\" , \"2xx\", tostring(HttpStatusCode) startswith \"3\" , \"3xx\", tostring(HttpStatusCode) startswith \"4\" , \"4xx\", tostring(HttpStatusCode) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| summarize Count=count() by response_error_type",
+        "size": 0,
+        "title": "Origin Response Error Ratio",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "piechart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_reliability_summary"
+      },
+      "customWidth": "33",
+      "name": "Origin Response Error Ratio"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend response_error_type= case(tostring(EdgeResponseStatus) startswith \"2\" , \"2xx\", tostring(EdgeResponseStatus) startswith \"3\" , \"3xx\", tostring(EdgeResponseStatus) startswith \"4\" , \"4xx\", tostring(EdgeResponseStatus) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| make-series Trend = count() on TimeGenerated from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by response_error_type;",
+        "size": 0,
+        "title": "Edge Response Status Over Time",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "timechart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_reliability_summary"
+      },
+      "customWidth": "50",
+      "name": "Edge Response Status Over Time"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "Cloudflare\n| extend response_error_type= case(tostring(HttpStatusCode) startswith \"2\" , \"2xx\", tostring(HttpStatusCode) startswith \"3\" , \"3xx\", tostring(HttpStatusCode) startswith \"4\" , \"4xx\", tostring(HttpStatusCode) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| make-series Trend = count() on TimeGenerated from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by response_error_type;",
+        "size": 0,
+        "title": "Origin Response Status Over Time",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "timechart",
+        "tileSettings": {
+          "showBorder": false,
+          "titleContent": {
+            "columnMatch": "title",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Count",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            },
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "tab",
+        "comparison": "isEqualTo",
+        "value": "cloudflare_reliability_summary"
+      },
+      "customWidth": "50",
+      "name": "Origin Response Status Over Time"
+    }
+  ],
+  "fromTemplateId": "sentinel-CloudflareCCFWorkbook",
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json",
+  "xdrMetadata": {
+    "contentId": "a93e75c5-d2b9-5e9e-b7a3-b8d23e209586",
+    "instanceId": "522ea710-20e6-515d-a71f-1308dbb2bdf3",
+    "version": "3.2.2",
+    "schemaVersion": "1.0.0",
+    "displayName": "Cloudflare CCF"
+  },
+  "contentProvenance": {
+    "source": {
+      "path": "Workbooks/CloudflareCCF.json",
+      "sha256": "3ba6efd8e2c5086d27e4629a57b7438f213fae2d0887e531abbbe73525060390",
+      "contentId": "sentinel-CloudflareCCFWorkbook",
+      "originalMetadataVersion": null
+    },
+    "conversion": {
+      "tool": "sentinel-xdr-migration",
+      "version": "0.1.0",
+      "reviewRequired": false,
+      "queries": [
+        {
+          "sourcePath": "/items/3/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "972f389a4418a8cce2ac3fe97cab5709b3473113868edb35faa3c2b270cb4ef5"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| summarize count() by ClientDeviceType",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/query",
+          "sourceSha256": "972f389a4418a8cce2ac3fe97cab5709b3473113868edb35faa3c2b270cb4ef5",
+          "targetSha256": "972f389a4418a8cce2ac3fe97cab5709b3473113868edb35faa3c2b270cb4ef5"
+        },
+        {
+          "sourcePath": "/items/4/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "0d2161c50d23a324b20c2176bf4cce87b94560e0ce8b3162b1aa3e2ec06926a4"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/4/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| summarize count() by ClientRequestProtocol",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/4/content/query",
+          "sourceSha256": "0d2161c50d23a324b20c2176bf4cce87b94560e0ce8b3162b1aa3e2ec06926a4",
+          "targetSha256": "0d2161c50d23a324b20c2176bf4cce87b94560e0ce8b3162b1aa3e2ec06926a4"
+        },
+        {
+          "sourcePath": "/items/5/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "f1f7fb7bc7146713404652fdcee1a2e9fde920c6fa36388f24f5ca41ebb542bb"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/5/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| summarize count() by HttpRequestMethod",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/5/content/query",
+          "sourceSha256": "f1f7fb7bc7146713404652fdcee1a2e9fde920c6fa36388f24f5ca41ebb542bb",
+          "targetSha256": "f1f7fb7bc7146713404652fdcee1a2e9fde920c6fa36388f24f5ca41ebb542bb"
+        },
+        {
+          "sourcePath": "/items/6/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "51c2017465a6e5e7db9be3dc17dac12bda625c378518edd315720866005f386f"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/6/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend EdgeResponseContentType = iif(isempty(HttpContentType),\"empty\",HttpContentType )\n| summarize count() by EdgeResponseContentType",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/6/content/query",
+          "sourceSha256": "51c2017465a6e5e7db9be3dc17dac12bda625c378518edd315720866005f386f",
+          "targetSha256": "51c2017465a6e5e7db9be3dc17dac12bda625c378518edd315720866005f386f"
+        },
+        {
+          "sourcePath": "/items/7/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "56639c65c386a117ace213180fce9c09b0dfe2948756d688d3c4ea8c061851f8"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/7/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| summarize Count=count() by ClientRequestURI\n| sort by Count | project-rename ClientRequestURI=ClientRequestURI | take 50",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/7/content/query",
+          "sourceSha256": "56639c65c386a117ace213180fce9c09b0dfe2948756d688d3c4ea8c061851f8",
+          "targetSha256": "56639c65c386a117ace213180fce9c09b0dfe2948756d688d3c4ea8c061851f8"
+        },
+        {
+          "sourcePath": "/items/8/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "53922a12788e0af4dd9bbb3ffc3af01b52d6743376a01398907c3e8766ab188b"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/8/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| summarize Count=count() by SrcIpAddr\n| sort by Count | take 50 | project-rename ClientIP=SrcIpAddr",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/8/content/query",
+          "sourceSha256": "53922a12788e0af4dd9bbb3ffc3af01b52d6743376a01398907c3e8766ab188b",
+          "targetSha256": "53922a12788e0af4dd9bbb3ffc3af01b52d6743376a01398907c3e8766ab188b"
+        },
+        {
+          "sourcePath": "/items/9/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "0485c86c49c4c041a7b4e213c8f4aeadc7b412851c58c6297f8699d685e41676"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/9/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend ClientRequestReferer = iif(isempty(HttpReferrerOriginal),\"empty\",HttpReferrerOriginal )\n| summarize Count=count() by ClientRequestReferer\n| sort by Count | take 50\n",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/9/content/query",
+          "sourceSha256": "0485c86c49c4c041a7b4e213c8f4aeadc7b412851c58c6297f8699d685e41676",
+          "targetSha256": "0485c86c49c4c041a7b4e213c8f4aeadc7b412851c58c6297f8699d685e41676"
+        },
+        {
+          "sourcePath": "/items/10/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "503e4c536d7c604a032a8b41e21851c072018927734439f8cc0af723ab415b8e"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/10/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| summarize Count=count() by ClientIPClass | project-rename ClientIPClass=ClientIPClass\n| sort by Count | take 50\n",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/10/content/query",
+          "sourceSha256": "503e4c536d7c604a032a8b41e21851c072018927734439f8cc0af723ab415b8e",
+          "targetSha256": "503e4c536d7c604a032a8b41e21851c072018927734439f8cc0af723ab415b8e"
+        },
+        {
+          "sourcePath": "/items/11/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "c3542b1595a2a41cf5fa5bdd092606fe3f5c2c05a878bc87d1500be62f58a263"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/11/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| summarize Count=count() by HttpUserAgentOriginal | project-rename ClientRequestUserAgent=HttpUserAgentOriginal\n| sort by Count | take 50",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/11/content/query",
+          "sourceSha256": "c3542b1595a2a41cf5fa5bdd092606fe3f5c2c05a878bc87d1500be62f58a263",
+          "targetSha256": "c3542b1595a2a41cf5fa5bdd092606fe3f5c2c05a878bc87d1500be62f58a263"
+        },
+        {
+          "sourcePath": "/items/12/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "936d20a5566fb7b4024222024bbf6c4a4fd5572dc5579e414633ee58eaaa007a"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/12/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "let total_number_of_requests =\nCloudflare\n| summarize Count=count()\n| extend title=\"Total Number Of Requests\";\n\nlet threats_stopped =\nCloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat) | summarize Count=count()\n| extend title=\"Stopped Threats\";\n\nlet result_table = union total_number_of_requests, threats_stopped; \nresult_table \n| sort by Count\n\n",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/12/content/query",
+          "sourceSha256": "936d20a5566fb7b4024222024bbf6c4a4fd5572dc5579e414633ee58eaaa007a",
+          "targetSha256": "936d20a5566fb7b4024222024bbf6c4a4fd5572dc5579e414633ee58eaaa007a"
+        },
+        {
+          "sourcePath": "/items/13/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "fabed9c3b83a359ecb2619bce7cb3227b86b022e37810fe55c6872f91f858627"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/13/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by threat",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/13/content/query",
+          "sourceSha256": "fabed9c3b83a359ecb2619bce7cb3227b86b022e37810fe55c6872f91f858627",
+          "targetSha256": "fabed9c3b83a359ecb2619bce7cb3227b86b022e37810fe55c6872f91f858627"
+        },
+        {
+          "sourcePath": "/items/14/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "936d20a5566fb7b4024222024bbf6c4a4fd5572dc5579e414633ee58eaaa007a"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/14/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "let total_number_of_requests =\nCloudflare\n| summarize Count=count()\n| extend title=\"Total Number Of Requests\";\n\nlet threats_stopped =\nCloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat) | summarize Count=count()\n| extend title=\"Stopped Threats\";\n\nlet result_table = union total_number_of_requests, threats_stopped; \nresult_table \n| sort by Count\n\n",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/14/content/query",
+          "sourceSha256": "936d20a5566fb7b4024222024bbf6c4a4fd5572dc5579e414633ee58eaaa007a",
+          "targetSha256": "936d20a5566fb7b4024222024bbf6c4a4fd5572dc5579e414633ee58eaaa007a"
+        },
+        {
+          "sourcePath": "/items/15/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "7459d3798304205e47b9eead13feb582dbd0c65b40e5f37333dcc12ddda0e883"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/15/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| make-series Trend = count() on TimeGenerated from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain};",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/15/content/query",
+          "sourceSha256": "7459d3798304205e47b9eead13feb582dbd0c65b40e5f37333dcc12ddda0e883",
+          "targetSha256": "7459d3798304205e47b9eead13feb582dbd0c65b40e5f37333dcc12ddda0e883"
+        },
+        {
+          "sourcePath": "/items/16/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "f32719e583473766d9ab14e6a9065b2c3fc08af120dc85233a412b7912f2c3d7"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/16/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize count() by SrcGeoCountry | project-rename Country=SrcGeoCountry | take 20",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/16/content/query",
+          "sourceSha256": "f32719e583473766d9ab14e6a9065b2c3fc08af120dc85233a412b7912f2c3d7",
+          "targetSha256": "f32719e583473766d9ab14e6a9065b2c3fc08af120dc85233a412b7912f2c3d7"
+        },
+        {
+          "sourcePath": "/items/17/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "c08fb02ac4631a655c3a96cc5c4c4e6576167af68f4cedfec18abd6dbcc92e2a"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/17/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize count() by SrcIpAddr | project-rename ClientIP=SrcIpAddr",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/17/content/query",
+          "sourceSha256": "c08fb02ac4631a655c3a96cc5c4c4e6576167af68f4cedfec18abd6dbcc92e2a",
+          "targetSha256": "c08fb02ac4631a655c3a96cc5c4c4e6576167af68f4cedfec18abd6dbcc92e2a"
+        },
+        {
+          "sourcePath": "/items/18/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "f326daf0a6b6835622336770b20eb1dd6c9ed2833b03606350c00575e42770bc"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/18/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by ClientRequestURI | project-rename ClientRequestURI=ClientRequestURI",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/18/content/query",
+          "sourceSha256": "f326daf0a6b6835622336770b20eb1dd6c9ed2833b03606350c00575e42770bc",
+          "targetSha256": "f326daf0a6b6835622336770b20eb1dd6c9ed2833b03606350c00575e42770bc"
+        },
+        {
+          "sourcePath": "/items/19/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "f43bb91732f2a935f1be26412a36613915808610a42fca042582403af9f9270b"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/19/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by HttpUserAgentOriginal | project-rename ClientRequestUserAgent=HttpUserAgentOriginal",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/19/content/query",
+          "sourceSha256": "f43bb91732f2a935f1be26412a36613915808610a42fca042582403af9f9270b",
+          "targetSha256": "f43bb91732f2a935f1be26412a36613915808610a42fca042582403af9f9270b"
+        },
+        {
+          "sourcePath": "/items/20/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "25ceed5c0271ea92bdd78cb926d8195f59f2aa64cbcc5f076765d887a560dcfb"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/20/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend threat=case(EdgePathingSrc ==\"user\" and EdgePathingOp == \"ban\" and EdgePathingStatus has \"ip\" ,\"IP Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\",\"Country Block\",EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"zl\", \"Routed by Zone Lockdown\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ua\", \"Blocked User Agent\", EdgePathingSrc==\"user\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"rateLimit\", \"Blocked by Rate Limiting\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Blocked by Filter Based Firewall\", EdgePathingSrc==\"filterBasedFirewall\" and EdgePathingOp==\"chl\", \"Challenged by Filter Based Firewall\", EdgePathingSrc==\"bic\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"unknown\", \"Browser Integrity Check\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ctry\", \"Blocked Hotlink\", EdgePathingSrc==\"hot\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"ip\", \"Blocked Hotlink\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaErr\", \"CAPTCHA Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaFail\", \"CAPTCHA Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"captchaNew\", \"New CAPTCHA\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlErr\", \"Java Script Challenge Error\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlFail\", \"Java Script Challenge Failed\", EdgePathingSrc==\"macro\" and EdgePathingOp==\"chl\" and EdgePathingStatus==\"jschlNew\", \"New Java Script Challenge\", EdgePathingSrc==\"protect\" and EdgePathingOp==\"ban\" and EdgePathingStatus==\"17ddos\", \"L7 DDos Mitigation\",\"\")\n| where isnotempty(threat)\n| summarize Count=count() by EdgePathingStatus | project-rename EdgePathingStatus=EdgePathingStatus",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/20/content/query",
+          "sourceSha256": "25ceed5c0271ea92bdd78cb926d8195f59f2aa64cbcc5f076765d887a560dcfb",
+          "targetSha256": "25ceed5c0271ea92bdd78cb926d8195f59f2aa64cbcc5f076765d887a560dcfb"
+        },
+        {
+          "sourcePath": "/items/21/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "8271505bd3ba3057b2947e53278f1a2e1e0ba994359795be979a4cf05832231a"
+          },
+          "conversion": {
+            "sourceId": "/items/21/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "let 5xx = Cloudflare\n| where tostring(EdgeResponseStatus) startswith \"5\"\n| summarize Count=count()\n| extend title=\"5xx Errors (Edge)\";\n\nlet 4xx = Cloudflare\n| where tostring(EdgeResponseStatus) startswith \"4\"\n| summarize Count=count()\n| extend title=\"4xx Errors (Edge)\";\n\nlet 3xx = Cloudflare\n| where tostring(EdgeResponseStatus) startswith \"3\"\n| summarize Count=count()\n| extend title=\"3xx Errors (Edge)\";\n\nlet result_table = union 5xx, 4xx, 3xx; \nresult_table \n| sort by Count\n\n",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/21/content/query",
+          "sourceSha256": "8271505bd3ba3057b2947e53278f1a2e1e0ba994359795be979a4cf05832231a",
+          "targetSha256": "8271505bd3ba3057b2947e53278f1a2e1e0ba994359795be979a4cf05832231a"
+        },
+        {
+          "sourcePath": "/items/22/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "65889e93a1db4e9c8d51f21098722bb877920957532b5e395ca52bbe6b4e0d40"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/22/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend response_error_type= case(tostring(EdgeResponseStatus) startswith \"2\" , \"2xx\", tostring(EdgeResponseStatus) startswith \"3\" , \"3xx\", tostring(EdgeResponseStatus) startswith \"4\" , \"4xx\", tostring(EdgeResponseStatus) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| summarize Count=count() by response_error_type",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/22/content/query",
+          "sourceSha256": "65889e93a1db4e9c8d51f21098722bb877920957532b5e395ca52bbe6b4e0d40",
+          "targetSha256": "65889e93a1db4e9c8d51f21098722bb877920957532b5e395ca52bbe6b4e0d40"
+        },
+        {
+          "sourcePath": "/items/23/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "7af4c96fb682f0ecbb299de1e1ca8b04c6ef6c92f07b6913d72f589d7c0c6b32"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/23/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend response_error_type= case(tostring(HttpStatusCode) startswith \"2\" , \"2xx\", tostring(HttpStatusCode) startswith \"3\" , \"3xx\", tostring(HttpStatusCode) startswith \"4\" , \"4xx\", tostring(HttpStatusCode) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| summarize Count=count() by response_error_type",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/23/content/query",
+          "sourceSha256": "7af4c96fb682f0ecbb299de1e1ca8b04c6ef6c92f07b6913d72f589d7c0c6b32",
+          "targetSha256": "7af4c96fb682f0ecbb299de1e1ca8b04c6ef6c92f07b6913d72f589d7c0c6b32"
+        },
+        {
+          "sourcePath": "/items/24/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "2e6212754c5a308251cca3fe646dbd0c3818ee2203fc33725e58b8662b67fba8"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/24/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend response_error_type= case(tostring(EdgeResponseStatus) startswith \"2\" , \"2xx\", tostring(EdgeResponseStatus) startswith \"3\" , \"3xx\", tostring(EdgeResponseStatus) startswith \"4\" , \"4xx\", tostring(EdgeResponseStatus) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| make-series Trend = count() on TimeGenerated from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by response_error_type;",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/24/content/query",
+          "sourceSha256": "2e6212754c5a308251cca3fe646dbd0c3818ee2203fc33725e58b8662b67fba8",
+          "targetSha256": "2e6212754c5a308251cca3fe646dbd0c3818ee2203fc33725e58b8662b67fba8"
+        },
+        {
+          "sourcePath": "/items/25/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "182da88d7733b5981500423185ea9cb028381f9148c8c94f790a086668ab301b",
+            "decision": "change",
+            "querySha256": "44d76887f7ccd3a82ce0f3b9b4cf237bb6ec57a5df9008162b211b26ec372e01"
+          },
+          "workspaceFunctions": [
+            "Cloudflare"
+          ],
+          "conversion": {
+            "sourceId": "/items/25/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "Cloudflare\n| extend response_error_type= case(tostring(HttpStatusCode) startswith \"2\" , \"2xx\", tostring(HttpStatusCode) startswith \"3\" , \"3xx\", tostring(HttpStatusCode) startswith \"4\" , \"4xx\", tostring(HttpStatusCode) startswith \"5\" , \"5xx\",\"\")\n| where isnotempty(response_error_type)\n| make-series Trend = count() on TimeGenerated from {TimeRange:start} to {TimeRange:end} step {TimeRange:grain} by response_error_type;",
+            "resolvedTables": [
+              "CloudflareV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "CloudflareV2_CL",
+                "ahTable": "CloudflareV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/25/content/query",
+          "sourceSha256": "44d76887f7ccd3a82ce0f3b9b4cf237bb6ec57a5df9008162b211b26ec372e01",
+          "targetSha256": "44d76887f7ccd3a82ce0f3b9b4cf237bb6ec57a5df9008162b211b26ec372e01"
+        }
+      ]
+    },
+    "requiredWorkloads": [
+      {
+        "workload": "sentinel",
+        "dataTypes": [
+          "CloudflareV2_CL"
+        ]
+      }
+    ],
+    "requiredDataConnectors": [
+      {
+        "connectorId": "CloudflareDataConnector",
+        "dataTypes": [
+          "CloudflareV2_CL"
+        ]
+      }
+    ],
+    "dependencyReviewRequired": false,
+    "requiredWorkspaceFunctions": [
+      {
+        "functionAlias": "Cloudflare",
+        "sourcePath": "Parsers/Cloudflare.yaml",
+        "sourceSha256": "6c05ea541128abf673bafb0da3a59542e27331f5f065ca128cd58c33876a774d"
+      }
+    ]
+  }
+}

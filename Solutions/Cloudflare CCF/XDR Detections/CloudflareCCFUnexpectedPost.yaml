@@ -1,0 +1,122 @@
+schemaVersion: 1.0.0
+version: 3.1.0
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors:
+- connectorId: CloudflareDataConnector
+  dataTypes:
+  - Cloudflare
+contentProvenance:
+  requiredWorkloads:
+  - workload: sentinel
+    dataTypes:
+    - Cloudflare
+    - CloudflareV2_CL
+    - Cloudflare_CL
+    - Event
+  requiredDataConnectors:
+  - connectorId: CloudflareDataConnector
+    dataTypes:
+    - Cloudflare
+    - CloudflareV2_CL
+    - Cloudflare_CL
+  - connectorId: CloudflareLog_CCF
+    dataTypes:
+    - CloudflareV2_CL
+  dependencyReviewRequired: false
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: 7313352a-09f6-4a84-88bd-6f17f1cbeb88
+    path: Analytic Rules/CloudflareCCFUnexpectedPost.yaml
+    version: 1.0.1
+    querySha256: 9299e3e1e48411e460be875ab721b7527472087ad532fdf5e6f91fb873a14f3e
+    schedule:
+      queryFrequency: 1h
+      queryPeriod: 1h
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=1h, lookback=1h; target frequency=PT1H,
+      native lookback=unknown/unconfigured; mixed, Sentinel-only, or unknown query
+      surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    informational:
+    - All source MITRE tactics are preserved in source order in authored YAML. V3.1
+      ARM packaging carries only the first tactic and its compatible techniques; this
+      classification loss is not validated parity. Direct Graph deployment requires
+      a single tactic.
+    errors: []
+    originalTactics:
+    - Persistence
+    - CommandAndControl
+    originalTechniques:
+    - T1505
+    - T1071
+    reviewScope:
+      sourceDocumentSha256: 9d4d7ef63a1be10f3b71b1b9567299a4b6de19de166ba8a5966f3e89b80887ff
+      targetQuerySha256: 93f376c5c124600cb1423c75b7605733bf22f479f5b021c04907ac68b281d9ac
+    eventTimeWindow:
+      status: default-native-lookback
+      appliedDefault: hourly-1h-to-native-4h-lookback
+      queryFrequency: 1h
+      queryPeriod: 1h
+      targetFrequency: PT1H
+      effectiveLookback: PT4H
+      originalSentinelLookbackSeconds: 3600
+      effectiveEventWindowSeconds: 14400
+      xdrServiceWindowSeconds: 14400
+      filterInjected: false
+      parityClaimed: false
+      hasAggregation: false
+      aggregationWindowDifference: false
+      timingDifference: Four hours (PT4H / 14400s) is the native XDR ingestion-based
+        lookback window for PT1H execution frequency, not the execution frequency;
+        original Sentinel queryPeriod was 1h (3600s).
+      aggregationDifference: No summarize/make-series aggregation detected in query;
+        native 4-hour XDR lookback relies on Defender XDR alert deduplication across
+        hourly runs.
+      sourceDocumentSha256: 9d4d7ef63a1be10f3b71b1b9567299a4b6de19de166ba8a5966f3e89b80887ff
+      targetQuerySha256: 93f376c5c124600cb1423c75b7605733bf22f479f5b021c04907ac68b281d9ac
+properties:
+  id: xdr-7313352a-09f6-4a84-88bd-6f17f1cbeb88
+  displayName: Cloudflare - Unexpected POST requests
+  status: disabled
+  queryCondition:
+    queryText: 'Cloudflare
+
+      | where HttpRequestMethod in~ (''POST'', ''PUT'')
+
+      | where tostring(HttpStatusCode) startswith ''2''
+
+      | where DstBytes != 0 or SrcBytes != 0
+
+      | extend fe = extract(@''.*(\.\w+)$'', 1, ClientRequestURI)
+
+      | where fe in~ (''.jpg'', ''.jpeg'', ''.gif'', ''.png'', ''.icon'', ''.ico'',
+      ''.xml'', ''.swf'', ''.svg'', ''.ppt'', ''.pttx'', ''.doc'', ''.docx'', ''.rtf'',
+      ''.pdf'', ''.tif'', ''.zip'', ''.mov'')'
+  schedule:
+    frequency: PT1H
+  detectionAction:
+    alertTemplate:
+      title: Cloudflare - Unexpected POST requests
+      description: '''Detects post requests to unusual extensions.'''
+      severity: medium
+      entityMappings:
+        ips:
+        - id: ip1
+          addressColumn: SrcIpAddr
+      tactics:
+      - tactic: Persistence
+        techniques:
+        - technique: T1505
+      - tactic: CommandAndControl
+        techniques:
+        - technique: T1071
