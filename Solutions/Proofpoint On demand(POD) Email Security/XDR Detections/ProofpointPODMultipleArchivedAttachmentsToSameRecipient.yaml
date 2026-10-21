@@ -1,0 +1,131 @@
+schemaVersion: 1.0.0
+version: 3.1.4
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors:
+- connectorId: ProofpointPOD
+  dataTypes:
+  - ProofpointPOD_message_CL
+contentProvenance:
+  requiredWorkloads:
+  - workload: sentinel
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  requiredDataConnectors:
+  - connectorId: ProofpointPOD
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  - connectorId: ProofpointPODCcpDefinition
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  dependencyReviewRequired: false
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: bda5a2bd-979b-4828-a91f-27c2a5048f7f
+    path: Analytic Rules/ProofpointPODMultipleArchivedAttachmentsToSameRecipient.yaml
+    version: 1.0.2
+    querySha256: 4dfa0569541d1a70e016281deed9ae14e2ab7666cba72126b03adbfd020a7ae7
+    schedule:
+      queryFrequency: 30m
+      queryPeriod: 30m
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=30m, lookback=30m; target frequency=PT30M,
+      native lookback=unknown/unconfigured; mixed, Sentinel-only, or unknown query
+      surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    - Account mapping is incomplete and was removed
+    - Supplemental customDetails.AccountFullName column `AccountCustomEntity` requires
+      runtime output-schema binding verification
+    - Custom-detail values must remain within the documented combined 4 KB per-alert
+      limit; runtime values are unverified and the service drops all custom details
+      if exceeded
+    informational: []
+    errors: []
+    originalTactics:
+    - Exfiltration
+    originalTechniques:
+    - T1567
+    reviewScope:
+      sourceDocumentSha256: e08fb78b246e7f6c922ccfea7552a0f2b2125ed7c7aa1361b1ec908824c1b969
+      targetQuerySha256: 956f94be25d68c3e4519e064b8610bf653515d1366c46839c1a6a06a82cd6748
+    supplementalEntityDetails:
+    - entityType: Account
+      entityIndex: 1
+      identifier: FullName
+      sourceColumn: AccountCustomEntity
+      column: AccountCustomEntity
+      status: runtime-binding-pending
+      customDetailKey: AccountFullName
+properties:
+  id: xdr-bda5a2bd-979b-4828-a91f-27c2a5048f7f
+  displayName: ProofpointPOD - Multiple archived attachments to the same recipient
+  status: disabled
+  queryCondition:
+    queryText: 'let lbtime = 30m;
+
+      let msgthreshold = 3;
+
+      let compressedTypes = dynamic([''zip'', ''rar'', ''tar'', ''x-7z-compressed'']);
+
+      ProofpointPOD
+
+      | where TimeGenerated > ago(lbtime)
+
+      | where EventType == ''message''
+
+      | where NetworkDirection == ''outbound''
+
+      | extend attachedMimeType = todynamic(MsgParts)[0][''detectedMime'']
+
+      | where attachedMimeType has_any (compressedTypes)
+
+      | summarize count(), make_set(attachedMimeType) by SrcUserUpn, DstUserUpn
+
+      | where count_ > msgthreshold
+
+      | extend AccountCustomEntity = SrcUserUpn'
+  schedule:
+    frequency: PT30M
+  detectionAction:
+    alertTemplate:
+      title: ProofpointPOD - Multiple archived attachments to the same recipient
+      description: '''Detects when multiple emails where sent to the same recipient
+        with large archived attachments.'''
+      severity: medium
+      entityMappings:
+        mailboxes:
+        - id: mailbox1
+          primaryAddressColumn: AccountCustomEntity
+      tactics:
+      - tactic: Exfiltration
+        techniques:
+        - technique: T1567
+      customDetails:
+        AccountFullName: AccountCustomEntity
