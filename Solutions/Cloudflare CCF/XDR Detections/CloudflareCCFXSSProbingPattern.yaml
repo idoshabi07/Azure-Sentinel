@@ -1,0 +1,117 @@
+schemaVersion: 1.0.0
+version: 3.1.0
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors:
+- connectorId: CloudflareDataConnector
+  dataTypes:
+  - Cloudflare
+contentProvenance:
+  requiredWorkloads:
+  - workload: sentinel
+    dataTypes:
+    - Cloudflare
+    - CloudflareV2_CL
+    - Cloudflare_CL
+    - Event
+  requiredDataConnectors:
+  - connectorId: CloudflareDataConnector
+    dataTypes:
+    - Cloudflare
+    - CloudflareV2_CL
+    - Cloudflare_CL
+  - connectorId: CloudflareLog_CCF
+    dataTypes:
+    - CloudflareV2_CL
+  dependencyReviewRequired: false
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: 4d9d00b9-31a6-49e4-88c1-9e68277053ad
+    path: Analytic Rules/CloudflareCCFXSSProbingPattern.yaml
+    version: 1.0.1
+    querySha256: c269b987c1ce6b9ce9349fb76395931f96e9b2d29aff35102ea126593aa684d6
+    schedule:
+      queryFrequency: 1h
+      queryPeriod: 1h
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=1h, lookback=1h; target frequency=PT1H,
+      native lookback=unknown/unconfigured; mixed, Sentinel-only, or unknown query
+      surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    informational: []
+    errors: []
+    originalTactics:
+    - InitialAccess
+    originalTechniques:
+    - T1190
+    - T1133
+    reviewScope:
+      sourceDocumentSha256: 77e03489b5a7cedac7d995feed7eac6d3800640d917fba15dff70b59d5265960
+      targetQuerySha256: 8928f8f79eb9bcf4d16fc6a7286c96d86ac9a3c5c385e376b06de5013f062f60
+    eventTimeWindow:
+      status: default-native-lookback
+      appliedDefault: hourly-1h-to-native-4h-lookback
+      queryFrequency: 1h
+      queryPeriod: 1h
+      targetFrequency: PT1H
+      effectiveLookback: PT4H
+      originalSentinelLookbackSeconds: 3600
+      effectiveEventWindowSeconds: 14400
+      xdrServiceWindowSeconds: 14400
+      filterInjected: false
+      parityClaimed: false
+      hasAggregation: false
+      aggregationWindowDifference: false
+      timingDifference: Four hours (PT4H / 14400s) is the native XDR ingestion-based
+        lookback window for PT1H execution frequency, not the execution frequency;
+        original Sentinel queryPeriod was 1h (3600s).
+      aggregationDifference: No summarize/make-series aggregation detected in query;
+        native 4-hour XDR lookback relies on Defender XDR alert deduplication across
+        hourly runs.
+      sourceDocumentSha256: 77e03489b5a7cedac7d995feed7eac6d3800640d917fba15dff70b59d5265960
+      targetQuerySha256: 8928f8f79eb9bcf4d16fc6a7286c96d86ac9a3c5c385e376b06de5013f062f60
+properties:
+  id: xdr-4d9d00b9-31a6-49e4-88c1-9e68277053ad
+  displayName: Cloudflare - XSS probing pattern in request
+  status: disabled
+  queryCondition:
+    queryText: 'let s_threshold = 3;
+
+      Cloudflare
+
+      | where HttpRequestMethod in~ (''POST'', ''PUT'')
+
+      | extend susp_ch = countof(ClientRequestURI, ''%00'')
+
+      | where ClientRequestURI matches regex @''(alert\()|(alert\%28)|(String\.fromCharCode\()|(expression\(alert)''
+      or susp_ch > s_threshold
+
+      | extend CompleteUrl = strcat(HttpRequestHeaderHost,ClientRequestPath)'
+  schedule:
+    frequency: PT1H
+  detectionAction:
+    alertTemplate:
+      title: Cloudflare - XSS probing pattern in request
+      description: '''Detects XSS probing patterns.'''
+      severity: medium
+      entityMappings:
+        ips:
+        - id: ip1
+          addressColumn: SrcIpAddr
+        urls:
+        - id: url1
+          addressColumn: CompleteUrl
+      tactics:
+      - tactic: InitialAccess
+        techniques:
+        - technique: T1190
+        - technique: T1133

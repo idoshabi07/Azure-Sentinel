@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0.0",
+  "runId": "20261021T130522Z-1d602335d5b0443db72f2b1c3809bc71",
+  "generatedAtUtc": "2026-10-21T16:23:37Z",
+  "previousVersion": "3.0.4",
+  "acknowledged_exclusions": [
+    {
+      "path": "Data Connectors/CloudflareLog_CCF/CloudflareLog_DCR.json",
+      "rationale": "CCF sub-artifact referenced indirectly by Data Connectors/CloudflareLog_CCF/CloudflareLog_connectorDefinition.json in Data/Solution_Cloudflare.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/CloudflareLog_CCF/CloudflareLog_PollerConfig.json",
+      "rationale": "CCF sub-artifact referenced indirectly by Data Connectors/CloudflareLog_CCF/CloudflareLog_connectorDefinition.json in Data/Solution_Cloudflare.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/CloudflareLog_CCF/CloudflareLog_Table.json",
+      "rationale": "CCF sub-artifact referenced indirectly by Data Connectors/CloudflareLog_CCF/CloudflareLog_connectorDefinition.json in Data/Solution_Cloudflare.json and compiled into Package/mainTemplate.json."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "exclude-ccf-subartifact-1",
+      "itemId": "Data Connectors/CloudflareLog_CCF/CloudflareLog_DCR.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact referenced indirectly by CloudflareLog_connectorDefinition.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-ccf-subartifact-2",
+      "itemId": "Data Connectors/CloudflareLog_CCF/CloudflareLog_PollerConfig.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact referenced indirectly by CloudflareLog_connectorDefinition.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-ccf-subartifact-3",
+      "itemId": "Data Connectors/CloudflareLog_CCF/CloudflareLog_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact referenced indirectly by CloudflareLog_connectorDefinition.json and compiled into Package/mainTemplate.json."
+    }
+  ]
+}
