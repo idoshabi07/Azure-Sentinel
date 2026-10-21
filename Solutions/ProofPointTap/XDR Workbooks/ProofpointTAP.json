@@ -1,0 +1,2069 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Messages",
+            "subTarget": "Messages",
+            "style": "link",
+            "workbookContext": {},
+            "templateRunContext": {},
+            "alertRuleContext": {}
+          },
+          {
+            "cellValue": "selectedTab",
+            "linkTarget": "parameter",
+            "linkLabel": "Clicks",
+            "subTarget": "Clicks",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "links - 4"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "326a3767-8597-43ee-a116-44fc7280c63a",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeRange",
+            "type": 4,
+            "value": {
+              "durationMs": 5184000000
+            },
+            "typeSettings": {
+              "selectableValues": [
+                {
+                  "durationMs": 300000
+                },
+                {
+                  "durationMs": 900000
+                },
+                {
+                  "durationMs": 1800000
+                },
+                {
+                  "durationMs": 3600000
+                },
+                {
+                  "durationMs": 14400000
+                },
+                {
+                  "durationMs": 43200000
+                },
+                {
+                  "durationMs": 86400000
+                },
+                {
+                  "durationMs": 172800000
+                },
+                {
+                  "durationMs": 259200000
+                },
+                {
+                  "durationMs": 604800000
+                },
+                {
+                  "durationMs": 1209600000
+                },
+                {
+                  "durationMs": 2419200000
+                },
+                {
+                  "durationMs": 2592000000
+                },
+                {
+                  "durationMs": 5184000000
+                },
+                {
+                  "durationMs": 7776000000
+                }
+              ],
+              "allowCustom": true
+            },
+            "label": "Time Range"
+          },
+          {
+            "id": "59948c5e-ab41-4b57-85f0-5e65966dd98e",
+            "version": "KqlParameterItem/1.0",
+            "name": "Classification",
+            "type": 2,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "union ProofPointTAPMessagesBlockedV2_CL, ProofPointTAPMessagesDeliveredV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend classification = tostring(threatsInfoMap.classification)\n| distinct classification",
+            "value": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ]
+            },
+            "timeContext": {
+              "durationMs": 0
+            },
+            "timeContextFromParameter": "TimeRange",
+            "queryType": "advancedHunting"
+          },
+          {
+            "id": "503a952f-d169-4c5a-bf2e-5e74672bd9d4",
+            "version": "KqlParameterItem/1.0",
+            "name": "ThreatType",
+            "label": "Threat Type",
+            "type": 2,
+            "isRequired": true,
+            "multiSelect": true,
+            "quote": "'",
+            "delimiter": ",",
+            "query": "union ProofPointTAPMessagesBlockedV2_CL, ProofPointTAPMessagesDeliveredV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend threatType_ = tostring(threatsInfoMap.threatType)\n| distinct threatType_",
+            "value": [
+              "value::all"
+            ],
+            "typeSettings": {
+              "additionalResourceOptions": [
+                "value::all"
+              ]
+            },
+            "timeContext": {
+              "durationMs": 0
+            },
+            "timeContextFromParameter": "TimeRange",
+            "queryType": "advancedHunting"
+          }
+        ],
+        "style": "above"
+      },
+      "name": "parameters - 2"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "union ProofPointTAPMessagesBlockedV2_CL, ProofPointTAPMessagesDeliveredV2_CL\r\n| mv-expand todynamic(threatsInfoMap)\r\n| extend classification = tostring(threatsInfoMap.classification)\r\n| extend threatType_ = tostring(threatsInfoMap.threatType)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\r\n| summarize phish = countif(classification == 'phish'), malware = countif(classification == \"malware\"), impostor = countif(classification == \"impostor\"), spam = countif(classification == \"spam\") by bin(TimeGenerated, {TimeRange:grain})",
+        "size": 0,
+        "title": "Message Events by Classification",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "areachart",
+        "tileSettings": {
+          "showBorder": false
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "classification",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "count_",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "phish",
+              "color": "blue"
+            },
+            {
+              "seriesName": "malware",
+              "color": "red"
+            },
+            {
+              "seriesName": "impostor",
+              "color": "green"
+            },
+            {
+              "seriesName": "spam",
+              "color": "magenta"
+            }
+          ]
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Messages"
+      },
+      "customWidth": "50",
+      "name": "query - 2 - Copy"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "union ProofPointTAPClicksBlockedV2_CL, ProofPointTAPClicksPermittedV2_CL\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), spam = countif(classification == \"spam\") by bin(TimeGenerated, {TimeRange:grain})",
+        "size": 0,
+        "showAnalytics": true,
+        "title": "Click Events by Classification",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "unstackedbar",
+        "tileSettings": {
+          "showBorder": false
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "classification",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "count_",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "phish",
+              "color": "blue"
+            },
+            {
+              "seriesName": "malware",
+              "color": "redBright"
+            },
+            {
+              "seriesName": "spam",
+              "color": "magenta"
+            }
+          ]
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Clicks"
+      },
+      "customWidth": "50",
+      "name": "query - 2 - Clicks"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "union withsource=Type ProofPointTAPClicksBlockedV2_CL, ProofPointTAPClicksPermittedV2_CL\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize ClicksBlocked = countif(Type == \"ProofPointTAPClicksBlockedV2_CL\"), ClicksPermitted = countif(Type == \"ProofPointTAPClicksPermittedV2_CL\") by bin(TimeGenerated, {TimeRange:grain})",
+        "size": 0,
+        "showAnalytics": true,
+        "title": "Clicks Blocked vs. Permitted",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "areachart",
+        "tileSettings": {
+          "showBorder": false
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "classification",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "count_",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "phish",
+              "color": "blue"
+            },
+            {
+              "seriesName": "malware",
+              "color": "redBright"
+            },
+            {
+              "seriesName": "spam",
+              "color": "magenta"
+            },
+            {
+              "seriesName": "ClicksBlocked",
+              "color": "redBright"
+            },
+            {
+              "seriesName": "ClicksPermitted",
+              "color": "green"
+            }
+          ]
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Clicks"
+      },
+      "customWidth": "50",
+      "name": "query - 2 - Clicks - Copy"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "union withsource=Type ProofPointTAPMessagesBlockedV2_CL, ProofPointTAPMessagesDeliveredV2_CL\r\n| mv-expand todynamic(threatsInfoMap)\r\n| extend classification = tostring(threatsInfoMap.classification)\r\n| extend threatType_ = tostring(threatsInfoMap.threatType)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\r\n| mv-expand todynamic(recipient)\r\n| summarize MessagesBlocked = countif(Type == \"ProofPointTAPMessagesBlockedV2_CL\"), MessagesDelivered = countif(Type == \"ProofPointTAPMessagesDeliveredV2_CL\") by bin(TimeGenerated, {TimeRange:grain})",
+        "size": 0,
+        "showAnalytics": true,
+        "title": "Messages Blocked vs. Delivered",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "areachart",
+        "tileSettings": {
+          "showBorder": false
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "classification",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "count_",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "MessagesBlocked",
+              "color": "red"
+            },
+            {
+              "seriesName": "MessagesDelivered",
+              "color": "green"
+            }
+          ]
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Messages"
+      },
+      "customWidth": "50",
+      "name": "query - 2 -"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ProofPointTAPClicksBlockedV2_CL\r\n| extend URL = extract(@\"\\/\\/(www.)?([a-zA-Z0-9-_.]+)(\\/|$)\",2,url)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), spam = countif(classification == \"spam\"), count() by URL\r\n| project-rename Total = count_\r\n| top 10 by Total",
+        "size": 0,
+        "showAnalytics": true,
+        "title": "Top 10 Clicks Blocked by Domain",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "URL",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "phish",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "blue",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "malware",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "red",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "spam",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "magenta",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "Total",
+              "formatter": 3,
+              "formatOptions": {
+                "palette": "blueOrange",
+                "showIcon": true
+              }
+            }
+          ]
+        },
+        "tileSettings": {
+          "showBorder": false
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "classification",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "count_",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "phish",
+              "color": "blue"
+            },
+            {
+              "seriesName": "malware",
+              "color": "redBright"
+            },
+            {
+              "seriesName": "impostor",
+              "color": "magenta"
+            },
+            {
+              "seriesName": "spam",
+              "color": "green"
+            }
+          ]
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Clicks"
+      },
+      "customWidth": "50",
+      "name": "query_clicks_top10clicksblockedbydomain"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ProofPointTAPClicksPermittedV2_CL\r\n| extend URL = extract(@\"\\/\\/(www.)?([a-zA-Z0-9-_.]+)(\\/|$)\",2,url)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), spam = countif(classification == \"spam\"), count() by URL\r\n| project-rename Total = count_\r\n| top 10 by Total",
+        "size": 0,
+        "showAnalytics": true,
+        "title": "Top 10 Clicks Permitted by Domain",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "URL",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "phish",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "blue",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "malware",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "red",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "spam",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "magenta",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "Total",
+              "formatter": 3,
+              "formatOptions": {
+                "palette": "blueOrange",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "Type",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            }
+          ],
+          "sortBy": [
+            {
+              "itemKey": "$gen_heatmap_phish_1",
+              "sortOrder": 2
+            }
+          ]
+        },
+        "sortBy": [
+          {
+            "itemKey": "$gen_heatmap_phish_1",
+            "sortOrder": 2
+          }
+        ],
+        "tileSettings": {
+          "showBorder": false
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "classification",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "count_",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "phish",
+              "color": "blue"
+            },
+            {
+              "seriesName": "malware",
+              "color": "redBright"
+            },
+            {
+              "seriesName": "impostor",
+              "color": "magenta"
+            },
+            {
+              "seriesName": "spam",
+              "color": "green"
+            }
+          ]
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Clicks"
+      },
+      "customWidth": "50",
+      "name": "query_clicks_top10clickspermittedbydomain"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ProofPointTAPClicksBlockedV2_CL\r\n| extend URL = extract(@\"\\/\\/(www.)?([a-zA-Z0-9-_.]+)(\\/|$)\",2,url)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), spam = countif(classification == \"spam\"), count() by senderIP\r\n| project-rename Total = count_, SenderIP = senderIP\r\n| top 10 by Total",
+        "size": 0,
+        "showAnalytics": true,
+        "title": "Top 10 Clicks Blocked by Sender IP",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "SenderIP",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "phish",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "blue",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "malware",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "red",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "spam",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "purple",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "Total",
+              "formatter": 3,
+              "formatOptions": {
+                "palette": "blueOrange",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "URL",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            }
+          ],
+          "labelSettings": [
+            {
+              "columnId": "SenderIP",
+              "label": "Sender IP"
+            },
+            {
+              "columnId": "phish"
+            },
+            {
+              "columnId": "malware"
+            },
+            {
+              "columnId": "spam"
+            },
+            {
+              "columnId": "Total"
+            }
+          ]
+        },
+        "tileSettings": {
+          "showBorder": false
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "classification",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "count_",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "phish",
+              "color": "blue"
+            },
+            {
+              "seriesName": "malware",
+              "color": "redBright"
+            },
+            {
+              "seriesName": "impostor",
+              "color": "magenta"
+            },
+            {
+              "seriesName": "spam",
+              "color": "green"
+            }
+          ]
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Clicks"
+      },
+      "customWidth": "50",
+      "name": "query_clicks_top10clicksblockedbysenderIP"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ProofPointTAPClicksPermittedV2_CL\r\n| extend URL = extract(@\"\\/\\/(www.)?([a-zA-Z0-9-_.]+)(\\/|$)\",2,url)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), spam = countif(classification == \"spam\"), count() by clickIP\r\n| project-rename Total = count_, ClickIP = clickIP\r\n| top 10 by Total",
+        "size": 0,
+        "showAnalytics": true,
+        "title": "Top 10 Clicks Permitted by Click IP",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "table",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "ClickIP",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "phish",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "blue",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "malware",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "red",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "spam",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "purple",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "Total",
+              "formatter": 3,
+              "formatOptions": {
+                "palette": "blueOrange",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "URL",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "Type",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            }
+          ],
+          "sortBy": [
+            {
+              "itemKey": "$gen_heatmap_phish_1",
+              "sortOrder": 2
+            }
+          ],
+          "labelSettings": [
+            {
+              "columnId": "ClickIP",
+              "label": "Click IP"
+            },
+            {
+              "columnId": "phish"
+            },
+            {
+              "columnId": "malware"
+            },
+            {
+              "columnId": "spam"
+            },
+            {
+              "columnId": "Total"
+            }
+          ]
+        },
+        "sortBy": [
+          {
+            "itemKey": "$gen_heatmap_phish_1",
+            "sortOrder": 2
+          }
+        ],
+        "tileSettings": {
+          "showBorder": false
+        },
+        "graphSettings": {
+          "type": 0,
+          "topContent": {
+            "columnMatch": "classification",
+            "formatter": 1
+          },
+          "centerContent": {
+            "columnMatch": "count_",
+            "formatter": 1,
+            "numberFormat": {
+              "unit": 17,
+              "options": {
+                "maximumSignificantDigits": 3,
+                "maximumFractionDigits": 2
+              }
+            }
+          }
+        },
+        "chartSettings": {
+          "seriesLabelSettings": [
+            {
+              "seriesName": "phish",
+              "color": "blue"
+            },
+            {
+              "seriesName": "malware",
+              "color": "redBright"
+            },
+            {
+              "seriesName": "impostor",
+              "color": "magenta"
+            },
+            {
+              "seriesName": "spam",
+              "color": "green"
+            }
+          ]
+        }
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Clicks"
+      },
+      "customWidth": "50",
+      "name": "query_clicks_top10clickspermittedbyclickip"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ProofPointTAPMessagesBlockedV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend classification = tostring(threatsInfoMap.classification)\n| extend threatType_ = tostring(threatsInfoMap.threatType)\n| where classification in ({Classification}) or '*' in ({Classification})\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\n| mv-expand todynamic(recipient)\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), impostor = countif(classification == \"impostor\"), spam = countif(classification == \"spam\"), count() by sender\n| project-rename Total = count_, SourceAddress = sender\n| top 10 by Total",
+        "size": 0,
+        "title": "Top 10 Blocked Sender Address",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "SourceAddress",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "phish",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "blue",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "malware",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "red",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "impostor",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "green",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "spam",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "magenta",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "Total",
+              "formatter": 3,
+              "formatOptions": {
+                "palette": "greenRed",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "SourceIP",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            }
+          ]
+        },
+        "sortBy": []
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Messages"
+      },
+      "customWidth": "70",
+      "name": "query - 5 - Copy"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ProofPointTAPMessagesBlockedV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend classification = tostring(threatsInfoMap.classification)\n| extend threatType_ = tostring(threatsInfoMap.threatType)\n| where classification in ({Classification}) or '*' in ({Classification})\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\n| mv-expand todynamic(recipient)\n| summarize count() by threatType_  ",
+        "size": 0,
+        "title": "Threat Type",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "visualization": "piechart",
+        "chartSettings": {}
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Messages"
+      },
+      "customWidth": "30",
+      "name": "query - 11"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ProofPointTAPMessagesBlockedV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend classification = tostring(threatsInfoMap.classification)\n| extend threatType_ = tostring(threatsInfoMap.threatType)\n| where classification in ({Classification}) or '*' in ({Classification})\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\n| mv-expand todynamic(recipient)\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), impostor = countif(classification == \"impostor\"), spam = countif(classification == \"spam\"), count() by senderIP\n| top 10 by count_",
+        "size": 0,
+        "title": "Top 10 Blocked Sender IP ",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "senderIP",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "phish",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "blue",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "malware",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "red",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "impostor",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "green",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "spam",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "magenta",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "count_",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "SourceIP",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "Total",
+              "formatter": 3,
+              "formatOptions": {
+                "palette": "greenRed",
+                "showIcon": true
+              }
+            }
+          ],
+          "labelSettings": [
+            {
+              "columnId": "senderIP",
+              "label": "Sender IP"
+            },
+            {
+              "columnId": "phish"
+            },
+            {
+              "columnId": "malware"
+            },
+            {
+              "columnId": "impostor"
+            },
+            {
+              "columnId": "spam"
+            },
+            {
+              "columnId": "count_",
+              "label": "Total"
+            }
+          ]
+        },
+        "sortBy": []
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Messages"
+      },
+      "customWidth": "45",
+      "name": "query - 5 - Copy"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "ProofPointTAPMessagesBlockedV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend classification = tostring(threatsInfoMap.classification)\n| extend threatType_ = tostring(threatsInfoMap.threatType)\n| where classification in ({Classification}) or '*' in ({Classification})\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\n| mv-expand todynamic(recipient)\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), impostor = countif(classification == \"impostor\"), spam = countif(classification == \"spam\"), count() by tostring(recipient)\n| project-rename Total = count_, Recipient = recipient\n| top 10 by Total",
+        "size": 0,
+        "title": "Top 10 Recipients",
+        "timeContext": {
+          "durationMs": 0
+        },
+        "timeContextFromParameter": "TimeRange",
+        "queryType": "advancedHunting",
+        "gridSettings": {
+          "formatters": [
+            {
+              "columnMatch": "SourceIP",
+              "formatter": 0,
+              "formatOptions": {
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "phish",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "blue",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "malware",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "red",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "impostor",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "green",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "spam",
+              "formatter": 8,
+              "formatOptions": {
+                "palette": "magenta",
+                "showIcon": true
+              }
+            },
+            {
+              "columnMatch": "Total",
+              "formatter": 3,
+              "formatOptions": {
+                "palette": "greenRed",
+                "showIcon": true
+              }
+            }
+          ]
+        },
+        "sortBy": []
+      },
+      "conditionalVisibility": {
+        "parameterName": "selectedTab",
+        "comparison": "isEqualTo",
+        "value": "Messages"
+      },
+      "customWidth": "50",
+      "name": "query - 5 - Copy - Copy"
+    }
+  ],
+  "fromTemplateId": "sentinel-ProofPointTAPWorkbook",
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json",
+  "xdrMetadata": {
+    "contentId": "ca945eb4-77f9-53ed-936b-7009bb02f645",
+    "instanceId": "cdc6f5d4-1097-5c98-921c-f951a2bccd14",
+    "version": "3.2.2",
+    "schemaVersion": "1.0.0",
+    "displayName": "Proofpoint TAP"
+  },
+  "contentProvenance": {
+    "source": {
+      "path": "Workbooks/ProofpointTAP.json",
+      "sha256": "3c8c27c208759b54093bd0bf49d7d4c7a07a6a57d569a6ed6e79161d7c69f5ea",
+      "contentId": "sentinel-ProofPointTAPWorkbook",
+      "originalMetadataVersion": null
+    },
+    "conversion": {
+      "tool": "sentinel-xdr-migration",
+      "version": "0.1.0",
+      "reviewRequired": false,
+      "queries": [
+        {
+          "sourcePath": "/items/1/content/parameters/1/query",
+          "parameter": true,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "d0e0ff7e49153ab124b356072c70f03ac8dea6143280be58566f0565e7b94734"
+          },
+          "conversion": {
+            "sourceId": "/items/1/content/parameters/1/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "union ProofPointTAPMessagesBlockedV2_CL, ProofPointTAPMessagesDeliveredV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend classification = tostring(threatsInfoMap.classification)\n| distinct classification",
+            "resolvedTables": [
+              "ProofPointTAPMessagesBlockedV2_CL",
+              "ProofPointTAPMessagesDeliveredV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "ahTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              },
+              {
+                "sentinelTable": "ProofPointTAPMessagesDeliveredV2_CL",
+                "ahTable": "ProofPointTAPMessagesDeliveredV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/parameters/1/query",
+          "sourceSha256": "d0e0ff7e49153ab124b356072c70f03ac8dea6143280be58566f0565e7b94734",
+          "targetSha256": "d0e0ff7e49153ab124b356072c70f03ac8dea6143280be58566f0565e7b94734"
+        },
+        {
+          "sourcePath": "/items/1/content/parameters/2/query",
+          "parameter": true,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "6a62c4b65cf00f423547c06a164c15d50e4d5baa52fa57aa8c4d11d9babe7d70"
+          },
+          "conversion": {
+            "sourceId": "/items/1/content/parameters/2/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "union ProofPointTAPMessagesBlockedV2_CL, ProofPointTAPMessagesDeliveredV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend threatType_ = tostring(threatsInfoMap.threatType)\n| distinct threatType_",
+            "resolvedTables": [
+              "ProofPointTAPMessagesBlockedV2_CL",
+              "ProofPointTAPMessagesDeliveredV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "ahTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              },
+              {
+                "sentinelTable": "ProofPointTAPMessagesDeliveredV2_CL",
+                "ahTable": "ProofPointTAPMessagesDeliveredV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/parameters/2/query",
+          "sourceSha256": "6a62c4b65cf00f423547c06a164c15d50e4d5baa52fa57aa8c4d11d9babe7d70",
+          "targetSha256": "6a62c4b65cf00f423547c06a164c15d50e4d5baa52fa57aa8c4d11d9babe7d70"
+        },
+        {
+          "sourcePath": "/items/2/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "10bd22872d8e60861764db4bed52a879f8b4e7d376f752ed4b4b28f8fbc13cf7"
+          },
+          "conversion": {
+            "sourceId": "/items/2/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "union ProofPointTAPMessagesBlockedV2_CL, ProofPointTAPMessagesDeliveredV2_CL\r\n| mv-expand todynamic(threatsInfoMap)\r\n| extend classification = tostring(threatsInfoMap.classification)\r\n| extend threatType_ = tostring(threatsInfoMap.threatType)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\r\n| summarize phish = countif(classification == 'phish'), malware = countif(classification == \"malware\"), impostor = countif(classification == \"impostor\"), spam = countif(classification == \"spam\") by bin(TimeGenerated, {TimeRange:grain})",
+            "resolvedTables": [
+              "ProofPointTAPMessagesBlockedV2_CL",
+              "ProofPointTAPMessagesDeliveredV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "ahTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              },
+              {
+                "sentinelTable": "ProofPointTAPMessagesDeliveredV2_CL",
+                "ahTable": "ProofPointTAPMessagesDeliveredV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/query",
+          "sourceSha256": "10bd22872d8e60861764db4bed52a879f8b4e7d376f752ed4b4b28f8fbc13cf7",
+          "targetSha256": "10bd22872d8e60861764db4bed52a879f8b4e7d376f752ed4b4b28f8fbc13cf7"
+        },
+        {
+          "sourcePath": "/items/3/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "8f5eedbbdcacf57392e6b33069e2c3cd3fcf9721811a76f75493dac3bca05e70"
+          },
+          "conversion": {
+            "sourceId": "/items/3/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "union ProofPointTAPClicksBlockedV2_CL, ProofPointTAPClicksPermittedV2_CL\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), spam = countif(classification == \"spam\") by bin(TimeGenerated, {TimeRange:grain})",
+            "resolvedTables": [
+              "ProofPointTAPClicksBlockedV2_CL",
+              "ProofPointTAPClicksPermittedV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPClicksBlockedV2_CL",
+                "ahTable": "ProofPointTAPClicksBlockedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              },
+              {
+                "sentinelTable": "ProofPointTAPClicksPermittedV2_CL",
+                "ahTable": "ProofPointTAPClicksPermittedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/query",
+          "sourceSha256": "8f5eedbbdcacf57392e6b33069e2c3cd3fcf9721811a76f75493dac3bca05e70",
+          "targetSha256": "8f5eedbbdcacf57392e6b33069e2c3cd3fcf9721811a76f75493dac3bca05e70"
+        },
+        {
+          "sourcePath": "/items/4/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "22098ff6f104fe069e3dd97a189ba72a85a319c3edbf3bcc9bada14fd080909b"
+          },
+          "conversion": {
+            "sourceId": "/items/4/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "union ProofPointTAPClicksBlockedV2_CL, ProofPointTAPClicksPermittedV2_CL\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize ClicksBlocked = countif(Type == \"ProofPointTAPClicksBlockedV2_CL\"), ClicksPermitted = countif(Type == \"ProofPointTAPClicksPermittedV2_CL\") by bin(TimeGenerated, {TimeRange:grain})",
+            "resolvedTables": [
+              "Watchlist"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Watchlist",
+                "ahTable": "Watchlist",
+                "identical": true,
+                "verdict": "Easy",
+                "score": 1.0,
+                "columnCount": 25,
+                "note": "schema identical; no column changes"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "referenceInputs": [
+            "Watchlist"
+          ],
+          "status": "converted",
+          "outputPath": "/items/4/content/query",
+          "sourceSha256": "22098ff6f104fe069e3dd97a189ba72a85a319c3edbf3bcc9bada14fd080909b",
+          "targetSha256": "22098ff6f104fe069e3dd97a189ba72a85a319c3edbf3bcc9bada14fd080909b"
+        },
+        {
+          "sourcePath": "/items/5/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "a67a7177669306a00c1d11d548312b9d7164965619a3a281e7ec3ed231707178"
+          },
+          "conversion": {
+            "sourceId": "/items/5/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "union ProofPointTAPMessagesBlockedV2_CL, ProofPointTAPMessagesDeliveredV2_CL\r\n| mv-expand todynamic(threatsInfoMap)\r\n| extend classification = tostring(threatsInfoMap.classification)\r\n| extend threatType_ = tostring(threatsInfoMap.threatType)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\r\n| mv-expand todynamic(recipient)\r\n| summarize MessagesBlocked = countif(Type == \"ProofPointTAPMessagesBlockedV2_CL\"), MessagesDelivered = countif(Type == \"ProofPointTAPMessagesDeliveredV2_CL\") by bin(TimeGenerated, {TimeRange:grain})",
+            "resolvedTables": [
+              "Watchlist"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Watchlist",
+                "ahTable": "Watchlist",
+                "identical": true,
+                "verdict": "Easy",
+                "score": 1.0,
+                "columnCount": 25,
+                "note": "schema identical; no column changes"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "referenceInputs": [
+            "Watchlist"
+          ],
+          "status": "converted",
+          "outputPath": "/items/5/content/query",
+          "sourceSha256": "a67a7177669306a00c1d11d548312b9d7164965619a3a281e7ec3ed231707178",
+          "targetSha256": "a67a7177669306a00c1d11d548312b9d7164965619a3a281e7ec3ed231707178"
+        },
+        {
+          "sourcePath": "/items/6/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "353a1f75a9ff232f502ce7795121b6790626ccf770c2c14df96a21c62fbef20d"
+          },
+          "conversion": {
+            "sourceId": "/items/6/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "ProofPointTAPClicksBlockedV2_CL\r\n| extend URL = extract(@\"\\/\\/(www.)?([a-zA-Z0-9-_.]+)(\\/|$)\",2,url)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), spam = countif(classification == \"spam\"), count() by URL\r\n| project-rename Total = count_\r\n| top 10 by Total",
+            "resolvedTables": [
+              "ProofPointTAPClicksBlockedV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPClicksBlockedV2_CL",
+                "ahTable": "ProofPointTAPClicksBlockedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/6/content/query",
+          "sourceSha256": "353a1f75a9ff232f502ce7795121b6790626ccf770c2c14df96a21c62fbef20d",
+          "targetSha256": "353a1f75a9ff232f502ce7795121b6790626ccf770c2c14df96a21c62fbef20d"
+        },
+        {
+          "sourcePath": "/items/7/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "63dbebbe8321780b048ef16dc20cd7955f37a1bf4be669a5738dad6cd74b9187"
+          },
+          "conversion": {
+            "sourceId": "/items/7/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "ProofPointTAPClicksPermittedV2_CL\r\n| extend URL = extract(@\"\\/\\/(www.)?([a-zA-Z0-9-_.]+)(\\/|$)\",2,url)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), spam = countif(classification == \"spam\"), count() by URL\r\n| project-rename Total = count_\r\n| top 10 by Total",
+            "resolvedTables": [
+              "ProofPointTAPClicksPermittedV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPClicksPermittedV2_CL",
+                "ahTable": "ProofPointTAPClicksPermittedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/7/content/query",
+          "sourceSha256": "63dbebbe8321780b048ef16dc20cd7955f37a1bf4be669a5738dad6cd74b9187",
+          "targetSha256": "63dbebbe8321780b048ef16dc20cd7955f37a1bf4be669a5738dad6cd74b9187"
+        },
+        {
+          "sourcePath": "/items/8/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "735b3a02854070f57755dd24b7f43e07aaa3068c90ddcae75a5084be58621fe6"
+          },
+          "conversion": {
+            "sourceId": "/items/8/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "ProofPointTAPClicksBlockedV2_CL\r\n| extend URL = extract(@\"\\/\\/(www.)?([a-zA-Z0-9-_.]+)(\\/|$)\",2,url)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), spam = countif(classification == \"spam\"), count() by senderIP\r\n| project-rename Total = count_, SenderIP = senderIP\r\n| top 10 by Total",
+            "resolvedTables": [
+              "ProofPointTAPClicksBlockedV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPClicksBlockedV2_CL",
+                "ahTable": "ProofPointTAPClicksBlockedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/8/content/query",
+          "sourceSha256": "735b3a02854070f57755dd24b7f43e07aaa3068c90ddcae75a5084be58621fe6",
+          "targetSha256": "735b3a02854070f57755dd24b7f43e07aaa3068c90ddcae75a5084be58621fe6"
+        },
+        {
+          "sourcePath": "/items/9/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "4222b0d0fec85fc96ad5f8ba1b016f6f9dacb0b38e6578cae42856e07bc0abf3"
+          },
+          "conversion": {
+            "sourceId": "/items/9/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "ProofPointTAPClicksPermittedV2_CL\r\n| extend URL = extract(@\"\\/\\/(www.)?([a-zA-Z0-9-_.]+)(\\/|$)\",2,url)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), spam = countif(classification == \"spam\"), count() by clickIP\r\n| project-rename Total = count_, ClickIP = clickIP\r\n| top 10 by Total",
+            "resolvedTables": [
+              "ProofPointTAPClicksPermittedV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPClicksPermittedV2_CL",
+                "ahTable": "ProofPointTAPClicksPermittedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/9/content/query",
+          "sourceSha256": "4222b0d0fec85fc96ad5f8ba1b016f6f9dacb0b38e6578cae42856e07bc0abf3",
+          "targetSha256": "4222b0d0fec85fc96ad5f8ba1b016f6f9dacb0b38e6578cae42856e07bc0abf3"
+        },
+        {
+          "sourcePath": "/items/10/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "a209a1aa2c370f9a4c20a9f6d15b02aec36ffd39e153b09f627c11e7d3244bab"
+          },
+          "conversion": {
+            "sourceId": "/items/10/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "ProofPointTAPMessagesBlockedV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend classification = tostring(threatsInfoMap.classification)\n| extend threatType_ = tostring(threatsInfoMap.threatType)\n| where classification in ({Classification}) or '*' in ({Classification})\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\n| mv-expand todynamic(recipient)\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), impostor = countif(classification == \"impostor\"), spam = countif(classification == \"spam\"), count() by sender\n| project-rename Total = count_, SourceAddress = sender\n| top 10 by Total",
+            "resolvedTables": [
+              "ProofPointTAPMessagesBlockedV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "ahTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/10/content/query",
+          "sourceSha256": "a209a1aa2c370f9a4c20a9f6d15b02aec36ffd39e153b09f627c11e7d3244bab",
+          "targetSha256": "a209a1aa2c370f9a4c20a9f6d15b02aec36ffd39e153b09f627c11e7d3244bab"
+        },
+        {
+          "sourcePath": "/items/11/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "4755a73a79ef90df82f3874122e0117eb41d861e1f7cf7492fbdd94fec03ffaa"
+          },
+          "conversion": {
+            "sourceId": "/items/11/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "ProofPointTAPMessagesBlockedV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend classification = tostring(threatsInfoMap.classification)\n| extend threatType_ = tostring(threatsInfoMap.threatType)\n| where classification in ({Classification}) or '*' in ({Classification})\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\n| mv-expand todynamic(recipient)\n| summarize count() by threatType_  ",
+            "resolvedTables": [
+              "ProofPointTAPMessagesBlockedV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "ahTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/11/content/query",
+          "sourceSha256": "4755a73a79ef90df82f3874122e0117eb41d861e1f7cf7492fbdd94fec03ffaa",
+          "targetSha256": "4755a73a79ef90df82f3874122e0117eb41d861e1f7cf7492fbdd94fec03ffaa"
+        },
+        {
+          "sourcePath": "/items/12/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "12f848a2973c6e10354e928d1b8419ad134a17c51b6510b85bd5925cb135f964"
+          },
+          "conversion": {
+            "sourceId": "/items/12/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "ProofPointTAPMessagesBlockedV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend classification = tostring(threatsInfoMap.classification)\n| extend threatType_ = tostring(threatsInfoMap.threatType)\n| where classification in ({Classification}) or '*' in ({Classification})\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\n| mv-expand todynamic(recipient)\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), impostor = countif(classification == \"impostor\"), spam = countif(classification == \"spam\"), count() by senderIP\n| top 10 by count_",
+            "resolvedTables": [
+              "ProofPointTAPMessagesBlockedV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "ahTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/12/content/query",
+          "sourceSha256": "12f848a2973c6e10354e928d1b8419ad134a17c51b6510b85bd5925cb135f964",
+          "targetSha256": "12f848a2973c6e10354e928d1b8419ad134a17c51b6510b85bd5925cb135f964"
+        },
+        {
+          "sourcePath": "/items/13/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "idoshabi",
+            "reference": "user-approved-isv-drop1",
+            "planSha256": "39c9297e37fa6bfc57d28af5940be7e26b67cadeb028ebeb42f1dc1799a1c687",
+            "decision": "accept",
+            "querySha256": "f84448faa3660df7f3efe4d4d4151f0c7503b5d544fee99cc99cb234f053b716"
+          },
+          "conversion": {
+            "sourceId": "/items/13/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "ProofPointTAPMessagesBlockedV2_CL\n| mv-expand todynamic(threatsInfoMap)\n| extend classification = tostring(threatsInfoMap.classification)\n| extend threatType_ = tostring(threatsInfoMap.threatType)\n| where classification in ({Classification}) or '*' in ({Classification})\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\n| mv-expand todynamic(recipient)\n| summarize phish = countif(classification == \"phish\"), malware = countif(classification == \"malware\"), impostor = countif(classification == \"impostor\"), spam = countif(classification == \"spam\"), count() by tostring(recipient)\n| project-rename Total = count_, Recipient = recipient\n| top 10 by Total",
+            "resolvedTables": [
+              "ProofPointTAPMessagesBlockedV2_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "ahTable": "ProofPointTAPMessagesBlockedV2_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/13/content/query",
+          "sourceSha256": "f84448faa3660df7f3efe4d4d4151f0c7503b5d544fee99cc99cb234f053b716",
+          "targetSha256": "f84448faa3660df7f3efe4d4d4151f0c7503b5d544fee99cc99cb234f053b716"
+        }
+      ]
+    },
+    "requiredWorkloads": [
+      {
+        "workload": "sentinel",
+        "dataTypes": [
+          "ProofPointTAPClicksBlockedV2_CL",
+          "ProofPointTAPClicksPermittedV2_CL",
+          "ProofPointTAPMessagesBlockedV2_CL",
+          "ProofPointTAPMessagesDeliveredV2_CL"
+        ]
+      }
+    ],
+    "requiredDataConnectors": [
+      {
+        "connectorId": "ProofpointTAPv2",
+        "dataTypes": [
+          "ProofPointTAPClicksBlockedV2_CL",
+          "ProofPointTAPClicksPermittedV2_CL",
+          "ProofPointTAPMessagesBlockedV2_CL",
+          "ProofPointTAPMessagesDeliveredV2_CL"
+        ]
+      }
+    ],
+    "dependencyReviewRequired": false,
+    "authoredReview": {
+      "schemaVersion": "1.0.0",
+      "baseline": {
+        "reference": "baseline-ProofpointTAP.json",
+        "sha256": "a638e794b340debd4508f867ae1fe87d187592ccb7d29a63d659e827932b17bf",
+        "canonicalDocumentSha256": "8f18c28c60be7b8d0631ac9e016572933af550f9b9692c41585e0591dbfb8ccd"
+      },
+      "baselineMetadata": {
+        "contentId": "ca945eb4-77f9-53ed-936b-7009bb02f645",
+        "instanceId": "cdc6f5d4-1097-5c98-921c-f951a2bccd14",
+        "version": "3.2.2",
+        "schemaVersion": "1.0.0",
+        "displayName": "Proofpoint TAP"
+      },
+      "reversePayloadChanges": [
+        {
+          "path": [
+            "items",
+            4,
+            "content",
+            "query"
+          ],
+          "op": "replace",
+          "value": "union ProofPointTAPClicksBlockedV2_CL, ProofPointTAPClicksPermittedV2_CL\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| summarize ClicksBlocked = countif(Type == \"ProofPointTAPClicksBlockedV2_CL\"), ClicksPermitted = countif(Type == \"ProofPointTAPClicksPermittedV2_CL\") by bin(TimeGenerated, {TimeRange:grain})"
+        },
+        {
+          "path": [
+            "items",
+            5,
+            "content",
+            "query"
+          ],
+          "op": "replace",
+          "value": "union ProofPointTAPMessagesBlockedV2_CL, ProofPointTAPMessagesDeliveredV2_CL\r\n| mv-expand todynamic(threatsInfoMap)\r\n| extend classification = tostring(threatsInfoMap.classification)\r\n| extend threatType_ = tostring(threatsInfoMap.threatType)\r\n| where classification in ({Classification}) or '*' in ({Classification})\r\n| where threatType_ in ({ThreatType}) or '*' in ({ThreatType})\r\n| mv-expand todynamic(recipient)\r\n| summarize MessagesBlocked = countif(Type == \"ProofPointTAPMessagesBlockedV2_CL\"), MessagesDelivered = countif(Type == \"ProofPointTAPMessagesDeliveredV2_CL\") by bin(TimeGenerated, {TimeRange:grain})"
+        }
+      ],
+      "canonicalPayloadSha256": "69c010a7cab8c50a669e080af167d207a9bcd5e12f7d5591ea86dfa2d48ac8a4",
+      "canonicalDocumentSha256": "f864607397e39ae77482f6f1e4cb2c77d3fa7610beade0a1d8e1e31f1587a75a",
+      "queries": [
+        {
+          "path": "/items/1/content/parameters/1/query",
+          "querySha256": "d0e0ff7e49153ab124b356072c70f03ac8dea6143280be58566f0565e7b94734",
+          "tables": [
+            "ProofPointTAPMessagesBlockedV2_CL",
+            "ProofPointTAPMessagesDeliveredV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/1/content/parameters/2/query",
+          "querySha256": "6a62c4b65cf00f423547c06a164c15d50e4d5baa52fa57aa8c4d11d9babe7d70",
+          "tables": [
+            "ProofPointTAPMessagesBlockedV2_CL",
+            "ProofPointTAPMessagesDeliveredV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/2/content/query",
+          "querySha256": "10bd22872d8e60861764db4bed52a879f8b4e7d376f752ed4b4b28f8fbc13cf7",
+          "tables": [
+            "ProofPointTAPMessagesBlockedV2_CL",
+            "ProofPointTAPMessagesDeliveredV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/3/content/query",
+          "querySha256": "8f5eedbbdcacf57392e6b33069e2c3cd3fcf9721811a76f75493dac3bca05e70",
+          "tables": [
+            "ProofPointTAPClicksBlockedV2_CL",
+            "ProofPointTAPClicksPermittedV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/4/content/query",
+          "querySha256": "664664fe5cbe72856f43113542b8800400395b19e136b5077ccec2f5d2a55f08",
+          "tables": [
+            "ProofPointTAPClicksBlockedV2_CL",
+            "ProofPointTAPClicksPermittedV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/5/content/query",
+          "querySha256": "750ad217fe8066f60aa51751b06faeef85360a68160d580f653ba511bc1dedf0",
+          "tables": [
+            "ProofPointTAPMessagesBlockedV2_CL",
+            "ProofPointTAPMessagesDeliveredV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/6/content/query",
+          "querySha256": "353a1f75a9ff232f502ce7795121b6790626ccf770c2c14df96a21c62fbef20d",
+          "tables": [
+            "ProofPointTAPClicksBlockedV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/7/content/query",
+          "querySha256": "63dbebbe8321780b048ef16dc20cd7955f37a1bf4be669a5738dad6cd74b9187",
+          "tables": [
+            "ProofPointTAPClicksPermittedV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/8/content/query",
+          "querySha256": "735b3a02854070f57755dd24b7f43e07aaa3068c90ddcae75a5084be58621fe6",
+          "tables": [
+            "ProofPointTAPClicksBlockedV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/9/content/query",
+          "querySha256": "4222b0d0fec85fc96ad5f8ba1b016f6f9dacb0b38e6578cae42856e07bc0abf3",
+          "tables": [
+            "ProofPointTAPClicksPermittedV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/10/content/query",
+          "querySha256": "a209a1aa2c370f9a4c20a9f6d15b02aec36ffd39e153b09f627c11e7d3244bab",
+          "tables": [
+            "ProofPointTAPMessagesBlockedV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/11/content/query",
+          "querySha256": "4755a73a79ef90df82f3874122e0117eb41d861e1f7cf7492fbdd94fec03ffaa",
+          "tables": [
+            "ProofPointTAPMessagesBlockedV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/12/content/query",
+          "querySha256": "12f848a2973c6e10354e928d1b8419ad134a17c51b6510b85bd5925cb135f964",
+          "tables": [
+            "ProofPointTAPMessagesBlockedV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        },
+        {
+          "path": "/items/13/content/query",
+          "querySha256": "f84448faa3660df7f3efe4d4d4151f0c7503b5d544fee99cc99cb234f053b716",
+          "tables": [
+            "ProofPointTAPMessagesBlockedV2_CL"
+          ],
+          "builtinAsimParsers": [],
+          "workspaceFunctions": []
+        }
+      ],
+      "changedQueries": [
+        {
+          "path": "/items/4/content/query",
+          "baselineQuerySha256": "22098ff6f104fe069e3dd97a189ba72a85a319c3edbf3bcc9bada14fd080909b",
+          "querySha256": "664664fe5cbe72856f43113542b8800400395b19e136b5077ccec2f5d2a55f08",
+          "decision": "accept",
+          "evidence": "Added withsource=Type to union so countif(Type == ...) binds Type column cleanly in Advanced Hunting."
+        },
+        {
+          "path": "/items/5/content/query",
+          "baselineQuerySha256": "a67a7177669306a00c1d11d548312b9d7164965619a3a281e7ec3ed231707178",
+          "querySha256": "750ad217fe8066f60aa51751b06faeef85360a68160d580f653ba511bc1dedf0",
+          "decision": "accept",
+          "evidence": "Added withsource=Type to union so countif(Type == ...) binds Type column cleanly in Advanced Hunting."
+        }
+      ],
+      "actor": "idoshabi",
+      "reference": "user-approved-isv-drop1",
+      "decision": "accept",
+      "reviewSha256": "05bb63fd9af70d140052609f5b691f6bb89fc5efa6052e6dbddb0d411926591c"
+    }
+  }
+}
