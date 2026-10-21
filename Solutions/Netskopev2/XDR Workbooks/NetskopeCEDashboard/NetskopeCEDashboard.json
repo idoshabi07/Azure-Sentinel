@@ -1,0 +1,4310 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 11,
+      "content": {
+        "version": "LinkItem/1.0",
+        "style": "tabs",
+        "links": [
+          {
+            "id": "bea257bd-19ed-4afd-b2db-817eb5aced6f",
+            "cellValue": "view",
+            "linkTarget": "parameter",
+            "linkLabel": "Application Overview",
+            "subTarget": "tab1",
+            "style": "link"
+          },
+          {
+            "id": "61b82b1b-1290-4757-b181-a3fa015b5aae",
+            "cellValue": "view",
+            "linkTarget": "parameter",
+            "linkLabel": "Alert Overview",
+            "subTarget": "tab2",
+            "style": "link"
+          },
+          {
+            "id": "d33934aa-be63-4925-826c-54dcc185e4c9",
+            "cellValue": "view",
+            "linkTarget": "parameter",
+            "linkLabel": "Web Transactions Overview",
+            "subTarget": "tab3",
+            "style": "link"
+          }
+        ]
+      },
+      "name": "links - 2"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "parameters": [
+                {
+                  "id": "66dab7e6-5f19-48d6-b11c-5a94f84dafdb",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "TimeRange",
+                  "type": 4,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "selectableValues": [
+                      {
+                        "durationMs": 300000
+                      },
+                      {
+                        "durationMs": 900000
+                      },
+                      {
+                        "durationMs": 1800000
+                      },
+                      {
+                        "durationMs": 3600000
+                      },
+                      {
+                        "durationMs": 14400000
+                      },
+                      {
+                        "durationMs": 43200000
+                      },
+                      {
+                        "durationMs": 86400000
+                      },
+                      {
+                        "durationMs": 172800000
+                      },
+                      {
+                        "durationMs": 259200000
+                      },
+                      {
+                        "durationMs": 604800000
+                      },
+                      {
+                        "durationMs": 1209600000
+                      },
+                      {
+                        "durationMs": 2419200000
+                      },
+                      {
+                        "durationMs": 2592000000
+                      },
+                      {
+                        "durationMs": 5184000000
+                      },
+                      {
+                        "durationMs": 7776000000
+                      }
+                    ],
+                    "allowCustom": true
+                  },
+                  "timeContext": {
+                    "durationMs": 86400000
+                  },
+                  "value": {
+                    "durationMs": 1209600000
+                  },
+                  "label": "Time Range"
+                }
+              ],
+              "style": "pills",
+              "doNotRunWhenHidden": true
+            },
+            "conditionalVisibility": {
+              "parameterName": "TimeRange",
+              "comparison": "isNotEqualTo",
+              "value": "None"
+            },
+            "name": "parameters - 11",
+            "styleSettings": {
+              "margin": "5px"
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication\n| where isnotempty(App)\n| summarize arg_max(TimeGenerated,*) by Id\n| summarize Count = count() by Application = App\n| sort by Count desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Top Applications By Usage",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "Application",
+              "exportParameterName": "ApplicationName1",
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Count",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "filter": true,
+                "sortBy": [
+                  {
+                    "itemKey": "$gen_bar_Count_1",
+                    "sortOrder": 2
+                  }
+                ]
+              },
+              "sortBy": [
+                {
+                  "itemKey": "$gen_bar_Count_1",
+                  "sortOrder": 2
+                }
+              ]
+            },
+            "customWidth": "50",
+            "name": "Top Applications By Usage",
+            "styleSettings": {
+              "margin": "5px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where App == '{ApplicationName1}'\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by User\r\n| top 50 by Count",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Top 50 Users Of {ApplicationName1}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Count",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ApplicationName1",
+              "comparison": "isNotEqualTo",
+              "value": ""
+            },
+            "name": "Top 50 Users Of Application : {ApplicationName1}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where isnotempty(App)\r\n| summarize arg_max(TimeGenerated,*) by App\r\n| sort by CCI desc\r\n| project Application = App, ['CCI SCORE'] = CCI",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Top Applications By CCI Score",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "Application",
+              "exportParameterName": "ApplicationName2",
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "CCI SCORE",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "customWidth": "50",
+            "name": "Top Applications By CCI Score",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where App == '{ApplicationName2}'\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by User\r\n| top 50 by Count",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Top 50 Users Of {ApplicationName2}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Count",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "customWidth": "50",
+            "conditionalVisibility": {
+              "parameterName": "ApplicationName2",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Top 50 Users Of {ApplicationName2}",
+            "styleSettings": {
+              "margin": "5px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on a row in the above 'Top Applications By Usage' and 'Top Applications By CCI score' grid to view more details_\r\n"
+            },
+            "name": "text - 24"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where isnotempty(AppCategory)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by AppCategory\r\n| sort by Count desc",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Top Categories",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "series",
+              "exportParameterName": "CategoryName",
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              },
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "name": "Top Categories",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where isnotempty(Browser)\r\n| summarize arg_max(TimeGenerated,*) by Id   \r\n| summarize Count = count() by Browser\r\n| sort by Count desc",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Browser Breakdown",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "series",
+              "exportParameterName": "BrowserName",
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "name": "Browser Breakdown",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Top Categories' pie chart to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 25"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Browser Breakdown' pie chart to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 26"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where AppCategory == '{CategoryName}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Application Details For {CategoryName}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "CategoryName",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Applications Data For Category : {CategoryName}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where Browser == '{BrowserName}'\r\n| summarize arg_max(TimeGenerated,*) by Id  ",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Application Details For {BrowserName}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "BrowserName",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Application Details For {BrowserName}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication\r\n| where isnotempty(DeviceClassification)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by DeviceClassification\r\n| sort by Count desc",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Device Classification",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "series",
+              "exportParameterName": "DeviceClassificationName",
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "",
+                    "label": "<empty>"
+                  }
+                ]
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 8",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where isnotempty(CCL)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by CCL\r\n| sort by Count desc",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Cloud Confidence Level Breakdown",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "series",
+              "exportParameterName": "CCL",
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 6",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Device Classification' pie chart to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 27"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Cloud Confidence Level Breakdown' pie chart to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 28"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication\r\n| where DeviceClassification == '{DeviceClassificationName}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Application Details For {DeviceClassificationName}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "DeviceClassificationName",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Application Details For {DeviceClassificationName}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where CCL == \"{CCL}\"\r\n| summarize arg_max(TimeGenerated,*) by Id",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Application Details For Cloud Confidence Level {CCL}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "CCL",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Application Details For Cloud Confidence Level {CCL}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where isnotempty(Device)\r\n| extend Device = iff(Device == \"Other\", \"Other (value in Data)\", Device)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by Device\r\n| sort by Count desc",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Device Breakdown",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "series",
+              "exportParameterName": "DeviceName",
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 11,
+                "showMetrics": false,
+                "showLegend": true,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "Other",
+                    "label": "Other (grouped other values)"
+                  }
+                ]
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 7",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where isnotempty(Activity)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count()  by Activity\r\n| top 10 by Count",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Top 10 Application Activities",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "x",
+              "exportParameterName": "ActivityName",
+              "queryType": "advancedHunting",
+              "visualization": "barchart",
+              "chartSettings": {
+                "createOtherGroup": 11
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 7",
+            "styleSettings": {
+              "margin": "5px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Device Breakdown' pie chart to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 29"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Top 10 Application Activities' bar chart to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 30"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication\r\n| where Device == (case(\"{DeviceName}\"==\"Other\",\"Other(Grouped Value)\",\"{DeviceName}\"==\"Other (value in Data)\",\"Other\",\"{DeviceName}\"))\r\n| summarize arg_max(TimeGenerated,*) by Id",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Application Details For Device {DeviceName}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "DeviceName",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Application Details For Device {DeviceName}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where Activity == '{ActivityName}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Application Details For Activity {ActivityName}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "ActivityName",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Application Details For Activity {ActivityName}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where isnotempty(User)and isnotempty(AccessMethod)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by User, ['Access Method'] = AccessMethod\r\n| sort by Count desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Top Users By Access Method",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportedParameters": [
+                {
+                  "fieldName": "User",
+                  "parameterName": "UserName",
+                  "parameterType": 1,
+                  "defaultValue": "none"
+                },
+                {
+                  "fieldName": "Access Method",
+                  "parameterName": "AccessMethod",
+                  "parameterType": 1,
+                  "defaultValue": "none"
+                }
+              ],
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Count",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "customWidth": "100",
+            "name": "Top Users By Access Method",
+            "styleSettings": {
+              "margin": "5px",
+              "maxWidth": "100%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Top Users By Access Method' grid to view more details_"
+            },
+            "name": "text - 31"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where User == '{UserName}'\r\n    and AccessMethod == '{AccessMethod}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Application Details For User {UserName} And Access Method {AccessMethod}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "customWidth": "100",
+            "conditionalVisibilities": [
+              {
+                "parameterName": "UserName",
+                "comparison": "isNotEqualTo",
+                "value": "none"
+              },
+              {
+                "parameterName": "AccessMethod",
+                "comparison": "isNotEqualTo",
+                "value": "none"
+              }
+            ],
+            "name": "query - 24",
+            "styleSettings": {
+              "margin": "5px",
+              "maxWidth": "100%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where isnotempty(User) and isnotempty( App)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize ['Total Client Bytes'] = sum(todecimal(ClientBytes)),['Total Server Bytes'] =sum(todecimal(ServerBytes)) by User,Application = App\r\n ",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Bytes Transferred",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Total Client Bytes",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  },
+                  {
+                    "columnMatch": "Total Server Bytes",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "name": "query - 10",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where isnotempty(OS)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by OS\r\n| sort by Count desc\r\n",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "OS Breakdown",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "OS",
+              "exportParameterName": "os",
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Count",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "customWidth": "50",
+            "name": "OS Breakdown",
+            "styleSettings": {
+              "margin": "5px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where isnotempty(App) and isnotempty(Category)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by Application = App, Category\r\n| sort by Count desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Applications Accessed (w/App Category)",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportedParameters": [
+                {
+                  "fieldName": "Category",
+                  "parameterName": "category",
+                  "defaultValue": "none"
+                },
+                {
+                  "fieldName": "Application",
+                  "parameterName": "app",
+                  "parameterType": 1
+                }
+              ],
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Count",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "customWidth": "50",
+            "name": "Applications Accessed (w/App Category)",
+            "styleSettings": {
+              "margin": "5px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'OS Breakdown' grid to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 32"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Applications Accessed (w/App Category)' grid to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 33"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication\r\n| where OS == '{os}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Application Details For {os}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "customWidth": "100",
+            "conditionalVisibility": {
+              "parameterName": "os",
+              "comparison": "isNotEqualTo",
+              "value": ""
+            },
+            "name": "Application Details For {os}",
+            "styleSettings": {
+              "margin": "5px",
+              "maxWidth": "100%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEEventsApplication \r\n| where App == '{app}'\r\n    and Category == '{category}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Application Details For Application {app} And Category {category}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibilities": [
+              {
+                "parameterName": "category",
+                "comparison": "isNotEqualTo",
+                "value": "none"
+              },
+              {
+                "parameterName": "app",
+                "comparison": "isNotEqualTo",
+                "value": "none"
+              }
+            ],
+            "name": "Application Details For Application {app} And Category {category}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "view",
+        "comparison": "isEqualTo",
+        "value": "tab1"
+      },
+      "name": "group - 11"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "parameters": [
+                {
+                  "id": "66dab7e6-5f19-48d6-b11c-5a94f84dafdb",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "TimeRange",
+                  "type": 4,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "selectableValues": [
+                      {
+                        "durationMs": 300000
+                      },
+                      {
+                        "durationMs": 900000
+                      },
+                      {
+                        "durationMs": 1800000
+                      },
+                      {
+                        "durationMs": 3600000
+                      },
+                      {
+                        "durationMs": 14400000
+                      },
+                      {
+                        "durationMs": 43200000
+                      },
+                      {
+                        "durationMs": 86400000
+                      },
+                      {
+                        "durationMs": 172800000
+                      },
+                      {
+                        "durationMs": 259200000
+                      },
+                      {
+                        "durationMs": 604800000
+                      },
+                      {
+                        "durationMs": 1209600000
+                      },
+                      {
+                        "durationMs": 2419200000
+                      },
+                      {
+                        "durationMs": 2592000000
+                      },
+                      {
+                        "durationMs": 5184000000
+                      },
+                      {
+                        "durationMs": 7776000000
+                      }
+                    ],
+                    "allowCustom": true
+                  },
+                  "timeContext": {
+                    "durationMs": 86400000
+                  },
+                  "value": {
+                    "durationMs": 1209600000
+                  },
+                  "label": "Time Range"
+                },
+                {
+                  "id": "2f85800e-e576-4669-b72d-2527981dc15d",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "TypeOfAlert",
+                  "label": "Type Of Alert",
+                  "type": 2,
+                  "description": "Select Alert Type to visualize data related to specific type of alert",
+                  "isRequired": true,
+                  "multiSelect": true,
+                  "quote": "'",
+                  "delimiter": ",",
+                  "query": "NetskopeCEAlerts\r\n| where isnotempty(AlertType)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| distinct tolower(AlertType)",
+                  "typeSettings": {
+                    "additionalResourceOptions": [
+                      "value::all"
+                    ],
+                    "selectAllValue": "*",
+                    "showDefault": false
+                  },
+                  "timeContext": {
+                    "durationMs": 0
+                  },
+                  "timeContextFromParameter": "TimeRange",
+                  "defaultValue": "value::all",
+                  "queryType": "advancedHunting"
+                }
+              ],
+              "style": "pills",
+              "doNotRunWhenHidden": true
+            },
+            "conditionalVisibility": {
+              "parameterName": "TimeRange",
+              "comparison": "isNotEqualTo",
+              "value": "None"
+            },
+            "name": "parameters - 11"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\n| where isnotempty(DlpFile)\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\n| summarize arg_max(TimeGenerated,*) by Id\n| summarize Count = count() by DlpFile\n| top 10 by Count",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Top 10 File Matches For DLP",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 2",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| where isnotempty(App)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize  Count = count() by App\r\n| top 10 by Count",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Top 10 Applications Triggering Alerts",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "series",
+              "exportParameterName": "AppName",
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "tileSettings": {
+                "showBorder": false,
+                "titleContent": {
+                  "columnMatch": "app_s",
+                  "formatter": 1
+                },
+                "leftContent": {
+                  "columnMatch": "count_",
+                  "formatter": 12,
+                  "formatOptions": {
+                    "palette": "auto"
+                  },
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              },
+              "graphSettings": {
+                "type": 0,
+                "topContent": {
+                  "columnMatch": "app_s",
+                  "formatter": 1
+                },
+                "centerContent": {
+                  "columnMatch": "count_",
+                  "formatter": 1,
+                  "numberFormat": {
+                    "unit": 17,
+                    "options": {
+                      "maximumSignificantDigits": 3,
+                      "maximumFractionDigits": 2
+                    }
+                  }
+                }
+              },
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "Other",
+                    "label": "Others"
+                  },
+                  {
+                    "seriesName": "Other",
+                    "label": "Other Data"
+                  }
+                ]
+              },
+              "mapSettings": {
+                "locInfo": "LatLong",
+                "sizeSettings": "count_",
+                "sizeAggregation": "Sum",
+                "legendMetric": "count_",
+                "legendAggregation": "Sum",
+                "itemColorSettings": {
+                  "type": "heatmap",
+                  "colorAggregation": "Sum",
+                  "nodeColorField": "count_",
+                  "heatmapPalette": "greenRed"
+                }
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 2",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": ""
+            },
+            "customWidth": "50",
+            "name": "text - 12"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Top 10 Applications Triggering Alerts' pie chart to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 13"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\r\n| where App == \"{AppName}\"\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| sort by TimeGenerated desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Alert Details For {AppName}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "AppName",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "query - 8",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by tolower(AlertType)\r\n| sort by Count desc",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Alert Type Breakdown",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true,
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "Other",
+                    "label": "other",
+                    "color": "gray"
+                  }
+                ]
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 3",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| where isnotempty(DlpProfile)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by DlpProfile\r\n| top 10 by Count",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Top 10 DLP Profiles",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 4",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\r\n| where isnotempty(DlpRule) and isnotempty(DlpRuleSeverity)\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize  Count = count() by Rule = DlpRule, Severity = DlpRuleSeverity\r\n| top 10 by Count",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Top 10 DLP Rules",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportedParameters": [
+                {
+                  "fieldName": "Rule",
+                  "parameterName": "DlpRuleSelected",
+                  "parameterType": 1
+                },
+                {
+                  "fieldName": "Severity",
+                  "parameterName": "DlpSeveritySelected",
+                  "parameterType": 1
+                }
+              ],
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Count",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "filter": true
+              }
+            },
+            "customWidth": "33.34",
+            "name": "query - 6",
+            "styleSettings": {
+              "margin": "3px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\r\n| where isnotempty(Policy)\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by Policy\r\n| top 10 by Count",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Top 10 Policy Hits",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportFieldName": "Policy",
+              "exportParameterName": "PolicyName",
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Count",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "filter": true
+              }
+            },
+            "customWidth": "33.33",
+            "showPin": false,
+            "name": "query - 7",
+            "styleSettings": {
+              "margin": "3px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\r\n| where isnotempty(AccessMethod) and isnotempty(Policy)\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by Policy,Method = AccessMethod\r\n| sort by Count desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Policy Alerts by Access Method",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "exportedParameters": [
+                {
+                  "fieldName": "Policy",
+                  "parameterName": "PolicyName2"
+                },
+                {
+                  "fieldName": "Method",
+                  "parameterName": "AccessMethodName",
+                  "parameterType": 1
+                }
+              ],
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Count",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "filter": true
+              }
+            },
+            "customWidth": "33.33",
+            "name": "query - 11",
+            "styleSettings": {
+              "margin": "3px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Top 10 DLP Rules' grid to view more details_"
+            },
+            "customWidth": "33.34",
+            "name": "text - 16"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Top 10 Policy Hits' grid to view more details_"
+            },
+            "customWidth": "33.33",
+            "name": "text - 17"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Policy Alerts by Access Method' grid to view more details_"
+            },
+            "customWidth": "33.33",
+            "name": "text - 18"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| where DlpRule =~ \"{DlpRuleSelected}\" and DlpRuleSeverity =~ '{DlpSeveritySelected}'\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| sort by TimeGenerated desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Alert Details For Dlp Rule {DlpRuleSelected} and Severity {DlpSeveritySelected}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "DlpRuleSelected",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Alert Details For Dlp Rule {DlpRuleSelected} and Severity {DlpSeveritySelected}",
+            "styleSettings": {
+              "margin": "5",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| where Policy =~ \"{PolicyName}\"\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| sort by TimeGenerated desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Alert Details For {PolicyName}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "PolicyName",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "query - 9",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| where Policy =~ \"{PolicyName2}\" and AccessMethod =~ '{AccessMethodName}'\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| sort by TimeGenerated desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Alert Details For Policy {PolicyName2} and Access Method {AccessMethodName}",
+              "timeContextFromParameter": "TimeRange",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "PolicyName2",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "query - 11",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "view",
+        "comparison": "isEqualTo",
+        "value": "tab2"
+      },
+      "name": "group - 11"
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 9,
+            "content": {
+              "version": "KqlParameterItem/1.0",
+              "parameters": [
+                {
+                  "id": "e9fc5159-d3fe-4011-8dd5-7ee37332612c",
+                  "version": "KqlParameterItem/1.0",
+                  "name": "Time_Range",
+                  "label": "Time Range",
+                  "type": 4,
+                  "isRequired": true,
+                  "typeSettings": {
+                    "selectableValues": [
+                      {
+                        "durationMs": 300000
+                      },
+                      {
+                        "durationMs": 900000
+                      },
+                      {
+                        "durationMs": 1800000
+                      },
+                      {
+                        "durationMs": 3600000
+                      },
+                      {
+                        "durationMs": 14400000
+                      },
+                      {
+                        "durationMs": 43200000
+                      },
+                      {
+                        "durationMs": 86400000
+                      },
+                      {
+                        "durationMs": 172800000
+                      },
+                      {
+                        "durationMs": 259200000
+                      },
+                      {
+                        "durationMs": 604800000
+                      },
+                      {
+                        "durationMs": 1209600000
+                      },
+                      {
+                        "durationMs": 2419200000
+                      },
+                      {
+                        "durationMs": 2592000000
+                      },
+                      {
+                        "durationMs": 5184000000
+                      },
+                      {
+                        "durationMs": 7776000000
+                      }
+                    ],
+                    "allowCustom": true
+                  },
+                  "timeContext": {
+                    "durationMs": 86400000
+                  },
+                  "value": {
+                    "durationMs": 1209600000
+                  }
+                }
+              ],
+              "style": "pills"
+            },
+            "name": "parameters - 0",
+            "styleSettings": {
+              "margin": "5px"
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| top 1 by TimeGenerated\r\n| extend DateTime = todatetime(strcat(Date,\" \", Time))\r\n| extend ['Time Difference'] = datetime_diff('Minute',TimeGenerated,DateTime)\r\n| project ['Time Difference']\r\n| extend ['Time Difference'] = strcat(['Time Difference'],' Minutes')\r\n",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Latency of last ingested event (in minutes)",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "queryType": "advancedHunting",
+              "visualization": "card",
+              "gridSettings": {
+                "rowLimit": 10000
+              },
+              "tileSettings": {
+                "showBorder": false
+              },
+              "textSettings": {
+                "style": "bignumber"
+              }
+            },
+            "name": "query - 6",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "30px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where ClientBrowser != '-' and isnotempty(ClientBrowser)\r\n| summarize Count = count() by ClientBrowser\r\n| sort by Count desc",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Browser Breakdown",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "exportFieldName": "series",
+              "exportParameterName": "Browser",
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 5",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where ClientDeviceType != '-' and isnotempty(ClientDeviceType)\r\n| summarize Count = count() by ClientDeviceType\r\n| sort by Count desc",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Device Breakdown",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "exportFieldName": "series",
+              "exportParameterName": "DeviceName",
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 8",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Browser Breakdown' pie chart to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 13"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Device Breakdown' pie chart to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 14"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where ClientBrowser == '{Browser}'\r\n| sort by TimeGenerated desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Web Transactions Details For {Browser}",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "Browser",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Web Transactions Details For {Browser}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where ClientDeviceType == '{DeviceName}'\r\n| sort by TimeGenerated desc\r\n",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Web Transactions Details For {DeviceName}",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "DeviceName",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Web Transactions Details For {DeviceName}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where ClientUsername != '-' and ClientMethod != '-' and isnotempty(ClientUsername) and isnotempty(ClientMethod)\r\n| summarize Count = count() by ['User Name'] = ClientUsername, Method = ClientMethod \r\n| sort by Count desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Top Users By Access Method",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "exportedParameters": [
+                {
+                  "fieldName": "User Name",
+                  "parameterName": "UserName",
+                  "parameterType": 1
+                },
+                {
+                  "fieldName": "Method",
+                  "parameterName": "Method",
+                  "parameterType": 1
+                }
+              ],
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Count",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 10",
+            "styleSettings": {
+              "margin": "5px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where ClientCloudApp !='-' and ClientUsername != '-' and isnotempty(ClientCloudApp) and isnotempty(ClientUsername)\r\n| summarize ['Total Client Bytes'] = sum(todecimal(ClientBytes)), ['Total Server Bytes'] = sum(todecimal(ServerBytes)) by Application = ClientCloudApp,['User Name'] = ClientUsername\r\n| sort by ['Total Client Bytes'] desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Bytes Transferred",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "formatters": [
+                  {
+                    "columnMatch": "Total Client Bytes",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  },
+                  {
+                    "columnMatch": "Total Server Bytes",
+                    "formatter": 4,
+                    "formatOptions": {
+                      "min": 0,
+                      "palette": "blue"
+                    }
+                  }
+                ],
+                "rowLimit": 10000,
+                "filter": true,
+                "sortBy": [
+                  {
+                    "itemKey": "Application",
+                    "sortOrder": 1
+                  }
+                ]
+              },
+              "sortBy": [
+                {
+                  "itemKey": "Application",
+                  "sortOrder": 1
+                }
+              ]
+            },
+            "customWidth": "50",
+            "name": "query - 11",
+            "styleSettings": {
+              "margin": "5px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 _Click on the above 'Top Users By Access Method' grid to view more details_"
+            },
+            "customWidth": "50",
+            "name": "text - 15"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": ""
+            },
+            "customWidth": "50",
+            "name": "text - 16"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where ClientUsername == '{UserName}' and ClientMethod == '{Method}'\r\n| sort by TimeGenerated desc",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Web Transactions Details For User {UserName} and Method {Method}",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibilities": [
+              {
+                "parameterName": "UserName",
+                "comparison": "isNotEqualTo"
+              },
+              {
+                "parameterName": "Method",
+                "comparison": "isNotEqualTo"
+              }
+            ],
+            "name": "Web Transactions Details For User {UserName} and Method {Method}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where Site != '-' and isnotempty(Site)\r\n| summarize Count = count() by Site\r\n| top 10 by Count",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Top 10 Sites",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "exportFieldName": "series",
+              "exportParameterName": "SiteName",
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 12",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where ClientHost != '-' and isnotempty(ClientHost)\r\n| summarize Count = count() by ClientHost\r\n| top 10 by Count\r\n",
+              "size": 3,
+              "showAnalytics": true,
+              "title": "Top 10 Hosts",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "exportFieldName": "series",
+              "exportParameterName": "HostName",
+              "queryType": "advancedHunting",
+              "visualization": "piechart",
+              "chartSettings": {
+                "createOtherGroup": 10,
+                "showMetrics": false,
+                "showLegend": true
+              }
+            },
+            "customWidth": "50",
+            "name": "query - 13",
+            "styleSettings": {
+              "margin": "5px",
+              "padding": "50px",
+              "maxWidth": "50%",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 Click on the above 'Top 10 Sites' pie chart to view more details"
+            },
+            "customWidth": "50",
+            "name": "text - 17"
+          },
+          {
+            "type": 1,
+            "content": {
+              "json": "💡 Click on the above 'Top 10 Hosts' pie chart to view more details"
+            },
+            "customWidth": "50",
+            "name": "text - 18"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where Site == '{SiteName}'\r\n| sort by TimeGenerated desc\r\n",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Web Transactions Details For {SiteName}",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "SiteName",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Web Transactions Details For {SiteName}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "NetskopeCEWebTransactions\r\n| where ClientHost == '{HostName}'\r\n| sort by TimeGenerated desc\r\n\r\n",
+              "size": 0,
+              "showAnalytics": true,
+              "title": "Web Transactions Details For {HostName}",
+              "timeContextFromParameter": "Time_Range",
+              "showRefreshButton": true,
+              "showExportToExcel": true,
+              "queryType": "advancedHunting",
+              "visualization": "table",
+              "gridSettings": {
+                "rowLimit": 10000,
+                "filter": true
+              }
+            },
+            "conditionalVisibility": {
+              "parameterName": "HostName",
+              "comparison": "isNotEqualTo"
+            },
+            "name": "Web Transactions Details For {HostName}",
+            "styleSettings": {
+              "margin": "5px",
+              "showBorder": true
+            }
+          }
+        ]
+      },
+      "conditionalVisibility": {
+        "parameterName": "view",
+        "comparison": "isEqualTo",
+        "value": "tab3"
+      },
+      "name": "Web Transactions Overview"
+    }
+  ],
+  "fromTemplateId": "sentinel-NetskopeCEDashboard",
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json",
+  "xdrMetadata": {
+    "contentId": "b0754d0f-941f-57bb-9fc6-980fd704c6ee",
+    "instanceId": "5689a9cd-d1df-5de7-843a-000c786dee3a",
+    "version": "3.2.2",
+    "schemaVersion": "1.0.0",
+    "displayName": "NetskopeCEDashboard"
+  },
+  "contentProvenance": {
+    "source": {
+      "path": "Workbooks/NetskopeCEDashboard/NetskopeCEDashboard.json",
+      "sha256": "868519d16f5eb0c5a261de0978b824a370e944b6b36cbaffac484b5f6cd9eefd",
+      "contentId": "sentinel-NetskopeCEDashboard",
+      "originalMetadataVersion": null
+    },
+    "conversion": {
+      "tool": "sentinel-xdr-migration",
+      "version": "0.1.0",
+      "reviewRequired": false,
+      "queries": [
+        {
+          "sourcePath": "/items/1/content/items/1/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "7e074186931a590e48c34fb3040d9311197c5f4206f5a39050c6fe5a77784409"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/1/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication\n| where isnotempty(App)\n| summarize arg_max(TimeGenerated,*) by Id\n| summarize Count = count() by Application = App\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/1/content/query",
+          "sourceSha256": "7e074186931a590e48c34fb3040d9311197c5f4206f5a39050c6fe5a77784409",
+          "targetSha256": "7e074186931a590e48c34fb3040d9311197c5f4206f5a39050c6fe5a77784409"
+        },
+        {
+          "sourcePath": "/items/1/content/items/2/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "bc3196a01a2250588b7bf5ac6ed5d6d95ca1f0facd58cbcf53fe66eb70c4a8df"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/2/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where App == '{ApplicationName1}'\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by User\r\n| top 50 by Count",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/2/content/query",
+          "sourceSha256": "bc3196a01a2250588b7bf5ac6ed5d6d95ca1f0facd58cbcf53fe66eb70c4a8df",
+          "targetSha256": "bc3196a01a2250588b7bf5ac6ed5d6d95ca1f0facd58cbcf53fe66eb70c4a8df"
+        },
+        {
+          "sourcePath": "/items/1/content/items/3/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "5883f728d3b503409bae0154e793b569d9d300d2f584aaec1d22fef350ce3733"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/3/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where isnotempty(App)\r\n| summarize arg_max(TimeGenerated,*) by App\r\n| sort by CCI desc\r\n| project Application = App, ['CCI SCORE'] = CCI",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/3/content/query",
+          "sourceSha256": "5883f728d3b503409bae0154e793b569d9d300d2f584aaec1d22fef350ce3733",
+          "targetSha256": "5883f728d3b503409bae0154e793b569d9d300d2f584aaec1d22fef350ce3733"
+        },
+        {
+          "sourcePath": "/items/1/content/items/4/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "772503dd570836c21f04e74b70744efa3d80bfaac09bdfacc9dbf53755ca3cd2"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/4/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where App == '{ApplicationName2}'\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by User\r\n| top 50 by Count",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/4/content/query",
+          "sourceSha256": "772503dd570836c21f04e74b70744efa3d80bfaac09bdfacc9dbf53755ca3cd2",
+          "targetSha256": "772503dd570836c21f04e74b70744efa3d80bfaac09bdfacc9dbf53755ca3cd2"
+        },
+        {
+          "sourcePath": "/items/1/content/items/6/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "fbabda804346cb08f81969a86e37a0177ea090d2774c7e746bf83460e6820e56"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/6/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where isnotempty(AppCategory)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by AppCategory\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/6/content/query",
+          "sourceSha256": "fbabda804346cb08f81969a86e37a0177ea090d2774c7e746bf83460e6820e56",
+          "targetSha256": "fbabda804346cb08f81969a86e37a0177ea090d2774c7e746bf83460e6820e56"
+        },
+        {
+          "sourcePath": "/items/1/content/items/7/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "5fbf3694d7eca1c79750c82a24ceb8940efbd24f5e9eb6513fb506d04353fae8"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/7/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where isnotempty(Browser)\r\n| summarize arg_max(TimeGenerated,*) by Id   \r\n| summarize Count = count() by Browser\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/7/content/query",
+          "sourceSha256": "5fbf3694d7eca1c79750c82a24ceb8940efbd24f5e9eb6513fb506d04353fae8",
+          "targetSha256": "5fbf3694d7eca1c79750c82a24ceb8940efbd24f5e9eb6513fb506d04353fae8"
+        },
+        {
+          "sourcePath": "/items/1/content/items/10/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "08e44516e59471fc1d247717c1cb37a22c2c81512b19bbbbec8908f7b3c032c0"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/10/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where AppCategory == '{CategoryName}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/10/content/query",
+          "sourceSha256": "08e44516e59471fc1d247717c1cb37a22c2c81512b19bbbbec8908f7b3c032c0",
+          "targetSha256": "08e44516e59471fc1d247717c1cb37a22c2c81512b19bbbbec8908f7b3c032c0"
+        },
+        {
+          "sourcePath": "/items/1/content/items/11/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "066efb9568cea27bb45bb8d5d7563348c6bfb0e2a34be7c32f61a826e8c5945c"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/11/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where Browser == '{BrowserName}'\r\n| summarize arg_max(TimeGenerated,*) by Id  ",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/11/content/query",
+          "sourceSha256": "066efb9568cea27bb45bb8d5d7563348c6bfb0e2a34be7c32f61a826e8c5945c",
+          "targetSha256": "066efb9568cea27bb45bb8d5d7563348c6bfb0e2a34be7c32f61a826e8c5945c"
+        },
+        {
+          "sourcePath": "/items/1/content/items/12/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "083ba863d9ebaeb452942323664100b8ccf55351ab87c1ad60ecac32a4adcacc"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/12/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication\r\n| where isnotempty(DeviceClassification)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by DeviceClassification\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/12/content/query",
+          "sourceSha256": "083ba863d9ebaeb452942323664100b8ccf55351ab87c1ad60ecac32a4adcacc",
+          "targetSha256": "083ba863d9ebaeb452942323664100b8ccf55351ab87c1ad60ecac32a4adcacc"
+        },
+        {
+          "sourcePath": "/items/1/content/items/13/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "6e585f7efc8a8b825fea2f995cba3646cca541f4d0a201ef229c2753bdfaae76"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/13/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where isnotempty(CCL)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by CCL\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/13/content/query",
+          "sourceSha256": "6e585f7efc8a8b825fea2f995cba3646cca541f4d0a201ef229c2753bdfaae76",
+          "targetSha256": "6e585f7efc8a8b825fea2f995cba3646cca541f4d0a201ef229c2753bdfaae76"
+        },
+        {
+          "sourcePath": "/items/1/content/items/16/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "da4e2deabcdc95851ae84813676d0ce2342527c22bc0231f5801b4610d304448"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/16/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication\r\n| where DeviceClassification == '{DeviceClassificationName}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/16/content/query",
+          "sourceSha256": "da4e2deabcdc95851ae84813676d0ce2342527c22bc0231f5801b4610d304448",
+          "targetSha256": "da4e2deabcdc95851ae84813676d0ce2342527c22bc0231f5801b4610d304448"
+        },
+        {
+          "sourcePath": "/items/1/content/items/17/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "0bdd5ed85e365132d1c497f2eac577f69da84b31fe7eaddc75f144cc3ad901f3"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/17/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where CCL == \"{CCL}\"\r\n| summarize arg_max(TimeGenerated,*) by Id",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/17/content/query",
+          "sourceSha256": "0bdd5ed85e365132d1c497f2eac577f69da84b31fe7eaddc75f144cc3ad901f3",
+          "targetSha256": "0bdd5ed85e365132d1c497f2eac577f69da84b31fe7eaddc75f144cc3ad901f3"
+        },
+        {
+          "sourcePath": "/items/1/content/items/18/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "4297931e144e0d416229ed369f4b25b3e75b646321ef369e1a12e987e1d96e91"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/18/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where isnotempty(Device)\r\n| extend Device = iff(Device == \"Other\", \"Other (value in Data)\", Device)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by Device\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/18/content/query",
+          "sourceSha256": "4297931e144e0d416229ed369f4b25b3e75b646321ef369e1a12e987e1d96e91",
+          "targetSha256": "4297931e144e0d416229ed369f4b25b3e75b646321ef369e1a12e987e1d96e91"
+        },
+        {
+          "sourcePath": "/items/1/content/items/19/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "814f52a8f0a814b7a0e8914f0652f08b3460f25822dc07f68d7028f939c59f52"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/19/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where isnotempty(Activity)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count()  by Activity\r\n| top 10 by Count",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/19/content/query",
+          "sourceSha256": "814f52a8f0a814b7a0e8914f0652f08b3460f25822dc07f68d7028f939c59f52",
+          "targetSha256": "814f52a8f0a814b7a0e8914f0652f08b3460f25822dc07f68d7028f939c59f52"
+        },
+        {
+          "sourcePath": "/items/1/content/items/22/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "9b61510d70ac983c7a9cb106c1132d305133c08a982bb87bbcc4659c614dfe17"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/22/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication\r\n| where Device == (case(\"{DeviceName}\"==\"Other\",\"Other(Grouped Value)\",\"{DeviceName}\"==\"Other (value in Data)\",\"Other\",\"{DeviceName}\"))\r\n| summarize arg_max(TimeGenerated,*) by Id",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/22/content/query",
+          "sourceSha256": "9b61510d70ac983c7a9cb106c1132d305133c08a982bb87bbcc4659c614dfe17",
+          "targetSha256": "9b61510d70ac983c7a9cb106c1132d305133c08a982bb87bbcc4659c614dfe17"
+        },
+        {
+          "sourcePath": "/items/1/content/items/23/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "93347c2c8c97f84591dcc1ed79f53b740fc27512df0e0143ab19becb37a9a1b5"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/23/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where Activity == '{ActivityName}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/23/content/query",
+          "sourceSha256": "93347c2c8c97f84591dcc1ed79f53b740fc27512df0e0143ab19becb37a9a1b5",
+          "targetSha256": "93347c2c8c97f84591dcc1ed79f53b740fc27512df0e0143ab19becb37a9a1b5"
+        },
+        {
+          "sourcePath": "/items/1/content/items/24/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "a23ce3b85287d76677981d9ea8b56c90eea1613f912b698b0db7eebe73488811"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/24/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where isnotempty(User)and isnotempty(AccessMethod)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by User, ['Access Method'] = AccessMethod\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/24/content/query",
+          "sourceSha256": "a23ce3b85287d76677981d9ea8b56c90eea1613f912b698b0db7eebe73488811",
+          "targetSha256": "a23ce3b85287d76677981d9ea8b56c90eea1613f912b698b0db7eebe73488811"
+        },
+        {
+          "sourcePath": "/items/1/content/items/26/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "e1d6d56142b1c08a52e25db8beb9ddae392a39ca32e3a576ebe7077a3f2be448"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/26/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where User == '{UserName}'\r\n    and AccessMethod == '{AccessMethod}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/26/content/query",
+          "sourceSha256": "e1d6d56142b1c08a52e25db8beb9ddae392a39ca32e3a576ebe7077a3f2be448",
+          "targetSha256": "e1d6d56142b1c08a52e25db8beb9ddae392a39ca32e3a576ebe7077a3f2be448"
+        },
+        {
+          "sourcePath": "/items/1/content/items/27/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "df8af9d8d0ed84d198e4d2399529bd834b77645b087a834444abfc080a8aab54"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/27/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where isnotempty(User) and isnotempty( App)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize ['Total Client Bytes'] = sum(todecimal(ClientBytes)),['Total Server Bytes'] =sum(todecimal(ServerBytes)) by User,Application = App\r\n ",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/27/content/query",
+          "sourceSha256": "df8af9d8d0ed84d198e4d2399529bd834b77645b087a834444abfc080a8aab54",
+          "targetSha256": "df8af9d8d0ed84d198e4d2399529bd834b77645b087a834444abfc080a8aab54"
+        },
+        {
+          "sourcePath": "/items/1/content/items/28/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "c9b8eb030cc904526276049dcba3baf61b99ced1df6146ae303930fb2dda6cf7"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/28/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where isnotempty(OS)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by OS\r\n| sort by Count desc\r\n",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/28/content/query",
+          "sourceSha256": "c9b8eb030cc904526276049dcba3baf61b99ced1df6146ae303930fb2dda6cf7",
+          "targetSha256": "c9b8eb030cc904526276049dcba3baf61b99ced1df6146ae303930fb2dda6cf7"
+        },
+        {
+          "sourcePath": "/items/1/content/items/29/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "34554968f996cc0bf306bb7a679ffe7403561af25c9fd7cf0f1705bd506b8770"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/29/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where isnotempty(App) and isnotempty(Category)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by Application = App, Category\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/29/content/query",
+          "sourceSha256": "34554968f996cc0bf306bb7a679ffe7403561af25c9fd7cf0f1705bd506b8770",
+          "targetSha256": "34554968f996cc0bf306bb7a679ffe7403561af25c9fd7cf0f1705bd506b8770"
+        },
+        {
+          "sourcePath": "/items/1/content/items/32/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "7f08132c07e75ef2690b1e4ad3ab3c4d4fc5364879efd6f30eaae4196cfc252f"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/32/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication\r\n| where OS == '{os}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/32/content/query",
+          "sourceSha256": "7f08132c07e75ef2690b1e4ad3ab3c4d4fc5364879efd6f30eaae4196cfc252f",
+          "targetSha256": "7f08132c07e75ef2690b1e4ad3ab3c4d4fc5364879efd6f30eaae4196cfc252f"
+        },
+        {
+          "sourcePath": "/items/1/content/items/33/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "bea68aa591942e1c92bbf332a7da5dfdf8c054c56da4f3de133224b5c4ed7dd8"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEEventsApplication"
+          ],
+          "conversion": {
+            "sourceId": "/items/1/content/items/33/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEEventsApplication \r\n| where App == '{app}'\r\n    and Category == '{category}'\r\n| summarize arg_max(TimeGenerated,*) by Id",
+            "resolvedTables": [
+              "Netskope_Events_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Events_CL",
+                "ahTable": "Netskope_Events_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/1/content/items/33/content/query",
+          "sourceSha256": "bea68aa591942e1c92bbf332a7da5dfdf8c054c56da4f3de133224b5c4ed7dd8",
+          "targetSha256": "bea68aa591942e1c92bbf332a7da5dfdf8c054c56da4f3de133224b5c4ed7dd8"
+        },
+        {
+          "sourcePath": "/items/2/content/items/0/content/parameters/1/query",
+          "parameter": true,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "309fbfaddc238132de203b546c0520e0f676027dd158ec43b534960759c65fb0"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/0/content/parameters/1/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where isnotempty(AlertType)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| distinct tolower(AlertType)",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/0/content/parameters/1/query",
+          "sourceSha256": "309fbfaddc238132de203b546c0520e0f676027dd158ec43b534960759c65fb0",
+          "targetSha256": "309fbfaddc238132de203b546c0520e0f676027dd158ec43b534960759c65fb0"
+        },
+        {
+          "sourcePath": "/items/2/content/items/1/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "03d64d6fca0a00cc2962c660104fe46f583b3dd0460f30de2ff9c3cc26486535"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/1/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\n| where isnotempty(DlpFile)\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\n| summarize arg_max(TimeGenerated,*) by Id\n| summarize Count = count() by DlpFile\n| top 10 by Count",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/1/content/query",
+          "sourceSha256": "03d64d6fca0a00cc2962c660104fe46f583b3dd0460f30de2ff9c3cc26486535",
+          "targetSha256": "03d64d6fca0a00cc2962c660104fe46f583b3dd0460f30de2ff9c3cc26486535"
+        },
+        {
+          "sourcePath": "/items/2/content/items/2/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "db5988c9ad98ec7bfa2a48516462259bec2f55cf1dbcd09896236688b68401c2"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/2/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| where isnotempty(App)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize  Count = count() by App\r\n| top 10 by Count",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/2/content/query",
+          "sourceSha256": "db5988c9ad98ec7bfa2a48516462259bec2f55cf1dbcd09896236688b68401c2",
+          "targetSha256": "db5988c9ad98ec7bfa2a48516462259bec2f55cf1dbcd09896236688b68401c2"
+        },
+        {
+          "sourcePath": "/items/2/content/items/5/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "4af5f04b02745803df6985e247330676595687d27ece349e7e7dfa7b0355809c"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/5/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where App == \"{AppName}\"\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| sort by TimeGenerated desc",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/5/content/query",
+          "sourceSha256": "4af5f04b02745803df6985e247330676595687d27ece349e7e7dfa7b0355809c",
+          "targetSha256": "4af5f04b02745803df6985e247330676595687d27ece349e7e7dfa7b0355809c"
+        },
+        {
+          "sourcePath": "/items/2/content/items/6/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "33d4b9037445e55276d351d355cd822b555f97624e33c6cc042d0748af3555f5"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/6/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by tolower(AlertType)\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/6/content/query",
+          "sourceSha256": "33d4b9037445e55276d351d355cd822b555f97624e33c6cc042d0748af3555f5",
+          "targetSha256": "33d4b9037445e55276d351d355cd822b555f97624e33c6cc042d0748af3555f5"
+        },
+        {
+          "sourcePath": "/items/2/content/items/7/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "5db2b732533f70e83c01bb022fc90c2752902994580971eb7b63bf977e509035"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/7/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| where isnotempty(DlpProfile)\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by DlpProfile\r\n| top 10 by Count",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/7/content/query",
+          "sourceSha256": "5db2b732533f70e83c01bb022fc90c2752902994580971eb7b63bf977e509035",
+          "targetSha256": "5db2b732533f70e83c01bb022fc90c2752902994580971eb7b63bf977e509035"
+        },
+        {
+          "sourcePath": "/items/2/content/items/8/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "c38e7c4924f840e8aa802f6d481ea8487101d9d3f7ca95edc457083029133128"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/8/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where isnotempty(DlpRule) and isnotempty(DlpRuleSeverity)\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize  Count = count() by Rule = DlpRule, Severity = DlpRuleSeverity\r\n| top 10 by Count",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/8/content/query",
+          "sourceSha256": "c38e7c4924f840e8aa802f6d481ea8487101d9d3f7ca95edc457083029133128",
+          "targetSha256": "c38e7c4924f840e8aa802f6d481ea8487101d9d3f7ca95edc457083029133128"
+        },
+        {
+          "sourcePath": "/items/2/content/items/9/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "40a7fe52c8cc461ccd1c70adbecd354427c33a535f74ca713d99e3e956b3dfcb"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/9/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where isnotempty(Policy)\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by Policy\r\n| top 10 by Count",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/9/content/query",
+          "sourceSha256": "40a7fe52c8cc461ccd1c70adbecd354427c33a535f74ca713d99e3e956b3dfcb",
+          "targetSha256": "40a7fe52c8cc461ccd1c70adbecd354427c33a535f74ca713d99e3e956b3dfcb"
+        },
+        {
+          "sourcePath": "/items/2/content/items/10/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "eb4830c53172abc8dd817513e48f694b1ff6c9b9d815f4eb9e904c55069adc2b"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/10/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where isnotempty(AccessMethod) and isnotempty(Policy)\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| summarize Count = count() by Policy,Method = AccessMethod\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/10/content/query",
+          "sourceSha256": "eb4830c53172abc8dd817513e48f694b1ff6c9b9d815f4eb9e904c55069adc2b",
+          "targetSha256": "eb4830c53172abc8dd817513e48f694b1ff6c9b9d815f4eb9e904c55069adc2b"
+        },
+        {
+          "sourcePath": "/items/2/content/items/14/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "4c7564c20d930e2af276b4729445c4403f9c0ef1773ddf671ce0b6079013772f"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/14/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| where DlpRule =~ \"{DlpRuleSelected}\" and DlpRuleSeverity =~ '{DlpSeveritySelected}'\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| sort by TimeGenerated desc",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/14/content/query",
+          "sourceSha256": "4c7564c20d930e2af276b4729445c4403f9c0ef1773ddf671ce0b6079013772f",
+          "targetSha256": "4c7564c20d930e2af276b4729445c4403f9c0ef1773ddf671ce0b6079013772f"
+        },
+        {
+          "sourcePath": "/items/2/content/items/15/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "fd975ed2669d661f5e0a11545bf0641d761f78efdab9e9b01d3cde2c6d9765e0"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/15/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| where Policy =~ \"{PolicyName}\"\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| sort by TimeGenerated desc",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/15/content/query",
+          "sourceSha256": "fd975ed2669d661f5e0a11545bf0641d761f78efdab9e9b01d3cde2c6d9765e0",
+          "targetSha256": "fd975ed2669d661f5e0a11545bf0641d761f78efdab9e9b01d3cde2c6d9765e0"
+        },
+        {
+          "sourcePath": "/items/2/content/items/16/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "af5bb80a910067868e1836066c22341af444452bb7c76f68691b8a5b66b51c9a"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEAlerts"
+          ],
+          "conversion": {
+            "sourceId": "/items/2/content/items/16/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEAlerts\r\n| where ('{TypeOfAlert:escapejson}' == '*' or AlertType in~ ({TypeOfAlert}))\r\n| where Policy =~ \"{PolicyName2}\" and AccessMethod =~ '{AccessMethodName}'\r\n| summarize arg_max(TimeGenerated,*) by Id\r\n| sort by TimeGenerated desc",
+            "resolvedTables": [
+              "Netskope_Alerts_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_Alerts_CL",
+                "ahTable": "Netskope_Alerts_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/2/content/items/16/content/query",
+          "sourceSha256": "af5bb80a910067868e1836066c22341af444452bb7c76f68691b8a5b66b51c9a",
+          "targetSha256": "af5bb80a910067868e1836066c22341af444452bb7c76f68691b8a5b66b51c9a"
+        },
+        {
+          "sourcePath": "/items/3/content/items/1/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "98a361a1cb8b2492cdb3e816f7ad9d6c8e67dd81808ba79176c54967ffcce32c"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/1/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| top 1 by TimeGenerated\r\n| extend DateTime = todatetime(strcat(Date,\" \", Time))\r\n| extend ['Time Difference'] = datetime_diff('Minute',TimeGenerated,DateTime)\r\n| project ['Time Difference']\r\n| extend ['Time Difference'] = strcat(['Time Difference'],' Minutes')\r\n",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/1/content/query",
+          "sourceSha256": "98a361a1cb8b2492cdb3e816f7ad9d6c8e67dd81808ba79176c54967ffcce32c",
+          "targetSha256": "98a361a1cb8b2492cdb3e816f7ad9d6c8e67dd81808ba79176c54967ffcce32c"
+        },
+        {
+          "sourcePath": "/items/3/content/items/2/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "7a1ec2d45e14c8046dfd735f5d100d9e59a466422ba583cc73452cb58d329c57"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/2/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where ClientBrowser != '-' and isnotempty(ClientBrowser)\r\n| summarize Count = count() by ClientBrowser\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/2/content/query",
+          "sourceSha256": "7a1ec2d45e14c8046dfd735f5d100d9e59a466422ba583cc73452cb58d329c57",
+          "targetSha256": "7a1ec2d45e14c8046dfd735f5d100d9e59a466422ba583cc73452cb58d329c57"
+        },
+        {
+          "sourcePath": "/items/3/content/items/3/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "43cab69ece952ee06860d0df07735597d2c796a1f8f12f7448906a85e3856ce9"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/3/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where ClientDeviceType != '-' and isnotempty(ClientDeviceType)\r\n| summarize Count = count() by ClientDeviceType\r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/3/content/query",
+          "sourceSha256": "43cab69ece952ee06860d0df07735597d2c796a1f8f12f7448906a85e3856ce9",
+          "targetSha256": "43cab69ece952ee06860d0df07735597d2c796a1f8f12f7448906a85e3856ce9"
+        },
+        {
+          "sourcePath": "/items/3/content/items/6/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "1c231965ca1b91e06cdaaf383a9daaa44a528c047afbd5c33f7445ed9bdfff72"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/6/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where ClientBrowser == '{Browser}'\r\n| sort by TimeGenerated desc",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/6/content/query",
+          "sourceSha256": "1c231965ca1b91e06cdaaf383a9daaa44a528c047afbd5c33f7445ed9bdfff72",
+          "targetSha256": "1c231965ca1b91e06cdaaf383a9daaa44a528c047afbd5c33f7445ed9bdfff72"
+        },
+        {
+          "sourcePath": "/items/3/content/items/7/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "3e6f881c22a7bfa5f77ad222124d1f3743592f9b30aca1be9b20ff2316ebf3eb"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/7/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where ClientDeviceType == '{DeviceName}'\r\n| sort by TimeGenerated desc\r\n",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/7/content/query",
+          "sourceSha256": "3e6f881c22a7bfa5f77ad222124d1f3743592f9b30aca1be9b20ff2316ebf3eb",
+          "targetSha256": "3e6f881c22a7bfa5f77ad222124d1f3743592f9b30aca1be9b20ff2316ebf3eb"
+        },
+        {
+          "sourcePath": "/items/3/content/items/8/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "628f0809f7faef65588b0f19fe812d805a988bacd650b430fa285c5e445b4a0e"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/8/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where ClientUsername != '-' and ClientMethod != '-' and isnotempty(ClientUsername) and isnotempty(ClientMethod)\r\n| summarize Count = count() by ['User Name'] = ClientUsername, Method = ClientMethod \r\n| sort by Count desc",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/8/content/query",
+          "sourceSha256": "628f0809f7faef65588b0f19fe812d805a988bacd650b430fa285c5e445b4a0e",
+          "targetSha256": "628f0809f7faef65588b0f19fe812d805a988bacd650b430fa285c5e445b4a0e"
+        },
+        {
+          "sourcePath": "/items/3/content/items/9/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "cbf0b3b8bab95b4b4034b4c490ed1c6b95a406f7dad3f023020f4edf1ae1ed81"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/9/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where ClientCloudApp !='-' and ClientUsername != '-' and isnotempty(ClientCloudApp) and isnotempty(ClientUsername)\r\n| summarize ['Total Client Bytes'] = sum(todecimal(ClientBytes)), ['Total Server Bytes'] = sum(todecimal(ServerBytes)) by Application = ClientCloudApp,['User Name'] = ClientUsername\r\n| sort by ['Total Client Bytes'] desc",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/9/content/query",
+          "sourceSha256": "cbf0b3b8bab95b4b4034b4c490ed1c6b95a406f7dad3f023020f4edf1ae1ed81",
+          "targetSha256": "cbf0b3b8bab95b4b4034b4c490ed1c6b95a406f7dad3f023020f4edf1ae1ed81"
+        },
+        {
+          "sourcePath": "/items/3/content/items/12/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "ca422a000042a69d88d27562d24becbfc97ac1fea5f458de9c4a1ebd2e8c32e4"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/12/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where ClientUsername == '{UserName}' and ClientMethod == '{Method}'\r\n| sort by TimeGenerated desc",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/12/content/query",
+          "sourceSha256": "ca422a000042a69d88d27562d24becbfc97ac1fea5f458de9c4a1ebd2e8c32e4",
+          "targetSha256": "ca422a000042a69d88d27562d24becbfc97ac1fea5f458de9c4a1ebd2e8c32e4"
+        },
+        {
+          "sourcePath": "/items/3/content/items/13/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "04071527570e144a646698c594293e2638756283c926706faf68cedfa79c8931"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/13/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where Site != '-' and isnotempty(Site)\r\n| summarize Count = count() by Site\r\n| top 10 by Count",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/13/content/query",
+          "sourceSha256": "04071527570e144a646698c594293e2638756283c926706faf68cedfa79c8931",
+          "targetSha256": "04071527570e144a646698c594293e2638756283c926706faf68cedfa79c8931"
+        },
+        {
+          "sourcePath": "/items/3/content/items/14/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "537dacb075052946ce0b6093d032f9c81770dd0590b5c26073b682b1a1feba9d"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/14/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where ClientHost != '-' and isnotempty(ClientHost)\r\n| summarize Count = count() by ClientHost\r\n| top 10 by Count\r\n",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/14/content/query",
+          "sourceSha256": "537dacb075052946ce0b6093d032f9c81770dd0590b5c26073b682b1a1feba9d",
+          "targetSha256": "537dacb075052946ce0b6093d032f9c81770dd0590b5c26073b682b1a1feba9d"
+        },
+        {
+          "sourcePath": "/items/3/content/items/17/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "c2e8fdac22d77bbafeebec137fea15658885684e30dd35e89bf2b39d5c4421c6"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/17/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where Site == '{SiteName}'\r\n| sort by TimeGenerated desc\r\n",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/17/content/query",
+          "sourceSha256": "c2e8fdac22d77bbafeebec137fea15658885684e30dd35e89bf2b39d5c4421c6",
+          "targetSha256": "c2e8fdac22d77bbafeebec137fea15658885684e30dd35e89bf2b39d5c4421c6"
+        },
+        {
+          "sourcePath": "/items/3/content/items/18/content/query",
+          "parameter": false,
+          "resolutionEvidence": {
+            "actor": "user-approved-isv-drop1",
+            "reference": "user-approval-20261021T130526Z-4325880842a642a0970677527209268f",
+            "planSha256": "5b20f8222956d8eaf0939d6c3d4ffd68a30e784623387f0be8560f70f3e2c82f",
+            "decision": "accept",
+            "querySha256": "c43bc8796f2051e83118a39ab8492cd9363088fd557058dceecef181dd16d3e8"
+          },
+          "workspaceFunctions": [
+            "NetskopeCEWebTransactions"
+          ],
+          "conversion": {
+            "sourceId": "/items/3/content/items/18/content/query",
+            "artifactType": "workbook",
+            "status": "converted",
+            "convertedKql": "NetskopeCEWebTransactions\r\n| where ClientHost == '{HostName}'\r\n| sort by TimeGenerated desc\r\n\r\n",
+            "resolvedTables": [
+              "Netskope_WebTX_CL"
+            ],
+            "mappingTier": "1to1",
+            "renamedTables": {},
+            "renamedAsimTables": {},
+            "diff": [],
+            "schemaMap": [
+              {
+                "sentinelTable": "Netskope_WebTX_CL",
+                "ahTable": "Netskope_WebTX_CL",
+                "identical": null,
+                "columnRenames": {},
+                "note": "no cached schema for either side; catalog renames only"
+              }
+            ],
+            "recommendations": [],
+            "confidence": 0.7,
+            "unsupported": [],
+            "validation": null,
+            "blockedReason": null
+          },
+          "status": "converted",
+          "outputPath": "/items/3/content/items/18/content/query",
+          "sourceSha256": "c43bc8796f2051e83118a39ab8492cd9363088fd557058dceecef181dd16d3e8",
+          "targetSha256": "c43bc8796f2051e83118a39ab8492cd9363088fd557058dceecef181dd16d3e8"
+        }
+      ]
+    },
+    "requiredWorkloads": [
+      {
+        "workload": "sentinel",
+        "dataTypes": [
+          "Netskope_Alerts_CL",
+          "Netskope_Events_CL",
+          "Netskope_WebTX_CL"
+        ]
+      }
+    ],
+    "requiredDataConnectors": [
+      {
+        "connectorId": "NetskopeDataConnector",
+        "dataTypes": [
+          "Netskope_Alerts_CL",
+          "Netskope_Events_CL",
+          "Netskope_WebTX_CL"
+        ]
+      }
+    ],
+    "dependencyReviewRequired": false,
+    "requiredWorkspaceFunctions": [
+      {
+        "functionAlias": "NetskopeCEAlerts",
+        "sourcePath": "Parsers/NetskopeCEAlerts.yaml",
+        "sourceSha256": "b0f8c60a7f57b22d994afd84a035ac56098c55a6b7c453d325a95c4289040cf4"
+      },
+      {
+        "functionAlias": "NetskopeCEEventsApplication",
+        "sourcePath": "Parsers/NetskopeCEEventsApplication.yaml",
+        "sourceSha256": "a8e70d879276dfced7422bfa212cc1df090804f4c3ea7d1eb2be3795137c352f"
+      },
+      {
+        "functionAlias": "NetskopeCEWebTransactions",
+        "sourcePath": "Parsers/NetskopeCEWebTransactions.yaml",
+        "sourceSha256": "0fa05655355c0a759689f78b429ab95f45db813ab101e41b93282f61c2653259"
+      }
+    ]
+  }
+}
