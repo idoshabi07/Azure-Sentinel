@@ -179,7 +179,16 @@ def rewrite_im_calls(kql: str, catalog: Optional[dict] = None) -> dict:
             if spec is None:
                 unknown.append(a)
                 continue
-            if spec.get("drop"):
+            if spec.get("drop") or value in (
+                "dynamic([])",
+                "dynamic(null)",
+                "'*'",
+                '"*"',
+                "''",
+                '""',
+                "'Any'",
+                '"Any"',
+            ):
                 continue
             clauses.append(spec["template"].format(value=value))
 

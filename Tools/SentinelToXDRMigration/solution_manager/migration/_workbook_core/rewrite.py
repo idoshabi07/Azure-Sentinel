@@ -87,6 +87,20 @@ def _segments(kql: str) -> List[Tuple[str, str]]:
                 j += 1
             segs.append(("str", kql[i:j]))
             i = start = j
+        elif c == "{":
+            m_param = re.match(r"\{[A-Za-z0-9_.:$ -]+\}", kql[i:])
+            if m_param and not re.search(
+                r"(?:\)|(?<![.\w])\bpartition\b(?:\s+hint\.[\w.]+\s*=\s*[\w.*-]+)*\s+by\s+[A-Za-z_]\w*)\s*$",
+                kql[:i],
+                flags=re.IGNORECASE,
+            ):
+                if start < i:
+                    segs.append(("code", kql[start:i]))
+                j = i + m_param.end()
+                segs.append(("param", kql[i:j]))
+                i = start = j
+                continue
+            i += 1
         else:
             i += 1
     if start < n:
@@ -204,6 +218,60 @@ def _type_column_rewrite(kql: str, eligible_tables: set[str]) -> Tuple[str, bool
                 if assignment:
                     producers.add(line_start + assignment.start())
         line_start = line_end
+
+    # Also recognize parenthesized union branches `(TableName | ... | summarize ... by ..., Type ...)`
+    # where TableName is an eligible table.
+    for branch_match in re.finditer(r"\(\s*([A-Za-z_]\w*)\b", masked):
+        table_name = kql[branch_match.start(1):branch_match.end(1)]
+        if table_name not in eligible_tables:
+            continue
+        # Find matching closing parenthesis for this branch
+        open_paren = branch_match.start()
+        depth = 0
+        branch_end = len(masked)
+        for idx in range(open_paren, len(masked)):
+            if masked[idx] == "(":
+                depth += 1
+            elif masked[idx] == ")":
+                depth -= 1
+                if depth == 0:
+                    branch_end = idx
+                    break
+        branch_masked = masked[open_paren:branch_end]
+        for sum_match in re.finditer(r"\|\s*summarize\b([^|]*?)\bby\b([^|)]*)", branch_masked, re.IGNORECASE):
+            key_start = open_paren + sum_match.start(2)
+            key_end = open_paren + sum_match.end(2)
+            key_mask = masked[key_start:key_end]
+            type_keys = set()
+            for start, end in _split_top_level_ranges(key_mask):
+                item = key_mask[start:end].strip()
+                if item.lower() == "type":
+                    type_token = re.search(r"\bType\b", item, re.IGNORECASE)
+                    if type_token:
+                        type_keys.add(
+                            key_start
+                            + start
+                            + len(key_mask[start:end])
+                            - len(key_mask[start:end].lstrip())
+                            + type_token.start()
+                        )
+            for pos in type_positions:
+                if pos in type_keys:
+                    producers.add(pos)
+                    insertions.append((
+                        branch_match.end(1),
+                        f' | extend Type = "{table_name}"',
+                        table_name,
+                    ))
+
+    # Deduplicate insertions at the same offset
+    seen_offsets: set[int] = set()
+    unique_insertions: List[Tuple[int, str, str]] = []
+    for offset, text_ins, tbl_name in insertions:
+        if offset not in seen_offsets:
+            seen_offsets.add(offset)
+            unique_insertions.append((offset, text_ins, tbl_name))
+    insertions = unique_insertions
 
     # Split a masked expression on commas outside parentheses and retain ranges.
     # This is also used for projection items so Type embedded in an expression
@@ -561,6 +629,33 @@ def rewrite(kql: str, tables: Optional[List[str]],
     provenance_notes: List[str] = []
     target_tables: List[str] = []
 
+    # Rewrite multi-workspace WorkspaceIDguid filter blocks to a single-workspace constant.
+    kql = re.sub(
+        r"\|\s*extend\s+stringtoSplit\s*=\s*split\s*\(\s*\"\{WorkspaceIDguid\}\"\s*,\s*\",\"\s*\)\s*(?:\r?\n\s*)*\|\s*mv-?expand\s+stringtoSplit\s*(?:\r?\n\s*)*\|\s*where\s+stringtoSplit\s+has\s+TenantId\s*(?:\r?\n\s*)*\|\s*extend\s+workSpacename\s*=\s*[^\r\n|]+",
+        '| extend workSpacename = "DefaultWorkspace"',
+        kql,
+        flags=re.IGNORECASE,
+    )
+
+    # Pre-apply ASIM function rewrites so bare/invoked _Im_* / im* parser references
+    # become ASim*Logs tables before table tiering and Type synthesis.
+    pre_asim_diffs: List[dict] = []
+    pre_asim_flags: List[dict] = []
+    pre_renamed_asim: Dict[str, str] = {}
+    if ASIM_REWRITE_ENABLED:
+        asim_pre = asim_functions.rewrite_im_calls(kql, cat)
+        if asim_pre["diff"] or asim_pre["flags"]:
+            kql = asim_pre["convertedKql"]
+            pre_asim_diffs = list(asim_pre["diff"])
+            pre_asim_flags = list(asim_pre["flags"])
+            for d in pre_asim_diffs:
+                if d.get("kind") == "asim-function-to-table":
+                    fn_name = d["before"].split("(", 1)[0].strip()
+                    ah_tbl = d["after"].split("|", 1)[0].strip()
+                    pre_renamed_asim[fn_name] = ah_tbl
+                    if ah_tbl not in tables:
+                        tables.append(ah_tbl)
+
     if not preserve_sentinel_tables:
         from solution_manager.migration.converter import (
             SECURITY_ALERT_DIRECT_COLUMN_MAP,
@@ -632,7 +727,7 @@ def rewrite(kql: str, tables: Optional[List[str]],
     for t in tables:
         entry = tbl_map.get(t)
         if not entry and isinstance(t, str) and t.endswith("_CL"):
-            entry = {"tier": "1to1", "ahTable": t, "applyGlobalDropColumns": True}
+            entry = {"tier": "1to1", "ahTable": t, "applyGlobalDropColumns": False}
         tier = entry["tier"] if entry else "unknown"
         tiers[t] = tier
         if not entry:
@@ -721,23 +816,20 @@ def rewrite(kql: str, tables: Optional[List[str]],
     if ASIM_REWRITE_ENABLED:
         asim_result = asim_functions.rewrite_im_calls(converted, cat)
         converted = asim_result["convertedKql"]
+        diff.extend(pre_asim_diffs)
         diff.extend(asim_result["diff"])
+        flags.extend(pre_asim_flags)
         flags.extend(asim_result["flags"])
     else:
         asim_result = {"diff": [], "flags": asim_functions.flag_im_calls(converted)}
         flags.extend(asim_result["flags"])
 
-    # [ASIM-FIX-TAG 2026-08-02] Per the spec (KQL-Conversion-Service-Spec.md, "Step 1 -
-    # Resolve data sources"), an unresolvable ASIM unifying parser is allowed to be
-    # recorded as `dataSourcesError`/null and routed to manual review rather than
-    # guessed at. We instead resolve and convert these deterministically via the
-    # verified asimFunctionRewrites catalog - a real table substitution the spec left
-    # optional ("a future parser-expansion mapping", see spec §9 Open Questions). Every
-    # such substitution must stay visible to reviewers, so record it separately from
-    # `renamedTables` (which only covers ordinary 1:1/renamed LA->AH table maps) and
-    # surface it distinctly in the dashboard rather than silently folding it in.
-    renamed_asim_tables = {d["func"]: d["ahTable"] for d in asim_result["diff"]
-                           if d["kind"] == "asim-function-rewrite"}
+    renamed_asim_tables = dict(pre_renamed_asim)
+    for d in asim_result["diff"]:
+        if d.get("kind") in ("asim-function-rewrite", "asim-function-to-table"):
+            fn_name = d.get("func") or d["before"].split("(", 1)[0].strip()
+            ah_tbl = d.get("ahTable") or d["after"].split("|", 1)[0].strip()
+            renamed_asim_tables[fn_name] = ah_tbl
 
     diff.sort(key=lambda d: (d["kind"], d["before"]))
 

@@ -360,7 +360,7 @@ def inspect_solution(solution: str | Path) -> dict[str, Any]:
 
 
 def _replace_code_segment(segment: str, pattern: re.Pattern[str], mappings: dict[str, str]) -> str:
-    pieces = re.split(r"""('(?:''|[^'])*'|"(?:\\"|[^"])*")""", segment)
+    pieces = re.split(r"""('(?:''|[^'])*'|"(?:\\"|[^"])*"|\{[A-Za-z0-9_.:$ -]+\})""", segment)
     for index in range(0, len(pieces), 2):
         pieces[index] = pattern.sub(lambda match: mappings[match.group(0)], pieces[index])
     return "".join(pieces)

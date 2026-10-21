@@ -52,7 +52,11 @@ def validate_public_document(solution, document):
                     if row["workload"] == "sentinel" for table in row["dataTypes"]}
         connectors = {table for row in provenance["requiredDataConnectors"] for table in row["dataTypes"]}
         used = set()
-        known = set(TABLE_WORKLOADS) | set(mapping_catalog.load_mapping_catalog()["tables"])
+        known = (
+            set(TABLE_WORKLOADS)
+            | set(mapping_catalog.load_mapping_catalog()["tables"])
+            | {t for t in declared if isinstance(t, str) and t.endswith("_CL")}
+        )
         if not declared <= known:
             errors.append("Unknown public dependency tables: " + ", ".join(sorted(declared - known)))
         if not connectors <= declared:
@@ -73,7 +77,7 @@ def validate_public_document(solution, document):
                 errors.append("Current Sentinel query tables require explicit connector coverage: "
                               + ", ".join(sorted((tables & sentinel) - connectors)))
             for table in tables:
-                expected = TABLE_WORKLOADS.get(table)
+                expected = TABLE_WORKLOADS.get(table) or ("sentinel" if table.endswith("_CL") else None)
                 if expected and not any(row["workload"] == expected and table in row["dataTypes"]
                                         for row in provenance["requiredWorkloads"]):
                     errors.append("Incorrect public workload for table: " + table)
@@ -240,7 +244,7 @@ def plan_publication(solution, content, *, _raw=None):
                                  allow_sentinel=provenance.get("origin") != "native-xdr"))
     declared = {table for row in dependencies["requiredWorkloads"] for table in row["dataTypes"]}
     for table in sorted(tables - declared):
-        workload = TABLE_WORKLOADS.get(table)
+        workload = TABLE_WORKLOADS.get(table) or ("sentinel" if table.endswith("_CL") else None)
         if workload is None:
             raise ValueError("Explicit workload mapping required for current table: " + table)
         row = next((row for row in dependencies["requiredWorkloads"] if row["workload"] == workload), None)

@@ -460,8 +460,9 @@ function Get-DefenderWorkbookImplicitFunctions {
             $childPath = "$Path/$key"
             if ($property.Name -ceq 'query' -and $property.Value -is [string]) {
                 if ($null -ne $ExcludedQueryPaths -and $ExcludedQueryPaths.Contains($childPath)) { continue }
-                if ($Value.queryType -eq 1 -and $Value.resourceType -ieq 'microsoft.resourcegraph/resources' -and
-                    $property.Value -inotmatch 'microsoft\.operationalinsights/workspaces') { continue }
+                if ($Value.queryType -in @(7, 8, 10) -or
+                    ($Value.queryType -eq 1 -and $Value.resourceType -ieq 'microsoft.resourcegraph/resources' -and
+                     -not ($Path -match '/parameters/' -and $Value.type -eq 5 -and $property.Value -imatch 'microsoft\.operationalinsights/workspaces'))) { continue }
                 $queryText = $property.Value
                 if ($Value.queryType -eq 18 -and $queryText.TrimStart().StartsWith('{')) {
                     try { $settings = $queryText | ConvertFrom-Json -ErrorAction Stop }

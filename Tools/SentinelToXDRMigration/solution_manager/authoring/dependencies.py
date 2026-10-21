@@ -40,7 +40,18 @@ TABLE_WORKLOADS = {
     **{table: "sentinel" for table in (
         "Syslog", "SecurityAlert", "SecurityIncident", "SecurityEvent", "WindowsEvent", "Event",
         "AzureActivity", "AzureDiagnostics", "CommonSecurityLog", "SigninLogs", "AuditLogs",
-        "OfficeActivity", "AWSCloudTrail", "AWSGuardDuty",
+        "OfficeActivity", "PowerBIActivity", "AWSCloudTrail", "AWSGuardDuty", "AWSVPCFlow", "AWSWAF",
+        "BehaviorAnalytics", "ConfigurationChange", "ConfigurationData", "DnsEvents", "DnsInventory",
+        "Heartbeat", "HuntingBookmark", "McasShadowItReporting", "ProtectionStatus",
+        "PurviewDataSensitivityLogs", "SecurityBaseline", "SecurityBaselineSummary",
+        "SecurityNestedRecommendation", "SecurityRecommendation", "SecurityRegulatoryCompliance",
+        "ThreatIntelIndicators", "ThreatIntelIndicatorsv2", "ThreatIntelligenceIndicator",
+        "Update", "UpdateSummary", "VMConnection", "W3CIISLog", "WindowsFirewall",
+        "MDfESecureScore_CL", "Sentinelubea_CL",
+        "ASimAlertEventLogs", "ASimAuditEventLogs", "ASimAuthenticationEventLogs",
+        "ASimDhcpEventLogs", "ASimDnsActivityLogs", "ASimFileEventLogs",
+        "ASimNetworkSessionLogs", "ASimProcessEventLogs", "ASimRegistryEventLogs",
+        "ASimUserManagementActivityLogs", "ASimWebSessionLogs",
     )},
 }
 
@@ -103,7 +114,7 @@ def workload_records(tables: list[str]) -> tuple[list[dict[str, Any]], list[str]
 
 
 STANDARD_BUILTIN_ASIM_PARSER_RE = re.compile(
-    r"\b(_(?:asim|im)_(?!test\b)[A-Za-z0-9_]+)\b",
+    r"\b(_(?:asim|im)_(?!test\b)[A-Za-z0-9_]+|(?:im|asim)(?!.*logs\b)[A-Za-z0-9_]+)\b",
     re.IGNORECASE,
 )
 

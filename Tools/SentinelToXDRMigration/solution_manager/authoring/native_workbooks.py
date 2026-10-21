@@ -93,6 +93,9 @@ def _query(surface, *, allowed_tables=(), allowed_functions=(), allow_sentinel=F
     tables -= asim | allowed_functions
     local = workbook._local_tabular_vars(code)
     tables -= local | workbook._BUILTINS | workbook._STATEMENT_PREFIXES
+    has_watchlist = bool(allow_sentinel and re.search(r"\b_GetWatchlist(?:Alias)?\b", code))
+    if has_watchlist:
+        tables -= {"Watchlist", "_GetWatchlistAlias"}
     opaque = workbook.opaque_functions(raw) - tables - allowed_functions
     explicit = (workbook.opaque_functions(raw, include_bare=False)
                 | (quoted_calls - asim)) - allowed_functions
@@ -102,7 +105,7 @@ def _query(surface, *, allowed_tables=(), allowed_functions=(), allow_sentinel=F
            and not (allow_sentinel and table in allowed_tables) for table in tables):
         raise ValueError("Unknown or non-native tables: " + ", ".join(sorted(tables)))
     known_function_input = allowed_functions & (calls | quoted_calls | workbook.opaque_functions(raw))
-    if not tables and not asim and not known_function_input and not rewrite.is_source_free_literal_query(raw):
+    if not tables and not asim and not known_function_input and not has_watchlist and not rewrite.is_source_free_literal_query(raw):
         raise ValueError("Empty lineage requires a standard built-in ASIM parser "
                          "or a recognized literal datatable or numeric range query.")
     if include_lineage:

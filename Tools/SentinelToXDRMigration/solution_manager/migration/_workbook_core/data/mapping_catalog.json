@@ -346,7 +346,9 @@
     "AzureDiagnostics": {
       "ahTable": "AzureDiagnostics",
       "tier": "1to1",
-      "columnRenames": {},
+      "columnRenames": {
+        "ResourceId": "_ResourceId"
+      },
       "dropColumns": [],
       "applyGlobalDropColumns": false,
       "discriminator": null,
@@ -918,6 +920,15 @@
       "discriminator": null,
       "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
     },
+    "PowerBIActivity": {
+      "ahTable": "PowerBIActivity",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
     "PowerPlatformAdminActivity": {
       "ahTable": "PowerPlatformAdminActivity",
       "tier": "1to1",
@@ -1196,6 +1207,242 @@
       "applyGlobalDropColumns": false,
       "discriminator": null,
       "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "BehaviorAnalytics": {
+      "ahTable": "BehaviorAnalytics",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "ConfigurationChange": {
+      "ahTable": "ConfigurationChange",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "ConfigurationData": {
+      "ahTable": "ConfigurationData",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "HuntingBookmark": {
+      "ahTable": "HuntingBookmark",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "McasShadowItReporting": {
+      "ahTable": "McasShadowItReporting",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "ProtectionStatus": {
+      "ahTable": "ProtectionStatus",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "PurviewDataSensitivityLogs": {
+      "ahTable": "PurviewDataSensitivityLogs",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "SecurityBaseline": {
+      "ahTable": "SecurityBaseline",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "SecurityBaselineSummary": {
+      "ahTable": "SecurityBaselineSummary",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "SecurityNestedRecommendation": {
+      "ahTable": "SecurityNestedRecommendation",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "SecurityRecommendation": {
+      "ahTable": "SecurityRecommendation",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "SecurityRegulatoryCompliance": {
+      "ahTable": "SecurityRegulatoryCompliance",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "ThreatIntelIndicatorsv2": {
+      "ahTable": "ThreatIntelIndicatorsv2",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "Update": {
+      "ahTable": "Update",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "UpdateSummary": {
+      "ahTable": "UpdateSummary",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "WindowsFirewall": {
+      "ahTable": "WindowsFirewall",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; target visibility and runtime semantics remain unverified."
+    },
+    "MDfESecureScore_CL": {
+      "ahTable": "MDfESecureScore_CL",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; custom log table."
+    },
+    "Sentinelubea_CL": {
+      "ahTable": "Sentinelubea_CL",
+      "tier": "1to1",
+      "columnRenames": {},
+      "dropColumns": [],
+      "applyGlobalDropColumns": false,
+      "discriminator": null,
+      "notes": "Offline conversion mapping; custom log table."
+    }
+  },
+  "asimFunctionRewrites": {
+    "functions": {
+      "_Im_AlertEvent": {"ahTable": "ASimAlertEventLogs"},
+      "_ASim_AlertEvent": {"ahTable": "ASimAlertEventLogs"},
+      "imAlertEvent": {"ahTable": "ASimAlertEventLogs"},
+      "ASimAlertEvent": {"ahTable": "ASimAlertEventLogs"},
+      "_Im_AuditEvent": {"ahTable": "ASimAuditEventLogs"},
+      "_ASim_AuditEvent": {"ahTable": "ASimAuditEventLogs"},
+      "imAuditEvent": {"ahTable": "ASimAuditEventLogs"},
+      "ASimAuditEvent": {"ahTable": "ASimAuditEventLogs"},
+      "_Im_Authentication": {"ahTable": "ASimAuthenticationEventLogs"},
+      "_ASim_Authentication": {"ahTable": "ASimAuthenticationEventLogs"},
+      "imAuthentication": {"ahTable": "ASimAuthenticationEventLogs"},
+      "ASimAuthentication": {"ahTable": "ASimAuthenticationEventLogs"},
+      "_Im_DhcpEvent": {"ahTable": "ASimDhcpEventLogs"},
+      "_ASim_DhcpEvent": {"ahTable": "ASimDhcpEventLogs"},
+      "imDhcpEvent": {"ahTable": "ASimDhcpEventLogs"},
+      "ASimDhcpEvent": {"ahTable": "ASimDhcpEventLogs"},
+      "_Im_Dns": {"ahTable": "ASimDnsActivityLogs"},
+      "_ASim_Dns": {"ahTable": "ASimDnsActivityLogs"},
+      "imDns": {"ahTable": "ASimDnsActivityLogs"},
+      "ASimDns": {"ahTable": "ASimDnsActivityLogs"},
+      "_Im_FileEvent": {"ahTable": "ASimFileEventLogs"},
+      "_ASim_FileEvent": {"ahTable": "ASimFileEventLogs"},
+      "imFileEvent": {"ahTable": "ASimFileEventLogs"},
+      "ASimFileEvent": {"ahTable": "ASimFileEventLogs"},
+      "_Im_NetworkSession": {"ahTable": "ASimNetworkSessionLogs"},
+      "_ASim_NetworkSession": {"ahTable": "ASimNetworkSessionLogs"},
+      "imNetworkSession": {"ahTable": "ASimNetworkSessionLogs"},
+      "ASimNetworkSession": {"ahTable": "ASimNetworkSessionLogs"},
+      "_Im_ProcessCreate": {"ahTable": "ASimProcessEventLogs"},
+      "_ASim_ProcessCreate": {"ahTable": "ASimProcessEventLogs"},
+      "_Im_ProcessEvent": {"ahTable": "ASimProcessEventLogs"},
+      "_ASim_ProcessEvent": {"ahTable": "ASimProcessEventLogs"},
+      "imProcess": {"ahTable": "ASimProcessEventLogs"},
+      "imProcessCreate": {"ahTable": "ASimProcessEventLogs"},
+      "imProcessEvent": {"ahTable": "ASimProcessEventLogs"},
+      "ASimProcess": {"ahTable": "ASimProcessEventLogs"},
+      "ASimProcessEvent": {"ahTable": "ASimProcessEventLogs"},
+      "_Im_RegistryEvent": {"ahTable": "ASimRegistryEventLogs"},
+      "_ASim_RegistryEvent": {"ahTable": "ASimRegistryEventLogs"},
+      "imRegistry": {"ahTable": "ASimRegistryEventLogs"},
+      "imRegistryEvent": {"ahTable": "ASimRegistryEventLogs"},
+      "ASimRegistryEvent": {"ahTable": "ASimRegistryEventLogs"},
+      "_Im_UserManagement": {"ahTable": "ASimUserManagementActivityLogs"},
+      "_ASim_UserManagement": {"ahTable": "ASimUserManagementActivityLogs"},
+      "imUserManagement": {"ahTable": "ASimUserManagementActivityLogs"},
+      "ASimUserManagement": {"ahTable": "ASimUserManagementActivityLogs"},
+      "_Im_WebSession": {"ahTable": "ASimWebSessionLogs"},
+      "_ASim_WebSession": {"ahTable": "ASimWebSessionLogs"},
+      "imWebSession": {"ahTable": "ASimWebSessionLogs"},
+      "imWebSessions": {"ahTable": "ASimWebSessionLogs"},
+      "ASimWebSession": {"ahTable": "ASimWebSessionLogs"}
+    },
+    "paramRewrites": {
+      "starttime": {"template": "TimeGenerated >= {value}"},
+      "endtime": {"template": "TimeGenerated <= {value}"},
+      "srcipaddr": {"template": "SrcIpAddr == {value}"},
+      "srcipaddr_has_any_prefix": {"template": "SrcIpAddr has_any ({value})"},
+      "dstipaddr_has_any_prefix": {"template": "DstIpAddr has_any ({value})"},
+      "ipaddr_has_any_prefix": {"template": "(SrcIpAddr has_any ({value}) or DstIpAddr has_any ({value}))"},
+      "domain_has_any": {"template": "DnsQuery has_any ({value})"},
+      "responsecodename": {"template": "DnsResponseCodeName == {value}"},
+      "url_has_any": {"template": "Url has_any ({value})"},
+      "httpuseragent_has_any": {"template": "HttpUserAgent has_any ({value})"},
+      "eventresult": {"template": "EventResult == {value}"},
+      "eventtype": {"template": "EventType == {value}"},
+      "eventtype_in": {"template": "EventType in ({value})"},
+      "dvcaction": {"template": "DvcAction has_any ({value})"},
+      "hostname_has_any": {"template": "DstHostname has_any ({value})"},
+      "disabled": {"drop": true},
+      "pack": {"drop": true}
     }
   }
 }

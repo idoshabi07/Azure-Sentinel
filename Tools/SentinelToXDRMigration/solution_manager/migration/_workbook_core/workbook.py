@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import defaultdict
 import copy
 import hashlib
 import json
@@ -92,6 +93,8 @@ def is_preserved_provider_surface(surface: dict | None) -> bool:
     if not isinstance(surface, dict):
         return False
     qt = surface.get("queryType")
+    if qt in (7, 8, 10):
+        return True
     rt = (surface.get("resourceType") or "").strip().lower()
     node = surface.get("node")
     raw = node.get("query") if isinstance(node, dict) else (surface.get("sourceKql") or surface.get("queryKql"))
@@ -99,7 +102,7 @@ def is_preserved_provider_surface(surface: dict | None) -> bool:
         qt == 1
         and rt == ARG_RESOURCE_TYPE
         and isinstance(raw, str)
-        and LA not in raw.lower()
+        and not (surface.get("parameter") and isinstance(node, dict) and node.get("type") == 5 and LA in raw.lower())
     )
 
 
@@ -107,9 +110,11 @@ def _scope_parameters(doc, protected=()):
     entries = [(path, node) for path, node in walk(doc)
                if re.search(r"/parameters/\d+$", path) and node.get("name")]
     names = {node["name"] for _, node in entries}
-    if len(names) != len(entries):
-        raise ValueError("Duplicate parameter names: scope dependencies are ambiguous.")
-    params = {node["name"]: node for _, node in entries}
+    params = {}
+    entries_by_name = defaultdict(list)
+    for path, node in entries:
+        params.setdefault(node["name"], node)
+        entries_by_name[node["name"]].append((path, node))
     nodes = dict(walk(doc))
     inherited_resources = {}
     for path, p in entries:
@@ -128,15 +133,24 @@ def _scope_parameters(doc, protected=()):
             if key in node:
                 bindings |= references({key: node[key]})
     dependencies = {
-        name: references(p, skip_scope=surfaces.get(id(p), {}).get("queryType", 0)
-                         in (0, None, AH)) & names
-        for name, p in params.items()
+        name: set().union(*(
+            references(
+                p_node,
+                skip_scope=(
+                    surfaces.get(id(p_node), {}).get("queryType", 0) in (0, None, AH)
+                    or is_preserved_provider_surface(surfaces.get(id(p_node)))
+                ),
+            ) & names
+            for _, p_node in entries_by_name[name]
+        ))
+        for name in names
     }
-    all_dependencies = {name: references(p) & names for name, p in params.items()}
+    all_dependencies = {
+        name: set().union(*(references(p_node) & names for _, p_node in entries_by_name[name]))
+        for name in names
+    }
 
-    def eligible(name):
-        p = params[name]
-        # A type-5 parameter may be a KQL-backed Computer filter or preserved ARG resource picker, not a workspace.
+    def _eligible_node(name, p):
         surface = surfaces.get(id(p))
         qt = surface.get("queryType") if surface else None
         return (
@@ -145,14 +159,18 @@ def _scope_parameters(doc, protected=()):
             and p.get("type") != 4
         )
 
+    def eligible(name):
+        return all(_eligible_node(name, p_node) for _, p_node in entries_by_name[name])
+
     candidates = {
-        name for name, p in params.items()
-        if eligible(name) and (
+        name for name in names
+        if eligible(name) and any(
             p.get("type") == 6
             or (p.get("type") == 5 and (
                 name in bindings or inherited_resources.get(name) == LA))
             or LA in json.dumps(p.get("typeSettings", {})).lower()
             or (p.get("queryType") == 1 and LA in p.get("query", "").lower())
+            for _, p in entries_by_name[name]
         )
     }
     # Include both upstream scope helpers and hidden derived helpers (ContextFree).
@@ -172,6 +190,13 @@ def _scope_parameters(doc, protected=()):
     for _, node in walk(outside):
         if isinstance(node.get("parameters"), list):
             node["parameters"] = []
+        if isinstance(node.get("query"), str):
+            node["query"] = re.sub(
+                r"\|\s*extend\s+stringtoSplit\s*=\s*split\s*\(\s*\"\{WorkspaceIDguid\}\"\s*,\s*\",\"\s*\)",
+                '| extend stringtoSplit = split("", ",")',
+                node["query"],
+                flags=re.IGNORECASE,
+            )
     live = ((names - candidates) | (references(outside, skip_scope=True) & names)
             | (set(protected) & names))
     while True:
@@ -447,7 +472,7 @@ def union_source_names(query: str) -> set[str]:
 
 
 _STANDARD_BUILTIN_ASIM_PARSER_RE = re.compile(
-    r"^_(?:asim|im)_(?!test$)[a-z0-9_]+$",
+    r"^(?:_(?:asim|im)_(?!test$)[a-z0-9_]+|(?:im|asim)(?!.*logs$)[a-z0-9_]+)$",
     re.IGNORECASE,
 )
 
@@ -527,20 +552,17 @@ def _parameter_source_or_call_tokens(query: str) -> set[str]:
     ):
         captured = [g for g in match.groups() if g]
         scalar_granularity = False
-        let_match = re.match(
-            rf"\blet\s+gran\s*=\s*({tok_pat})\s*;",
+        let_var_match = re.match(
+            rf"\blet\s+([A-Za-z_]\w*)\s*=(?:\s*\()*\s*({tok_pat})(?:\s*\))*\s*;",
             code[match.start():],
             flags=re.IGNORECASE,
         )
-        if let_match and let_match.group(1) in captured:
-            token = let_match.group(1)
-            scalar_granularity = (
-                token.casefold() == "{granularity}"
-                and bool(re.search(
-                    r"\bmake-series\b.*?\bstep\s+gran\b|\bbin\s*\([^)]*,\s*gran\s*\)",
-                    code, flags=re.IGNORECASE | re.DOTALL,
-                ))
-            )
+        if let_var_match and let_var_match.group(2) in captured:
+            var_name = let_var_match.group(1)
+            stripped_query = _stripped_code(query)
+            bare_sources = _bare_source_identifiers(stripped_query)
+            if var_name not in bare_sources and not re.search(rf"\b{re.escape(var_name)}\s*\(", stripped_query):
+                scalar_granularity = True
         if not scalar_granularity:
             tokens.update(captured)
     for m in re.finditer(rf"(\(\s*(?:\(\s*)*)({tok_pat})((?:\s*\))*)\s*(?:\*/\s*)?(?=\|)", code):
@@ -771,7 +793,7 @@ def convert_workbook(source: dict, resolutions: dict | None = None,
             gates.add("sentinel-workspace-function-availability-and-branch-coverage")
         if re.search(r"\bexternaldata\s*[\[(]", code):
             gates.add("external-source-binding-and-availability")
-        if references(raw) - references(node["query"]):
+        if (references(raw) - removed) - references(node["query"]):
             raise AssertionError(f"Parameter templates lost at {path}")
 
     # Blocked panels keep the scope inputs they still need. Revisit the graph
@@ -870,6 +892,10 @@ def convert_workbook(source: dict, resolutions: dict | None = None,
                     owner = context["ownerId"]
                     if "/subscriptions/" in owner.lower() or references(owner) & removed:
                         context.pop("ownerId")
+            elif id(value) in preserved_nodes:
+                for key in SCOPE_KEYS | {"resourceContextFromParameter"}:
+                    if key in value and (references({key: value[key]}) & removed):
+                        value.pop(key, None)
             for key, child in list(value.items()):
                 clean(child, path + "/" + key)
         elif isinstance(value, list):

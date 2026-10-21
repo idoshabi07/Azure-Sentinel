@@ -74,6 +74,8 @@ def _files(root: Path, directory: str) -> list[Path]:
     for path in sorted(base.rglob("*")):
         if path.is_symlink():
             raise ValueError(f"Symlink in workbook inventory: {path.relative_to(root)}")
+        if directory == "Workbooks" and "watchlist" in {p.lower() for p in path.relative_to(base).parts[:-1]}:
+            continue
         if path.is_file() and path.suffix.lower() == ".json":
             paths.append(path)
     folded = [p.relative_to(root).as_posix().casefold() for p in paths]
