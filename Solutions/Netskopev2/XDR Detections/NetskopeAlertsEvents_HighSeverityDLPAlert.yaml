@@ -1,0 +1,147 @@
+schemaVersion: 1.0.0
+version: 3.1.6
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors:
+- connectorId: NetskopeAlertsEvents
+  dataTypes:
+  - NetskopeAlerts_CL
+contentProvenance:
+  requiredWorkloads:
+  - workload: sentinel
+    dataTypes:
+    - NetskopeAlerts_CL
+  requiredDataConnectors:
+  - connectorId: NetskopeAlertsEvents
+    dataTypes:
+    - NetskopeAlerts_CL
+  dependencyReviewRequired: false
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: 04e36dfa-05b3-45bd-b39f-28b6fac71337
+    path: Analytic Rules/NetskopeAlertsEvents_HighSeverityDLPAlert.yaml
+    version: 1.0.0
+    querySha256: 116997f3b493e56dcf19b833c407d9d234a04952b3877ecf77adc42ee7a0bae1
+    schedule:
+      queryFrequency: 1h
+      queryPeriod: 1h
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=1h, lookback=1h; target frequency=PT1H, native lookback=unknown/unconfigured;
+      mixed, Sentinel-only, or unknown query surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    - Unconfirmed generic Account.Name mapping was omitted because another required Host, Mailbox, or IP asset is available
+    - Custom-detail values must remain within the documented combined 4 KB per-alert limit; runtime values are unverified
+      and the service drops all custom details if exceeded
+    informational:
+    - Account.Name mismatch is informational because its original value is preserved as customDetails.AccountName from query
+      column `User`; supplemental details do not restore entity identity, correlation, or alert parity
+    - All source MITRE tactics are preserved in source order in authored YAML. V3.1 ARM packaging carries only the first tactic
+      and its compatible techniques; this classification loss is not validated parity. Direct Graph deployment requires a
+      single tactic.
+    errors: []
+    originalTactics:
+    - Exfiltration
+    - Collection
+    originalTechniques:
+    - T1567
+    - T1005
+    reviewScope:
+      sourceDocumentSha256: 7e1e33aa7b794c280956575ca19191c1d192eb963eefb2ef23aeaea6cf282aa9
+      targetQuerySha256: 2b7dab189fe4f8dc1a00baaced3d5b5f858ffcaf5a80e8d7b6f2b19a52855ee5
+    eventTimeWindow:
+      status: default-native-lookback
+      appliedDefault: hourly-1h-to-native-4h-lookback
+      queryFrequency: 1h
+      queryPeriod: 1h
+      targetFrequency: PT1H
+      effectiveLookback: PT4H
+      originalSentinelLookbackSeconds: 3600
+      effectiveEventWindowSeconds: 14400
+      xdrServiceWindowSeconds: 14400
+      filterInjected: false
+      parityClaimed: false
+      hasAggregation: true
+      aggregationWindowDifference: true
+      timingDifference: Four hours (PT4H / 14400s) is the native XDR ingestion-based lookback window for PT1H execution frequency,
+        not the execution frequency; original Sentinel queryPeriod was 1h (3600s).
+      aggregationDifference: Query contains summarize/make-series aggregation; evaluating over the native 4-hour XDR lookback
+        window without an injected 1h event-time filter may aggregate up to 4 hours of events per hourly run instead of 1
+        hour.
+      sourceDocumentSha256: 7e1e33aa7b794c280956575ca19191c1d192eb963eefb2ef23aeaea6cf282aa9
+      targetQuerySha256: 2b7dab189fe4f8dc1a00baaced3d5b5f858ffcaf5a80e8d7b6f2b19a52855ee5
+    supplementalEntityDetails:
+    - entityType: Account
+      entityIndex: 1
+      identifier: Name
+      sourceColumn: User
+      column: User
+      status: available
+      customDetailKey: AccountName
+properties:
+  id: xdr-04e36dfa-05b3-45bd-b39f-28b6fac71337
+  displayName: Netskope - High Severity DLP Alert
+  status: disabled
+  queryCondition:
+    queryText: |-
+      NetskopeAlerts_CL
+      | where TimeGenerated > ago(1h)
+      | where alert_type =~ "dlp"
+      | where severity has_any ("high", "critical")
+      | summarize
+          AlertCount = count(),
+          DlpRules = make_set(dlp_rule, 20),
+          DlpProfiles = make_set(dlp_profile, 20),
+          Apps = make_set(app, 20),
+          FilePaths = make_set(file_path, 20),
+          FirstSeen = min(TimeGenerated),
+          LastSeen = max(TimeGenerated)
+          by User = user, UserIp = userip, HostName = hostname, AlertName = alert_name, Severity = severity
+      | order by AlertCount desc
+      | project
+          LastSeen,
+          AlertName,
+          Severity,
+          User,
+          UserIp,
+          HostName,
+          AlertCount,
+          Apps,
+          DlpRules,
+          DlpProfiles,
+          FilePaths,
+          FirstSeen
+  schedule:
+    frequency: PT1H
+  detectionAction:
+    alertTemplate:
+      title: Netskope - High Severity DLP Alert
+      description: |-
+        Detects Netskope DLP (Data Loss Prevention) alerts raised with high or critical severity.
+        These alerts indicate sensitive data (e.g. PII, source code, financial records) matched a
+        DLP policy during upload, download, or sharing and may represent data exfiltration.
+      severity: high
+      entityMappings:
+        ips:
+        - id: ip1
+          addressColumn: UserIp
+        hosts:
+        - id: host1
+          nameColumn: HostName
+      tactics:
+      - tactic: Exfiltration
+        techniques:
+        - technique: T1567
+      - tactic: Collection
+        techniques:
+        - technique: T1005
+      customDetails:
+        AccountName: User

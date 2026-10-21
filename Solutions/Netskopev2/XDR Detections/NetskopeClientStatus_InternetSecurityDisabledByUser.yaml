@@ -1,0 +1,162 @@
+schemaVersion: 1.0.0
+version: 3.1.6
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors:
+- connectorId: NetskopeClientStatus
+  dataTypes:
+  - NetskopeClientStatus_CL
+contentProvenance:
+  requiredWorkloads:
+  - workload: sentinel
+    dataTypes:
+    - NetskopeClientStatus_CL
+  requiredDataConnectors:
+  - connectorId: NetskopeClientStatus
+    dataTypes:
+    - NetskopeClientStatus_CL
+  dependencyReviewRequired: false
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: 3e9b7d54-2a6c-4f18-b0e5-c7a94d21f6b8
+    path: Analytic Rules/NetskopeClientStatus_InternetSecurityDisabledByUser.yaml
+    version: 1.0.0
+    querySha256: 5a72e149e7097f744825ed1770864e639820a59c99cd75b5d6353136f56cfe78
+    schedule:
+      queryFrequency: 6h
+      queryPeriod: 6h
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=6h, lookback=6h; target frequency=PT6H, native lookback=unknown/unconfigured;
+      mixed, Sentinel-only, or unknown query surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    - Unconfirmed generic Account.Name mapping was omitted because another required Host, Mailbox, or IP asset is available
+    - customDetails 'DeviceKey' column `DeviceKey` requires runtime output-schema binding verification
+    - customDetails 'EventCount' column `EventCount` requires runtime output-schema binding verification
+    - customDetails 'ServiceName' column `ServiceName` requires runtime output-schema binding verification
+    - customDetails 'ClientStatus' column `ClientStatus` requires runtime output-schema binding verification
+    - customDetails 'Actor' column `Actor` requires runtime output-schema binding verification
+    - customDetails 'NpaStatus' column `NpaStatus` requires runtime output-schema binding verification
+    - customDetails 'LatestClientEvent' column `LatestClientEvent` requires runtime output-schema binding verification
+    - customDetails 'ClientVersion' column `ClientVersion` requires runtime output-schema binding verification
+    - customDetails 'OperatingSystem' column `OperatingSystem` requires runtime output-schema binding verification
+    - Account.Name value is retained as customDetails.AccountName from query column `UserName`, but its target output binding
+      requires runtime-schema verification; custom details do not restore entity identity or correlation
+    - Supplemental customDetails.AccountName column `UserName` requires runtime output-schema binding verification
+    - Custom-detail values must remain within the documented combined 4 KB per-alert limit; runtime values are unverified
+      and the service drops all custom details if exceeded
+    informational: []
+    errors: []
+    originalTactics:
+    - DefenseEvasion
+    originalTechniques:
+    - T1562
+    reviewScope:
+      sourceDocumentSha256: 81054131683065f9205466916b02c1f6d3b7af44066cb56dd6e02290a64fa229
+      targetQuerySha256: bd35b2b874c6d8a8cf414d8916831e1c841bb05a0da952f2705d50c56f7a851e
+    supplementalEntityDetails:
+    - entityType: Account
+      entityIndex: 1
+      identifier: Name
+      sourceColumn: UserName
+      column: UserName
+      status: runtime-binding-pending
+      customDetailKey: AccountName
+properties:
+  id: xdr-3e9b7d54-2a6c-4f18-b0e5-c7a94d21f6b8
+  displayName: Netskope Client - Internet Security disabled by user
+  status: disabled
+  queryCondition:
+    queryText: |-
+      NetskopeClientStatus_CL
+      | where TimeGenerated > ago(6h)
+      | where last_seen_device_event_actor_name =~ "USER"
+          and last_seen_device_event_service_name =~ "Internet Security"
+          and last_seen_device_event_status_name =~ "DISABLED"
+      | extend DeviceKey = case(
+          isnotempty(device_hash), device_hash,
+          isnotempty(guid), guid,
+          isnotempty(device_id), device_id,
+          host_info_hostname)
+      | summarize
+          EventCount = count(),
+          FirstSeen = min(TimeGenerated),
+          LastSeen = max(TimeGenerated),
+          ClientEvents = make_set(last_seen_device_event_event_name, 10),
+          arg_max(TimeGenerated,
+              host_info_hostname,
+              user_info_username,
+              last_connected_from_public_ip,
+              last_connected_from_private_ip,
+              host_info_os_name,
+              client_version,
+              last_seen_device_event_actor_name,
+              last_seen_device_event_service_name,
+              last_seen_device_event_status_name,
+              last_seen_device_event_status_v2_name,
+              last_seen_device_event_npa_status_name,
+              last_seen_device_event_event_name,
+              last_seen_device_event_event_details)
+          by DeviceKey
+      | project
+          LastSeen,
+          FirstSeen,
+          EventCount,
+          DeviceKey,
+          HostName = host_info_hostname,
+          UserName = user_info_username,
+          PublicIp = last_connected_from_public_ip,
+          PrivateIp = last_connected_from_private_ip,
+          OperatingSystem = host_info_os_name,
+          ClientVersion = client_version,
+          Actor = last_seen_device_event_actor_name,
+          ServiceName = last_seen_device_event_service_name,
+          ClientStatus = last_seen_device_event_status_name,
+          ClientStatusV2 = last_seen_device_event_status_v2_name,
+          NpaStatus = last_seen_device_event_npa_status_name,
+          LatestClientEvent = last_seen_device_event_event_name,
+          EventDetails = last_seen_device_event_event_details,
+          ClientEvents
+      | order by LastSeen desc
+  schedule:
+    frequency: PT6H
+  detectionAction:
+    alertTemplate:
+      title: Netskope Client - Internet Security disabled by user
+      description: |-
+        Detects Netskope Client devices where the user disabled the Netskope Internet Security
+        (secure web gateway / CASB steering) service. All matching client-status events in the
+        6-hour window are collected into a single alert, grouped per device, so repeated disable
+        events on the same device are reported once. A user disabling Internet Security bypasses
+        web, threat and data protection policies for that device.
+      severity: medium
+      entityMappings:
+        hosts:
+        - id: host1
+          nameColumn: HostName
+        ips:
+        - id: ip1
+          addressColumn: PublicIp
+      tactics:
+      - tactic: DefenseEvasion
+        techniques:
+        - technique: T1562
+      customDetails:
+        DeviceKey: DeviceKey
+        EventCount: EventCount
+        ServiceName: ServiceName
+        ClientStatus: ClientStatus
+        Actor: Actor
+        NpaStatus: NpaStatus
+        LatestClientEvent: LatestClientEvent
+        ClientVersion: ClientVersion
+        OperatingSystem: OperatingSystem
+        AccountName: UserName

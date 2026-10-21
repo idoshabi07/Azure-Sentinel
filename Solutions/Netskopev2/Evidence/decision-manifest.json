@@ -1,0 +1,524 @@
+{
+  "schemaVersion": "1.0.0",
+  "solutionName": "Netskopev2",
+  "solutionVersion": "3.2.2",
+  "previousVersion": "3.2.1",
+  "runId": "20261021T130526Z-4325880842a642a0970677527209268f",
+  "generatedAtUtc": "2026-10-21T16:34:56Z",
+  "acknowledged_exclusions": [
+    {
+      "path": "Data Connectors/NetskopeAISecOps_Push_CCP/NetskopeAISecOps_dataConnector.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAISecOps_Push_CCP/NetskopeAISecOps_DCR.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAISecOps_Push_CCP/NetskopeAISecOps_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeAlerts_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeAlertsEvents_DCR.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeAlertsEvents_Poller.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsApplication_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsAudit_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsConnection_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsDLP_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsEndpoint_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsInfrastructure_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsNetwork_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsPage_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeClientStatus_RestAPI_CCP/NetskopeClientStatus_DCR.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeClientStatus_RestAPI_CCP/NetskopeClientStatus_Poller.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeClientStatus_RestAPI_CCP/NetskopeClientStatus_Table.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/azuredeploy_Connector_Netskope_AzureFunction.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/host.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/NetskopeStorageToSentinel.zip",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/NetskopeToAzureStorage/__init__.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/NetskopeToAzureStorage/function.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/NetskopeToAzureStorage/netskope_api_async.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/NetskopeToAzureStorage/netskope_to_azure_storage.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/NetskopeToStorage.zip",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/NetskopeWebTxMetrics.zip",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/requirements.txt",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/SharedCode/__init__.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/SharedCode/consts.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/SharedCode/logger.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/SharedCode/netskope_exception.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/SharedCode/state_manager.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/SharedCode/utils.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/SharedCode/validate_params.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/StorageToSentinel/__init__.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/StorageToSentinel/function.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/StorageToSentinel/netskope_azure_storage_to_sentinel.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/StorageToSentinel/remove_duplicates_in_azure_storage.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/StorageToSentinel/sentinel.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/WebTxMetrics/__init__.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/WebTxMetrics/function.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/WebTxMetrics/ingest_message.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeDataConnector/WebTxMetrics/sentinel.py",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeWebTransactionsDataConnector/azuredeploy_Connector_NetskopeWebTransaction.json",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "path": "Data Connectors/NetskopeWebTransactionsDataConnector/install_docker.sh",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    }
+  ],
+  "decisions": [
+    {
+      "id": "exclude-netskope-subartifact-1",
+      "itemId": "Data Connectors/NetskopeAISecOps_Push_CCP/NetskopeAISecOps_dataConnector.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-2",
+      "itemId": "Data Connectors/NetskopeAISecOps_Push_CCP/NetskopeAISecOps_DCR.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-3",
+      "itemId": "Data Connectors/NetskopeAISecOps_Push_CCP/NetskopeAISecOps_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-4",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeAlerts_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-5",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeAlertsEvents_DCR.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-6",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeAlertsEvents_Poller.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-7",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsApplication_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-8",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsAudit_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-9",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsConnection_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-10",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsDLP_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-11",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsEndpoint_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-12",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsInfrastructure_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-13",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsNetwork_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-14",
+      "itemId": "Data Connectors/NetskopeAlertsEvents_RestAPI_CCP/NetskopeEventsPage_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-15",
+      "itemId": "Data Connectors/NetskopeClientStatus_RestAPI_CCP/NetskopeClientStatus_DCR.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-16",
+      "itemId": "Data Connectors/NetskopeClientStatus_RestAPI_CCP/NetskopeClientStatus_Poller.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-17",
+      "itemId": "Data Connectors/NetskopeClientStatus_RestAPI_CCP/NetskopeClientStatus_Table.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-18",
+      "itemId": "Data Connectors/NetskopeDataConnector/azuredeploy_Connector_Netskope_AzureFunction.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-19",
+      "itemId": "Data Connectors/NetskopeDataConnector/host.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-20",
+      "itemId": "Data Connectors/NetskopeDataConnector/NetskopeStorageToSentinel.zip",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-21",
+      "itemId": "Data Connectors/NetskopeDataConnector/NetskopeToAzureStorage/__init__.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-22",
+      "itemId": "Data Connectors/NetskopeDataConnector/NetskopeToAzureStorage/function.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-23",
+      "itemId": "Data Connectors/NetskopeDataConnector/NetskopeToAzureStorage/netskope_api_async.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-24",
+      "itemId": "Data Connectors/NetskopeDataConnector/NetskopeToAzureStorage/netskope_to_azure_storage.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-25",
+      "itemId": "Data Connectors/NetskopeDataConnector/NetskopeToStorage.zip",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-26",
+      "itemId": "Data Connectors/NetskopeDataConnector/NetskopeWebTxMetrics.zip",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-27",
+      "itemId": "Data Connectors/NetskopeDataConnector/requirements.txt",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-28",
+      "itemId": "Data Connectors/NetskopeDataConnector/SharedCode/__init__.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-29",
+      "itemId": "Data Connectors/NetskopeDataConnector/SharedCode/consts.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-30",
+      "itemId": "Data Connectors/NetskopeDataConnector/SharedCode/logger.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-31",
+      "itemId": "Data Connectors/NetskopeDataConnector/SharedCode/netskope_exception.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-32",
+      "itemId": "Data Connectors/NetskopeDataConnector/SharedCode/state_manager.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-33",
+      "itemId": "Data Connectors/NetskopeDataConnector/SharedCode/utils.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-34",
+      "itemId": "Data Connectors/NetskopeDataConnector/SharedCode/validate_params.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-35",
+      "itemId": "Data Connectors/NetskopeDataConnector/StorageToSentinel/__init__.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-36",
+      "itemId": "Data Connectors/NetskopeDataConnector/StorageToSentinel/function.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-37",
+      "itemId": "Data Connectors/NetskopeDataConnector/StorageToSentinel/netskope_azure_storage_to_sentinel.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-38",
+      "itemId": "Data Connectors/NetskopeDataConnector/StorageToSentinel/remove_duplicates_in_azure_storage.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-39",
+      "itemId": "Data Connectors/NetskopeDataConnector/StorageToSentinel/sentinel.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-40",
+      "itemId": "Data Connectors/NetskopeDataConnector/WebTxMetrics/__init__.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-41",
+      "itemId": "Data Connectors/NetskopeDataConnector/WebTxMetrics/function.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-42",
+      "itemId": "Data Connectors/NetskopeDataConnector/WebTxMetrics/ingest_message.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-43",
+      "itemId": "Data Connectors/NetskopeDataConnector/WebTxMetrics/sentinel.py",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-44",
+      "itemId": "Data Connectors/NetskopeWebTransactionsDataConnector/azuredeploy_Connector_NetskopeWebTransaction.json",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-subartifact-45",
+      "itemId": "Data Connectors/NetskopeWebTransactionsDataConnector/install_docker.sh",
+      "scope": "package_selection_exclusion",
+      "decision": "acknowledged_exclusion",
+      "rationale": "CCF sub-artifact or Azure Function/Docker runtime helper referenced by the packaged Netskope Data Connector definitions in Data/Solution_Netskope.json and compiled into Package/mainTemplate.json."
+    },
+    {
+      "id": "exclude-netskope-webtxerrors-rule",
+      "itemId": "Analytic Rules/NetskopeWebTxErrors.yaml",
+      "scope": "detection_conversion",
+      "decision": "excluded",
+      "rationale": "Operational connector error log query (NetskopeWebtxErrors_CL) without security entities; preserved in Sentinel Analytic Rules and intentionally excluded from Defender XDR Custom Detections.",
+      "author": "idoshabi"
+    }
+  ],
+  "authorExceptions": {
+    "VAL-DC-01": {
+      "checkId": "VAL-DC-01",
+      "author": "idoshabi",
+      "authorJustification": "Auxiliary Azure Function runtime files (Data Connectors/NetskopeDataConnector/host.json and */function.json) are Function App bindings, not Sentinel Data Connector UI definitions. All 5 packaged Sentinel/CCP Data Connector definitions are valid.",
+      "supportingEvidenceRef": "Data/Solution_Netskope.json",
+      "knownLimitationCategory": "azure-function-runtime-json-in-data-connectors-folder"
+    }
+  }
+}
