@@ -1,5 +1,6 @@
 | **Version** | **Date Modified (DD-MM-YYYY)** | **Change History**                                           |
 |-------------|--------------------------------|--------------------------------------------------------------|
+| 3.2.2       | 21-10-2026                     | Added Defender XDR **Custom Detections** and **XDR Workbooks**. |
 | 3.1.3       | 19-03-2026                     | Update **ProofpointTAP_PollingConfig.json** to pass user-agent header with solution package version.|
 | 3.1.2       | 22-01-2026                     | Removed **Playbook** GetProofpointTAPEvents for TAP connector. |
 | 3.1.1       | 03-11-2025                     | Update support url in **SolutionMetadata.json**.|  

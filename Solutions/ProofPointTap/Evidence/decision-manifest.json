@@ -1,0 +1,211 @@
+{
+  "schemaVersion": "decision-manifest-v1",
+  "solutionName": "ProofPointTap",
+  "runId": "20261021T130524Z-574c95ba79134451bb96340359ca641e",
+  "acknowledgedExclusions": [
+    {
+      "path": "Data Connectors/azuredeploy_ProofpointTAP_API_FunctionApp.json",
+      "rationale": "Auxiliary ARM deployment template for legacy v1 Function App connector."
+    },
+    {
+      "path": "Data Connectors/AzureFunctionProofpointTAP/function.json",
+      "rationale": "Azure Functions runtime binding file for legacy v1 Function App connector."
+    },
+    {
+      "path": "Data Connectors/AzureFunctionProofpointTAP/run.ps1",
+      "rationale": "Azure Functions PowerShell script for legacy v1 Function App connector."
+    },
+    {
+      "path": "Data Connectors/AzureFunctionProofpointTAP.zip",
+      "rationale": "Pre-packaged zip artifact for legacy v1 Function App connector."
+    },
+    {
+      "path": "Data Connectors/host.json",
+      "rationale": "Azure Functions runtime host configuration file for legacy v1 Function App connector."
+    },
+    {
+      "path": "Data Connectors/profile.ps1",
+      "rationale": "Azure Functions PowerShell profile script for legacy v1 Function App connector."
+    },
+    {
+      "path": "Data Connectors/ProofpointTAP_API_FunctionApp.json",
+      "rationale": "Legacy v1 Azure Functions connector superseded by ProofpointTAPv2 CCP connector."
+    },
+    {
+      "path": "Data Connectors/ProofpointTAP_CCP/ProofpointTAP_DCR.json",
+      "rationale": "CCP DCR sub-artifact bundled via ProofpointTAP_defination.json during package build."
+    },
+    {
+      "path": "Data Connectors/ProofpointTAP_CCP/ProofPointTAPClicksBlockedV2_CL.json",
+      "rationale": "CCP table schema sub-artifact bundled during package build."
+    },
+    {
+      "path": "Data Connectors/ProofpointTAP_CCP/ProofPointTAPClicksPermittedV2_CL.json",
+      "rationale": "CCP table schema sub-artifact bundled during package build."
+    },
+    {
+      "path": "Data Connectors/ProofpointTAP_CCP/ProofPointTAPMessagesBlockedV2_CL.json",
+      "rationale": "CCP table schema sub-artifact bundled during package build."
+    },
+    {
+      "path": "Data Connectors/ProofpointTAP_CCP/ProofPointTAPMessagesDeliveredV2_CL.json",
+      "rationale": "CCP table schema sub-artifact bundled during package build."
+    },
+    {
+      "path": "Data Connectors/requirements.psd1",
+      "rationale": "Azure Functions PowerShell requirements file for legacy v1 Function App connector."
+    },
+    {
+      "path": "Data Connectors/ProofpointTAP_CCP/ProofpointTAP_pollingconfig.json",
+      "rationale": "CCP poller sub-artifact bundled alongside ProofpointTAP_defination.json during package build."
+    }
+  ],
+  "authorExceptions": [
+    {
+      "checkId": "VAL-URL-01",
+      "authorJustification": "Workbooks/Images/Logo/proofpointlogo.svg is an untouched upstream SVG file containing the standard W3C XML namespace declaration xmlns='http://www.w3.org/2000/svg', not an external network HTTP request.",
+      "supportingEvidenceRef": "Workbooks/Images/Logo/proofpointlogo.svg",
+      "author": "idoshabi",
+      "knownLimitationCategory": "svg-xml-namespace-uri"
+    },
+    {
+      "checkId": "VAL-DC-01",
+      "authorJustification": "Data Connectors/AzureFunctionProofpointTAP/function.json and Data Connectors/host.json are untouched upstream Azure Functions runtime files for the deprecated v1 Function App connector; the active packaged CCP connector Data Connectors/ProofpointTAP_CCP/ProofpointTAP_defination.json and ProofpointTAP_pollingconfig.json are structurally valid.",
+      "supportingEvidenceRef": "Data/Solution_ProofTap.json",
+      "author": "idoshabi",
+      "knownLimitationCategory": "legacy-function-app-auxiliary-files"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "connector_selection:Data Connectors/azuredeploy_ProofpointTAP_API_FunctionApp.json",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/azuredeploy_ProofpointTAP_API_FunctionApp.json",
+      "decision": "excluded",
+      "rationale": "Auxiliary ARM deployment template for legacy v1 Function App connector.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/AzureFunctionProofpointTAP/function.json",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/AzureFunctionProofpointTAP/function.json",
+      "decision": "excluded",
+      "rationale": "Azure Functions runtime binding file for legacy v1 Function App connector.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/AzureFunctionProofpointTAP/run.ps1",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/AzureFunctionProofpointTAP/run.ps1",
+      "decision": "excluded",
+      "rationale": "Azure Functions PowerShell script for legacy v1 Function App connector.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/AzureFunctionProofpointTAP.zip",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/AzureFunctionProofpointTAP.zip",
+      "decision": "excluded",
+      "rationale": "Pre-packaged zip artifact for legacy v1 Function App connector.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/host.json",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/host.json",
+      "decision": "excluded",
+      "rationale": "Azure Functions runtime host configuration file for legacy v1 Function App connector.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/profile.ps1",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/profile.ps1",
+      "decision": "excluded",
+      "rationale": "Azure Functions PowerShell profile script for legacy v1 Function App connector.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/ProofpointTAP_API_FunctionApp.json",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/ProofpointTAP_API_FunctionApp.json",
+      "decision": "excluded",
+      "rationale": "Legacy v1 Azure Functions connector superseded by ProofpointTAPv2 CCP connector.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/ProofpointTAP_CCP/ProofpointTAP_DCR.json",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/ProofpointTAP_CCP/ProofpointTAP_DCR.json",
+      "decision": "excluded",
+      "rationale": "CCP DCR sub-artifact bundled via ProofpointTAP_defination.json during package build.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/ProofpointTAP_CCP/ProofPointTAPClicksBlockedV2_CL.json",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/ProofpointTAP_CCP/ProofPointTAPClicksBlockedV2_CL.json",
+      "decision": "excluded",
+      "rationale": "CCP table schema sub-artifact bundled during package build.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/ProofpointTAP_CCP/ProofPointTAPClicksPermittedV2_CL.json",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/ProofpointTAP_CCP/ProofPointTAPClicksPermittedV2_CL.json",
+      "decision": "excluded",
+      "rationale": "CCP table schema sub-artifact bundled during package build.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/ProofpointTAP_CCP/ProofPointTAPMessagesBlockedV2_CL.json",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/ProofpointTAP_CCP/ProofPointTAPMessagesBlockedV2_CL.json",
+      "decision": "excluded",
+      "rationale": "CCP table schema sub-artifact bundled during package build.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/ProofpointTAP_CCP/ProofPointTAPMessagesDeliveredV2_CL.json",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/ProofpointTAP_CCP/ProofPointTAPMessagesDeliveredV2_CL.json",
+      "decision": "excluded",
+      "rationale": "CCP table schema sub-artifact bundled during package build.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/requirements.psd1",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/requirements.psd1",
+      "decision": "excluded",
+      "rationale": "Azure Functions PowerShell requirements file for legacy v1 Function App connector.",
+      "actor": "idoshabi"
+    },
+    {
+      "id": "check_waiver:VAL-URL-01",
+      "scope": "check_waiver",
+      "itemId": "VAL-URL-01",
+      "decision": "waived",
+      "rationale": "Workbooks/Images/Logo/proofpointlogo.svg is an untouched upstream SVG file containing the standard W3C XML namespace declaration xmlns='http://www.w3.org/2000/svg', not an external network HTTP request.",
+      "supportingEvidenceRef": "Workbooks/Images/Logo/proofpointlogo.svg",
+      "author": "idoshabi"
+    },
+    {
+      "id": "check_waiver:VAL-DC-01",
+      "scope": "check_waiver",
+      "itemId": "VAL-DC-01",
+      "decision": "waived",
+      "rationale": "Data Connectors/AzureFunctionProofpointTAP/function.json and Data Connectors/host.json are untouched upstream Azure Functions runtime files for the deprecated v1 Function App connector; the active packaged CCP connector Data Connectors/ProofpointTAP_CCP/ProofpointTAP_defination.json and ProofpointTAP_pollingconfig.json are structurally valid.",
+      "supportingEvidenceRef": "Data/Solution_ProofTap.json",
+      "author": "idoshabi"
+    },
+    {
+      "id": "connector_selection:Data Connectors/ProofpointTAP_CCP/ProofpointTAP_pollingconfig.json",
+      "scope": "connector_selection",
+      "itemId": "Data Connectors/ProofpointTAP_CCP/ProofpointTAP_pollingconfig.json",
+      "decision": "excluded",
+      "rationale": "CCP poller sub-artifact bundled alongside ProofpointTAP_defination.json during package build.",
+      "actor": "idoshabi"
+    }
+  ]
+}

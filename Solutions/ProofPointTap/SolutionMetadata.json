@@ -1,17 +1,23 @@
 {
-	"publisherId": "proofpointinc1600438591120",
-	"offerId": "azure-sentinel-proofpoint",
-	"firstPublishDate": "2022-05-23",
-	"providers": ["Proofpoint"],
-	"categories": {
-		"domains" : ["Security - Automation (SOAR)",
-		"Security - Threat Protection"],
-		"verticals": []
-	},
-	"support": {
-		"tier": "Partner",
-		"name": "Proofpoint, Inc.",
-		"email": "azure-support@proofpoint.com",
-		"link": "https://proofpoint.my.site.com/community/s/"
-	}
+  "trackingId": "pid-0cd9f3bf-01f7-4b21-966b-a685932f1ce5-partnercenter",
+  "publisherId": "proofpointinc1600438591120",
+  "offerId": "azure-sentinel-proofpoint",
+  "firstPublishDate": "2022-05-23",
+  "providers": [
+    "Proofpoint"
+  ],
+  "categories": {
+    "domains": [
+      "Security - Automation (SOAR)",
+      "Security - Threat Protection"
+    ],
+    "verticals": []
+  },
+  "support": {
+    "tier": "Partner",
+    "name": "Proofpoint, Inc.",
+    "email": "azure-support@proofpoint.com",
+    "link": "https://proofpoint.my.site.com/community/s/"
+  },
+  "version": "3.2.2"
 }
