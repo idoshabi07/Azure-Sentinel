@@ -1,0 +1,180 @@
+{
+  "schemaVersion": "decision-manifest-v1",
+  "solutionName": "Proofpoint On demand(POD) Email Security",
+  "solutionVersion": "3.2.2",
+  "previousVersion": "3.1.4",
+  "generatedAt": "2026-10-21T16:23:05Z",
+  "decisions": [
+    {
+      "id": "xdr-eb68b129-5f17-4f56-bf6d-dde48d5e615a",
+      "itemId": "XDR Detections/ProofpointPODBinaryInAttachment.yaml",
+      "sourcePath": "Analytic Rules/ProofpointPODBinaryInAttachment.yaml",
+      "sourceSha256": "8b86b4dabbaa4f4254115c098b02f2bf96cd6c2931134abdd0399ee92ab80789",
+      "scope": "detection-migration",
+      "decision": "included",
+      "rationale": "Converted and verified against live Sentinel Log Analytics and Defender XDR Advanced Hunting with Mailbox/Host/Ip/Url entity mappings."
+    },
+    {
+      "id": "xdr-aedc5b33-2d7c-42cb-a692-f25ef637cbb1",
+      "itemId": "XDR Detections/ProofpointPODDataExfiltrationToPrivateEmail.yaml",
+      "sourcePath": "Analytic Rules/ProofpointPODDataExfiltrationToPrivateEmail.yaml",
+      "sourceSha256": "6aa3bb0aba059c5c6f469e1a347e21fbba311b53aa15fdbaedb3682d81309c38",
+      "scope": "detection-migration",
+      "decision": "included",
+      "rationale": "Converted and verified against live Sentinel Log Analytics and Defender XDR Advanced Hunting with Mailbox/Host/Ip/Url entity mappings."
+    },
+    {
+      "id": "xdr-35a0792a-1269-431e-ac93-7ae2980d4dde",
+      "itemId": "XDR Detections/ProofpointPODEmailSenderInTIList.yaml",
+      "sourcePath": "Analytic Rules/ProofpointPODEmailSenderInTIList.yaml",
+      "sourceSha256": "ceccde8c4ca1bc0df0ddece8be690ca5384e0a22d00b2b277b6fabf4d7adb9bf",
+      "scope": "detection-migration",
+      "decision": "included",
+      "rationale": "Converted and verified against live Sentinel Log Analytics and Defender XDR Advanced Hunting with Mailbox/Host/Ip/Url entity mappings."
+    },
+    {
+      "id": "xdr-78979d32-e63f-4740-b206-cfb300c735e0",
+      "itemId": "XDR Detections/ProofpointPODEmailSenderIPinTIList.yaml",
+      "sourcePath": "Analytic Rules/ProofpointPODEmailSenderIPinTIList.yaml",
+      "sourceSha256": "3af5f99c0d9515300b685f36f5f011c955e6222a5c549f2181039370537a4993",
+      "scope": "detection-migration",
+      "decision": "included",
+      "rationale": "Converted and verified against live Sentinel Log Analytics and Defender XDR Advanced Hunting with Mailbox/Host/Ip/Url entity mappings."
+    },
+    {
+      "id": "xdr-c7cd6073-6d2c-4284-a5c8-da27605bdfde",
+      "itemId": "XDR Detections/ProofpointPODHighRiskNotDiscarded.yaml",
+      "sourcePath": "Analytic Rules/ProofpointPODHighRiskNotDiscarded.yaml",
+      "sourceSha256": "6dde8d85aa9f4b86b1c46ec1960067e32a34abc7849171fda1d1474ddfa87a58",
+      "scope": "detection-migration",
+      "decision": "included",
+      "rationale": "Converted and verified against live Sentinel Log Analytics and Defender XDR Advanced Hunting with Mailbox/Host/Ip/Url entity mappings."
+    },
+    {
+      "id": "xdr-bda5a2bd-979b-4828-a91f-27c2a5048f7f",
+      "itemId": "XDR Detections/ProofpointPODMultipleArchivedAttachmentsToSameRecipient.yaml",
+      "sourcePath": "Analytic Rules/ProofpointPODMultipleArchivedAttachmentsToSameRecipient.yaml",
+      "sourceSha256": "e08fb78b246e7f6c922ccfea7552a0f2b2125ed7c7aa1361b1ec908824c1b969",
+      "scope": "detection-migration",
+      "decision": "included",
+      "rationale": "Converted and verified against live Sentinel Log Analytics and Defender XDR Advanced Hunting with Mailbox/Host/Ip/Url entity mappings."
+    },
+    {
+      "id": "xdr-d1aba9a3-5ab1-45ef-8ed4-da57dc3c0d32",
+      "itemId": "XDR Detections/ProofpointPODMultipleLargeEmailsToSameRecipient.yaml",
+      "sourcePath": "Analytic Rules/ProofpointPODMultipleLargeEmailsToSameRecipient.yaml",
+      "sourceSha256": "30ed9d46fbd23e1a1ab9dc79bb00d30909c48323393ee78e716f66ab115cb7f7",
+      "scope": "detection-migration",
+      "decision": "included",
+      "rationale": "Converted and verified against live Sentinel Log Analytics and Defender XDR Advanced Hunting with Mailbox/Host/Ip/Url entity mappings."
+    },
+    {
+      "id": "xdr-f8127962-7739-4211-a4a9-390a7a00e91f",
+      "itemId": "XDR Detections/ProofpointPODMultipleProtectedEmailsToUnknownRecipient.yaml",
+      "sourcePath": "Analytic Rules/ProofpointPODMultipleProtectedEmailsToUnknownRecipient.yaml",
+      "sourceSha256": "2abaeeafd2968e64e93a4ba6f17d57f78fb07a026f20bc0464bc73733b9937a2",
+      "scope": "detection-migration",
+      "decision": "included",
+      "rationale": "Converted and verified against live Sentinel Log Analytics and Defender XDR Advanced Hunting with Mailbox/Host/Ip/Url entity mappings."
+    },
+    {
+      "id": "xdr-f6a51e2c-2d6a-4f92-a090-cfb002ca611f",
+      "itemId": "XDR Detections/ProofpointPODSuspiciousAttachment.yaml",
+      "sourcePath": "Analytic Rules/ProofpointPODSuspiciousAttachment.yaml",
+      "sourceSha256": "16aa39598e41d4e90f72385a093a92f67bf8eac78dae6f9ff68ec2abb996d795",
+      "scope": "detection-migration",
+      "decision": "included",
+      "rationale": "Converted and verified against live Sentinel Log Analytics and Defender XDR Advanced Hunting with Mailbox/Host/Ip/Url entity mappings."
+    },
+    {
+      "id": "xdr-56b0a0cd-894e-4b38-a0a1-c41d9f96649a",
+      "itemId": "XDR Detections/ProofpointPODWeakCiphers.yaml",
+      "sourcePath": "Analytic Rules/ProofpointPODWeakCiphers.yaml",
+      "sourceSha256": "89c2761ecbcdc69ad41e276d88d51c8faab66e261f68ae7dfebb6055f16ed646",
+      "scope": "detection-migration",
+      "decision": "included",
+      "rationale": "Converted and verified against live Sentinel Log Analytics and Defender XDR Advanced Hunting with Mailbox/Host/Ip/Url entity mappings."
+    },
+    {
+      "id": "workbook-ProofpointPOD",
+      "itemId": "XDR Workbooks/ProofpointPOD.json",
+      "sourcePath": "Workbooks/ProofpointPOD.json",
+      "sourceSha256": "4135789c7b521a77215e3afa84596952164681f7e49291b1fdb5a26f7155a516",
+      "scope": "workbook-migration",
+      "decision": "included",
+      "rationale": "Converted and contract-verified Defender XDR workbook preserving all 14 ProofpointPOD queries."
+    }
+  ],
+  "acknowledgedExclusions": [
+    {
+      "path": "Data Connectors/azuredeploy_Connector_Proofpoint_AzureFunction.json",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/host.json",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/ProofPointEmailSecurity_CCP/ProofpointPOD_DCR.json",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/ProofPointEmailSecurity_CCP/ProofpointPOD_PollingConfig.json",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/ProofPointEmailSecurity_CCP/ProofpointPOD_Table_MailLog.json",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/ProofPointEmailSecurity_CCP/ProofpointPOD_Table_Message.json",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/ProofPointEmailSecurity_CCP/readme.md",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/ProofpointPOD_API_FunctionApp.json",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/ProofpointSentinelConn.zip",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/ProofpointSentinelConnector/__init__.py",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/ProofpointSentinelConnector/function.json",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/ProofpointSentinelConnector/sentinel_connector.py",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/proxies.json",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    },
+    {
+      "path": "Data Connectors/requirements.txt",
+      "rationale": "Auxiliary Data Connector sub-artifact or legacy Azure Function runtime file; primary CCP connector definition ProofpointPOD_Definaton.json is packaged."
+    }
+  ],
+  "authorExceptions": [
+    {
+      "checkId": "VAL-URL-01",
+      "authorJustification": "Untouched upstream Azure Function Data Connectors/proxies.json contains standard JSON schema URI http://json.schemastore.org/proxies; upstream Data Connectors are preserved verbatim per ISV safety gate.",
+      "supportingEvidenceRef": "Data Connectors/proxies.json",
+      "knownLimitationCategory": "untouched-upstream-connector"
+    },
+    {
+      "checkId": "VAL-DC-01",
+      "authorJustification": "Data Connectors/host.json, function.json, and proxies.json are Azure Function runtime configuration files rather than Sentinel Data Connector UI definitions; packaged CCP connector ProofpointPOD_Definaton.json is valid.",
+      "supportingEvidenceRef": "Data Connectors/ProofPointEmailSecurity_CCP/ProofpointPOD_Definaton.json",
+      "knownLimitationCategory": "function-app-helper-files"
+    }
+  ]
+}

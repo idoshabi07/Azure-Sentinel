@@ -1,0 +1,129 @@
+schemaVersion: 1.0.0
+version: 3.1.4
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors:
+- connectorId: ProofpointPOD
+  dataTypes:
+  - ProofpointPOD_message_CL
+contentProvenance:
+  requiredWorkloads:
+  - workload: sentinel
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  requiredDataConnectors:
+  - connectorId: ProofpointPOD
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  - connectorId: ProofpointPODCcpDefinition
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  dependencyReviewRequired: false
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: d1aba9a3-5ab1-45ef-8ed4-da57dc3c0d32
+    path: Analytic Rules/ProofpointPODMultipleLargeEmailsToSameRecipient.yaml
+    version: 1.0.1
+    querySha256: 2bfa39d01a52002efd9055a1d661c757bfeb0213c07218ce4a0f3bc8a8a48d0c
+    schedule:
+      queryFrequency: 30m
+      queryPeriod: 30m
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=30m, lookback=30m; target frequency=PT30M,
+      native lookback=unknown/unconfigured; mixed, Sentinel-only, or unknown query
+      surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    - Account mapping is incomplete and was removed
+    - Supplemental customDetails.AccountFullName column `AccountCustomEntity` requires
+      runtime output-schema binding verification
+    - Custom-detail values must remain within the documented combined 4 KB per-alert
+      limit; runtime values are unverified and the service drops all custom details
+      if exceeded
+    informational: []
+    errors: []
+    originalTactics:
+    - Exfiltration
+    originalTechniques:
+    - T1567
+    reviewScope:
+      sourceDocumentSha256: 30ed9d46fbd23e1a1ab9dc79bb00d30909c48323393ee78e716f66ab115cb7f7
+      targetQuerySha256: 79d14899921c6c89535a14d10ceac8348d47b0a32c487dab0d7c27c15a89d2d1
+    supplementalEntityDetails:
+    - entityType: Account
+      entityIndex: 1
+      identifier: FullName
+      sourceColumn: AccountCustomEntity
+      column: AccountCustomEntity
+      status: runtime-binding-pending
+      customDetailKey: AccountFullName
+properties:
+  id: xdr-d1aba9a3-5ab1-45ef-8ed4-da57dc3c0d32
+  displayName: ProofpointPOD - Multiple large emails to the same recipient
+  status: disabled
+  queryCondition:
+    queryText: 'let lbtime = 30m;
+
+      let msgthreshold = 3;
+
+      let msgszthreshold = 3000000;
+
+      ProofpointPOD
+
+      | where TimeGenerated > ago(lbtime)
+
+      | where EventType == ''message''
+
+      | where NetworkDirection == ''outbound''
+
+      | where NetworkBytes > msgszthreshold
+
+      | summarize count() by SrcUserUpn, DstUserUpn
+
+      | where count_ > msgthreshold
+
+      | extend AccountCustomEntity = SrcUserUpn'
+  schedule:
+    frequency: PT30M
+  detectionAction:
+    alertTemplate:
+      title: ProofpointPOD - Multiple large emails to the same recipient
+      description: '''Detects when multiple emails with large size where sent to the
+        same recipient.'''
+      severity: medium
+      entityMappings:
+        mailboxes:
+        - id: mailbox1
+          primaryAddressColumn: AccountCustomEntity
+      tactics:
+      - tactic: Exfiltration
+        techniques:
+        - technique: T1567
+      customDetails:
+        AccountFullName: AccountCustomEntity

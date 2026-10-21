@@ -1,0 +1,125 @@
+schemaVersion: 1.0.0
+version: 3.1.4
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors:
+- connectorId: ProofpointPOD
+  dataTypes:
+  - ProofpointPOD_message_CL
+contentProvenance:
+  requiredWorkloads:
+  - workload: sentinel
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  requiredDataConnectors:
+  - connectorId: ProofpointPOD
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  - connectorId: ProofpointPODCcpDefinition
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  dependencyReviewRequired: false
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: c7cd6073-6d2c-4284-a5c8-da27605bdfde
+    path: Analytic Rules/ProofpointPODHighRiskNotDiscarded.yaml
+    version: 1.0.1
+    querySha256: 7a931347a5858a3dd32f4cbbb7ea92bf57037b221f4b30a98d298536a4937a69
+    schedule:
+      queryFrequency: 10m
+      queryPeriod: 10m
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=10m, lookback=10m; target frequency=PT10M,
+      native lookback=unknown/unconfigured; mixed, Sentinel-only, or unknown query
+      surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    - Account mapping is incomplete and was removed
+    - Supplemental customDetails.AccountFullName column `AccountCustomEntity` requires
+      runtime output-schema binding verification
+    - Custom-detail values must remain within the documented combined 4 KB per-alert
+      limit; runtime values are unverified and the service drops all custom details
+      if exceeded
+    informational: []
+    errors: []
+    originalTactics:
+    - InitialAccess
+    originalTechniques:
+    - T1566
+    reviewScope:
+      sourceDocumentSha256: 6dde8d85aa9f4b86b1c46ec1960067e32a34abc7849171fda1d1474ddfa87a58
+      targetQuerySha256: af2289bdd3f4abd25c0bb1b3d3410820c010dafd79b254179873e992bc5a755d
+    supplementalEntityDetails:
+    - entityType: Account
+      entityIndex: 1
+      identifier: FullName
+      sourceColumn: AccountCustomEntity
+      column: AccountCustomEntity
+      status: runtime-binding-pending
+      customDetailKey: AccountFullName
+properties:
+  id: xdr-c7cd6073-6d2c-4284-a5c8-da27605bdfde
+  displayName: ProofpointPOD - High risk message not discarded
+  status: disabled
+  queryCondition:
+    queryText: 'let lbtime = 10m;
+
+      ProofpointPOD
+
+      | where TimeGenerated > ago(lbtime)
+
+      | where EventType == ''message''
+
+      | where NetworkDirection == ''inbound''
+
+      | where FilterDisposition !in (''reject'', ''discard'')
+
+      | where FilterModulesSpamScoresOverall == ''100''
+
+      | project SrcUserUpn, DstUserUpn
+
+      | extend AccountCustomEntity = SrcUserUpn'
+  schedule:
+    frequency: PT10M
+  detectionAction:
+    alertTemplate:
+      title: ProofpointPOD - High risk message not discarded
+      description: '''Detects when email with high risk score was not rejected or
+        discarded by filters.'''
+      severity: low
+      entityMappings:
+        mailboxes:
+        - id: mailbox1
+          primaryAddressColumn: AccountCustomEntity
+      tactics:
+      - tactic: InitialAccess
+        techniques:
+        - technique: T1566
+      customDetails:
+        AccountFullName: AccountCustomEntity

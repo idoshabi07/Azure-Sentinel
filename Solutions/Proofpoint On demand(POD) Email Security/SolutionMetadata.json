@@ -1,16 +1,22 @@
 {
-	"publisherId": "proofpointinc1600438591120",
-	"offerId": "azure-sentinel-proofpointpod",
-	"firstPublishDate": "2021-03-31",
-	"providers": ["Proofpoint"],
-	"categories": {
-		"domains" : ["Security - Threat Protection"],
-		"verticals": []
-	},
-	"support": {
-		"tier": "Partner",
-		"name": "Proofpoint, Inc.",
-		"email": "azure-support@proofpoint.com",
-		"link": "https://proofpoint.my.site.com/community/s/"
-	}
+  "trackingId": "pid-6271cfb9-d886-42cb-9d16-ad5202d473cc-partnercenter",
+  "publisherId": "proofpointinc1600438591120",
+  "offerId": "azure-sentinel-proofpointpod",
+  "firstPublishDate": "2021-03-31",
+  "providers": [
+    "Proofpoint"
+  ],
+  "categories": {
+    "domains": [
+      "Security - Threat Protection"
+    ],
+    "verticals": []
+  },
+  "support": {
+    "tier": "Partner",
+    "name": "Proofpoint, Inc.",
+    "email": "azure-support@proofpoint.com",
+    "link": "https://proofpoint.my.site.com/community/s/"
+  },
+  "version": "3.2.2"
 }

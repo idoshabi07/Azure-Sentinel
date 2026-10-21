@@ -1,0 +1,124 @@
+schemaVersion: 1.0.0
+version: 3.1.4
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors:
+- connectorId: ProofpointPOD
+  dataTypes:
+  - ProofpointPOD_message_CL
+contentProvenance:
+  requiredWorkloads:
+  - workload: sentinel
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  requiredDataConnectors:
+  - connectorId: ProofpointPOD
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  - connectorId: ProofpointPODCcpDefinition
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  dependencyReviewRequired: false
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: 56b0a0cd-894e-4b38-a0a1-c41d9f96649a
+    path: Analytic Rules/ProofpointPODWeakCiphers.yaml
+    version: 1.0.3
+    querySha256: 87ef7f6fbdcd5ff6d2b54136a675d380f7178a126363c854771d19252f053643
+    schedule:
+      queryFrequency: 1h
+      queryPeriod: 1h
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=1h, lookback=1h; target frequency=PT1H,
+      native lookback=unknown/unconfigured; mixed, Sentinel-only, or unknown query
+      surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    informational: []
+    errors: []
+    originalTactics:
+    - CommandAndControl
+    originalTechniques:
+    - T1573
+    reviewScope:
+      sourceDocumentSha256: 89c2761ecbcdc69ad41e276d88d51c8faab66e261f68ae7dfebb6055f16ed646
+      targetQuerySha256: 2853c9a70b000ac22d65f9de287d9d634e2754519c3da566accacc02c1f42f46
+    eventTimeWindow:
+      status: default-native-lookback
+      appliedDefault: hourly-1h-to-native-4h-lookback
+      queryFrequency: 1h
+      queryPeriod: 1h
+      targetFrequency: PT1H
+      effectiveLookback: PT4H
+      originalSentinelLookbackSeconds: 3600
+      effectiveEventWindowSeconds: 14400
+      xdrServiceWindowSeconds: 14400
+      filterInjected: false
+      parityClaimed: false
+      hasAggregation: false
+      aggregationWindowDifference: false
+      timingDifference: Four hours (PT4H / 14400s) is the native XDR ingestion-based
+        lookback window for PT1H execution frequency, not the execution frequency;
+        original Sentinel queryPeriod was 1h (3600s).
+      aggregationDifference: No summarize/make-series aggregation detected in query;
+        native 4-hour XDR lookback relies on Defender XDR alert deduplication across
+        hourly runs.
+      sourceDocumentSha256: 89c2761ecbcdc69ad41e276d88d51c8faab66e261f68ae7dfebb6055f16ed646
+      targetQuerySha256: 2853c9a70b000ac22d65f9de287d9d634e2754519c3da566accacc02c1f42f46
+properties:
+  id: xdr-56b0a0cd-894e-4b38-a0a1-c41d9f96649a
+  displayName: ProofpointPOD - Weak ciphers
+  status: disabled
+  queryCondition:
+    queryText: 'let lbtime = 1h;
+
+      let tls_ciphers = dynamic([''RC4-SHA'', ''DES-CBC3-SHA'']);
+
+      ProofpointPOD
+
+      | where EventType == ''message''
+
+      | where TlsCipher in (tls_ciphers)
+
+      | extend IPCustomEntity = SrcIpAddr'
+  schedule:
+    frequency: PT1H
+  detectionAction:
+    alertTemplate:
+      title: ProofpointPOD - Weak ciphers
+      description: '''Detects when weak TLS ciphers are used.'''
+      severity: low
+      entityMappings:
+        ips:
+        - id: ip1
+          addressColumn: IPCustomEntity
+      tactics:
+      - tactic: CommandAndControl
+        techniques:
+        - technique: T1573

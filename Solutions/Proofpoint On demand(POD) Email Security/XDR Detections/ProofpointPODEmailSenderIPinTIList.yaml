@@ -1,0 +1,151 @@
+schemaVersion: 1.0.0
+version: 3.1.4
+kind: CustomDetection
+resourceType: Microsoft.Security/detectionRules
+apiVersion: 2026-06-01-preview
+requiredDataConnectors:
+- connectorId: ThreatIntelligence
+  dataTypes:
+  - ThreatIntelligenceIndicator
+- connectorId: ThreatIntelligenceTaxii
+  dataTypes:
+  - ThreatIntelligenceIndicator
+- connectorId: ProofpointPOD
+  dataTypes:
+  - ProofpointPOD_maillog_CL
+contentProvenance:
+  requiredWorkloads:
+  - workload: sentinel
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+    - ThreatIntelligenceIndicator
+  requiredDataConnectors:
+  - connectorId: ProofpointPOD
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  - connectorId: ProofpointPODCcpDefinition
+    dataTypes:
+    - ProofpointPOD
+    - ProofpointPODMailLog_CL
+    - ProofpointPODMessage_CL
+    - ProofpointPOD_maillog_CL
+    - ProofpointPOD_message_CL
+    - maillog_CL
+    - message_CL
+  - connectorId: ThreatIntelligence
+    dataTypes:
+    - ThreatIntelligenceIndicator
+  - connectorId: ThreatIntelligenceTaxii
+    dataTypes:
+    - ThreatIntelligenceIndicator
+  dependencyReviewRequired: false
+  source:
+    platform: Microsoft Sentinel
+    kind: AnalyticsRule
+    id: 78979d32-e63f-4740-b206-cfb300c735e0
+    path: Analytic Rules/ProofpointPODEmailSenderIPinTIList.yaml
+    version: 1.1.1
+    querySha256: 496256591c11b79cb02dd78c227c8cf8f235f7efab289b11d9257187efc79a8a
+    schedule:
+      queryFrequency: 1d
+      queryPeriod: 14d
+  conversion:
+    tool: sentinel-to-xdr-migration
+    version: 0.1.0
+    status: converted
+    reviewRequired: false
+    reviewReasons: []
+    requiredWorkloads:
+    - sentinel
+    warnings:
+    - 'Schedule assessment: source frequency=1d, lookback=14d; target frequency=P1D,
+      native lookback=unknown/unconfigured; mixed, Sentinel-only, or unknown query
+      surface; no custom lookback is configured in the payload. See https://learn.microsoft.com/en-us/defender-xdr/custom-detection-rules#lookback'
+    - Account mapping is incomplete and was removed
+    - Supplemental customDetails.AccountFullName column `SrcUserUpn` requires runtime
+      output-schema binding verification
+    - Custom-detail values must remain within the documented combined 4 KB per-alert
+      limit; runtime values are unverified and the service drops all custom details
+      if exceeded
+    informational:
+    - All source MITRE tactics are preserved in source order in authored YAML. V3.1
+      ARM packaging carries only the first tactic and its compatible techniques; this
+      classification loss is not validated parity. Direct Graph deployment requires
+      a single tactic.
+    errors: []
+    originalTactics:
+    - Exfiltration
+    - InitialAccess
+    originalTechniques:
+    - T1078
+    - T1567
+    reviewScope:
+      sourceDocumentSha256: 3af5f99c0d9515300b685f36f5f011c955e6222a5c549f2181039370537a4993
+      targetQuerySha256: 08999da656f420b43159df969bd8954157cba5dc11d10191026d4a4cecea4722
+    supplementalEntityDetails:
+    - entityType: Account
+      entityIndex: 1
+      identifier: FullName
+      sourceColumn: SrcUserUpn
+      column: SrcUserUpn
+      status: runtime-binding-pending
+      customDetailKey: AccountFullName
+properties:
+  id: xdr-78979d32-e63f-4740-b206-cfb300c735e0
+  displayName: ProofpointPOD - Email sender IP in TI list
+  status: disabled
+  queryCondition:
+    queryText: "let dt_lookBack = 1h;\nlet ioc_lookBack = 14d;\nThreatIntelligenceIndicator\n\
+      | where TimeGenerated >= ago(ioc_lookBack) and ExpirationDateTime > now()\n\
+      | where isnotempty(NetworkIP) or isnotempty(EmailSourceIpAddress) or isnotempty(NetworkDestinationIP)\
+      \ or isnotempty(NetworkSourceIP)\n| extend TI_ipEntity = iff(isnotempty(NetworkIP),\
+      \ NetworkIP, NetworkDestinationIP)\n| extend TI_ipEntity = iff(isempty(TI_ipEntity)\
+      \ and isnotempty(NetworkSourceIP), NetworkSourceIP, TI_ipEntity)\n| extend TI_ipEntity\
+      \ = iff(isempty(TI_ipEntity) and isnotempty(EmailSourceIpAddress), EmailSourceIpAddress,\
+      \ TI_ipEntity)\n| summarize LatestIndicatorTime = arg_max(TimeGenerated, *)\
+      \ by IndicatorId\n| where Active == true\n// using innerunique to keep perf\
+      \ fast and result set low, we only need one match to indicate potential malicious\
+      \ activity that needs to be investigated\n| join kind=innerunique (\n      \
+      \    ProofpointPOD\n          | where TimeGenerated >= ago(dt_lookBack)\n  \
+      \        | where isnotempty(SrcIpAddr)\n          | extend ProofpointPOD_TimeGenerated\
+      \ = TimeGenerated, ClientIP = SrcIpAddr\n  )\non $left.TI_ipEntity == $right.ClientIP\n\
+      | where ProofpointPOD_TimeGenerated < ExpirationDateTime\n| summarize ProofpointPOD_TimeGenerated\
+      \ = arg_max(ProofpointPOD_TimeGenerated, *) by IndicatorId, ClientIP\n| project\
+      \ ProofpointPOD_TimeGenerated, SrcUserUpn, DstUserUpn, SrcIpAddr, IndicatorId,\
+      \ ThreatType, ExpirationDateTime, ConfidenceScore,\nTI_ipEntity, ClientIP\n\
+      | extend timestamp = ProofpointPOD_TimeGenerated"
+  schedule:
+    frequency: P1D
+  detectionAction:
+    alertTemplate:
+      title: ProofpointPOD - Email sender IP in TI list
+      description: '''Email sender IP in TI list.'''
+      severity: medium
+      entityMappings:
+        ips:
+        - id: ip1
+          addressColumn: ClientIP
+        mailboxes:
+        - id: mailbox1
+          primaryAddressColumn: SrcUserUpn
+      tactics:
+      - tactic: Exfiltration
+        techniques:
+        - technique: T1567
+      - tactic: InitialAccess
+        techniques:
+        - technique: T1078
+      customDetails:
+        AccountFullName: SrcUserUpn
