@@ -204,6 +204,7 @@ class VersionPolicyTests(unittest.TestCase):
         source_rule = self.solution / "Analytic Rules/Test.yaml"
         analytic = json.loads(source_rule.read_text().removeprefix("---\n"))
         analytic["query"] = query
+        analytic["customDetails"] = {"ProjectId": "Project'Id", "ZoneId": "ZoneId", "FilePath": "FilePath"}
         source_rule.write_text("---\n" + json.dumps(analytic))
 
         for pipeline in (False, True):
@@ -232,6 +233,16 @@ class VersionPolicyTests(unittest.TestCase):
                         "[if(true(), 'testpublisher.test-sentinel', 'testpublisher.test-sentinel')]",
                         properties["contentProvenance"]["packageId"],
                     )
+                analytic_template = next(
+                    row for row in template["resources"]
+                    if row.get("properties", {}).get("contentKind") == "AnalyticsRule"
+                )
+                analytic_details = (
+                    analytic_template["properties"]["mainTemplate"]["resources"][0]["properties"]["customDetails"]
+                )
+                self.assertEqual("[if(true(), 'Project''Id', 'Project''Id')]", analytic_details["ProjectId"])
+                self.assertEqual("[if(true(), 'ZoneId', 'ZoneId')]", analytic_details["ZoneId"])
+                self.assertEqual("FilePath", analytic_details["FilePath"])
                 self.assertEqual(source_bytes, path.read_bytes())
 
                 module = attribution.ROOT / ".arm-ttk/arm-ttk/arm-ttk.psd1"
@@ -245,6 +256,10 @@ class VersionPolicyTests(unittest.TestCase):
                         "$resolved = @($inner | Resolve-JSONContent -JsonText $text); "
                         "if ($inner.Count -ne 1 -or $resolved.Count -ne $inner.Count) { "
                         "throw 'Nested Custom Detection template was not resolved' }; "
+                        f"$ttkResults = @(Test-AzTemplate -TemplatePath {attribution.ps_literal(template_path.parent)} "
+                        "-File mainTemplate.json -Test @('Parameters Must Be Referenced', 'Variables Must Be Referenced')); "
+                        "if (@($ttkResults | Where-Object { $_.Errors.Count -gt 0 }).Count -gt 0) { "
+                        "throw 'Parameters/Variables Must Be Referenced failed on mainTemplate.json' }; "
                         "$template = $doc.resources | Where-Object type -eq 'Microsoft.Resources/deployments' | "
                         "Select-Object -ExpandProperty properties | Select-Object -ExpandProperty template; "
                         f"$test = Join-Path {attribution.ps_literal(module.parent)} "
