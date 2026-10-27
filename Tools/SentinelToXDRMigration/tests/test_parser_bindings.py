@@ -163,8 +163,7 @@ class ParserBindingTests(unittest.TestCase):
             packaged_id = f"xdr-{source_id}"
             properties["id"] = f"[if(true(), '{packaged_id}', '{packaged_id}')]"
             properties["contentProvenance"] = {
-                "packageId": "[if(true(), 'testpublisher.test-sentinel', 'testpublisher.test-sentinel')]",
-                "packageVersion": "3.1.0",
+                "packageId": "testpublisher.test-sentinel", "packageVersion": "3.1.0",
                 "contentId": packaged_id, "contentVersion": document["version"],
             }
             for mappings in properties["detectionAction"]["alertTemplate"]["entityMappings"].values():
